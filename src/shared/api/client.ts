@@ -1,8 +1,11 @@
 import createClient from "openapi-fetch";
 import type { paths } from "./schema";
 
-export function resolveApiBaseUrl(configuredUrl?: string) {
-  return configuredUrl ?? "http://localhost:3000";
+export function resolveApiBaseUrl(
+  configuredUrl?: string,
+  currentOrigin = window.location.origin,
+) {
+  return configuredUrl ?? currentOrigin;
 }
 
 export const apiClient = createClient<paths>({

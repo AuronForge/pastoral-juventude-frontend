@@ -27,7 +27,9 @@ O backend é a fonte de verdade do OpenAPI. Com a API disponível em `http://loc
 npm run api:generate
 ```
 
-Para outra URL, defina `OPENAPI_URL`. O cliente usa `VITE_API_BASE_URL` em tempo de execução.
+Para outra URL, defina `OPENAPI_URL`. Durante o desenvolvimento, o cliente usa
+`VITE_API_BASE_URL`; no build de produção, a ausência dessa variável faz o cliente
+usar a mesma origem da aplicação, permitindo o roteamento pelo Traefik.
 
 ## Docker
 

@@ -1,8 +1,10 @@
 import { apiClient, resolveApiBaseUrl } from "./client";
 
 describe("cliente da API", () => {
-  it("usa o endereço local quando não há configuração", () => {
-    expect(resolveApiBaseUrl()).toBe("http://localhost:3000");
+  it("usa a mesma origem quando não há configuração", () => {
+    expect(resolveApiBaseUrl(undefined, "https://pastoral.exemplo.test")).toBe(
+      "https://pastoral.exemplo.test",
+    );
   });
 
   it("respeita o endereço configurado", () => {
