@@ -7,7 +7,7 @@ import { appStore } from "./store";
 export function AppProviders({ children }: PropsWithChildren) {
   return (
     <Provider store={appStore}>
-      <ThemeProvider theme={appTheme}>
+      <ThemeProvider theme={appTheme} defaultMode="light">
         <CssBaseline />
         {children}
       </ThemeProvider>

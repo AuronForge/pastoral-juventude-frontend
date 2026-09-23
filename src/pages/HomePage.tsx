@@ -5,14 +5,23 @@ const capabilities = ["React + TypeScript", "MUI", "Redux Toolkit", "OpenAPI"];
 
 export function HomePage() {
   return (
-    <Box component="main" className="d-flex align-items-center py-5">
+    <Box component="main" sx={{ display: "flex", alignItems: "center", py: 5 }}>
       <Container maxWidth="md">
         <Paper elevation={3} sx={{ overflow: "hidden" }}>
-          <Box className="row g-0">
-            <Box className="col-12 col-lg-5" sx={{ bgcolor: "primary.main" }}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", lg: "5fr 7fr" },
+            }}
+          >
+            <Box sx={{ bgcolor: "primary.main" }}>
               <Stack
                 spacing={2}
-                className="h-100 justify-content-center p-4 p-md-5"
+                sx={{
+                  height: "100%",
+                  justifyContent: "center",
+                  p: { xs: 4, md: 5 },
+                }}
                 color="primary.contrastText"
               >
                 <Typography variant="overline" component="p">
@@ -28,7 +37,7 @@ export function HomePage() {
               </Stack>
             </Box>
 
-            <Box className="col-12 col-lg-7 p-4 p-md-5">
+            <Box sx={{ p: { xs: 4, md: 5 } }}>
               <Stack spacing={3}>
                 <CheckCircleOutlinedIcon color="success" fontSize="large" />
                 <Box>
