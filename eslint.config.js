@@ -7,7 +7,13 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["dist", "coverage", "node_modules", "src/shared/api/schema.d.ts"],
+    ignores: [
+      "dist",
+      "coverage",
+      "storybook-static",
+      "node_modules",
+      "src/shared/api/schema.d.ts",
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
