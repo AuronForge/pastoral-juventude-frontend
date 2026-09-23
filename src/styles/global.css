@@ -4,11 +4,6 @@ body,
   min-height: 100%;
 }
 
-body {
-  margin: 0;
-  background: #f5f2f7;
-}
-
 main {
   min-height: 100vh;
 }
