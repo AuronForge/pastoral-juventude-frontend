@@ -15,6 +15,7 @@ export default defineConfig({
         "src/main.tsx",
         "src/test/**",
         "src/theme/docs/**",
+        "src/**/*.stories.{ts,tsx}",
         "src/**/*.d.ts",
         "src/app/store.ts",
       ],

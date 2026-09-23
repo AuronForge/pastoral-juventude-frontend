@@ -43,6 +43,7 @@ const preview: Preview = {
             "Introdução",
             "Fundações",
             ["Cores", "Tipografia", "Layout", "Elevação"],
+            "Componentes",
           ],
         ],
       },
