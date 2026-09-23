@@ -97,6 +97,7 @@ export function createAppTheme(defaultColorScheme: "light" | "dark" = "light") {
       },
     },
     spacing: 8,
+    motion: { reducedMotion: "system" },
     shape: { borderRadius: radiusTokens.md },
     shadows: appShadows,
     typography: {

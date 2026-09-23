@@ -60,6 +60,7 @@ describe("design system", () => {
       xl: 1440,
     });
     expect(appTheme.shape.borderRadius).toBe(12);
+    expect(appTheme.motion.reducedMotion).toBe("system");
     expect(appTheme.typography.displayMedium).toEqual(
       typographyTokens.displayMedium,
     );
