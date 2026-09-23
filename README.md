@@ -17,7 +17,23 @@ npm run dev
 
 ## Qualidade
 
-`npm run check` executa formatação, lint, testes com cobertura mínima de 85% e build de produção.
+`npm run check` executa formatação, lint, testes com cobertura mínima de 85%, build da aplicação e build do Storybook.
+
+## Design system e Storybook
+
+O Storybook documenta as fundações visuais consumindo os mesmos tokens da aplicação: cores primitivas e semânticas, tipografia, espaçamento, grids, breakpoints, raios, elevação e foco. A barra de ferramentas permite validar os modos claro e escuro, e as histórias executam verificações de acessibilidade.
+
+```bash
+npm run storybook
+```
+
+O catálogo fica disponível em `http://localhost:6006`. Para gerar a versão estática:
+
+```bash
+npm run build-storybook
+```
+
+Os tokens de produção ficam em `src/theme/tokens` e o tema MUI em `src/theme/appTheme.ts`. As histórias não devem redefinir esses valores; elas devem importar a mesma fonte de verdade usada pela aplicação.
 
 ## Contrato da API
 

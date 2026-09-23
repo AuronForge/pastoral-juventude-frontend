@@ -76,90 +76,94 @@ const appShadows = Array.from({ length: 25 }, (_, index) => {
   return elevationTokens.modal;
 }) as Shadows;
 
-export const appTheme = createTheme({
-  cssVariables: {
-    colorSchemeSelector: "data",
-    cssVarPrefix: "pj",
-  },
-  defaultColorScheme: "light",
-  colorSchemes: {
-    light: { palette: createPalette(semanticColors.light) },
-    dark: { palette: createPalette(semanticColors.dark) },
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: breakpointTokens.mobile,
-      md: breakpointTokens.tablet,
-      lg: breakpointTokens.desktop,
-      xl: breakpointTokens.wide,
+export function createAppTheme(defaultColorScheme: "light" | "dark" = "light") {
+  return createTheme({
+    cssVariables: {
+      colorSchemeSelector: "data",
+      cssVarPrefix: "pj",
     },
-  },
-  spacing: 8,
-  shape: { borderRadius: radiusTokens.md },
-  shadows: appShadows,
-  typography: {
-    fontFamily: fontFamilyTokens.body,
-    h1: typographyTokens.displayXl,
-    h2: typographyTokens.displayLarge,
-    h3: typographyTokens.displayMedium,
-    h4: typographyTokens.displaySmall,
-    h5: typographyTokens.headingLarge,
-    h6: typographyTokens.headingMedium,
-    subtitle1: typographyTokens.headingSmall,
-    subtitle2: typographyTokens.bodySmallStrong,
-    body1: typographyTokens.bodyLarge,
-    body2: typographyTokens.bodyMedium,
-    button: {
-      ...typographyTokens.labelMedium,
-      textTransform: "none",
+    defaultColorScheme,
+    colorSchemes: {
+      light: { palette: createPalette(semanticColors.light) },
+      dark: { palette: createPalette(semanticColors.dark) },
     },
-    caption: typographyTokens.caption,
-    overline: typographyTokens.overline,
-    displayXl: typographyTokens.displayXl,
-    displayLarge: typographyTokens.displayLarge,
-    displayMedium: typographyTokens.displayMedium,
-    displaySmall: typographyTokens.displaySmall,
-    headingLarge: typographyTokens.headingLarge,
-    headingMedium: typographyTokens.headingMedium,
-    headingSmall: typographyTokens.headingSmall,
-    bodyLarge: typographyTokens.bodyLarge,
-    bodyMedium: typographyTokens.bodyMedium,
-    bodyMediumStrong: typographyTokens.bodyMediumStrong,
-    bodySmall: typographyTokens.bodySmall,
-    bodySmallStrong: typographyTokens.bodySmallStrong,
-    labelMedium: typographyTokens.labelMedium,
-    labelSmall: typographyTokens.labelSmall,
-    metricDisplay: typographyTokens.metricDisplay,
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: {
-        ":root": designSystemCssVariables.light,
-        '[data-mui-color-scheme="dark"]': designSystemCssVariables.dark,
-        "*, *::before, *::after": { boxSizing: "border-box" },
-        "::selection": {
-          color: "var(--text-primary)",
-          backgroundColor: "var(--primary-subtle)",
-        },
-        body: {
-          margin: 0,
-          color: "var(--text-primary)",
-          backgroundColor: "var(--bg-canvas)",
-          fontFamily: "var(--font-family-body)",
-        },
-        "a:focus-visible, button:focus-visible, [tabindex]:focus-visible": {
-          outline:
-            "3px solid color-mix(in srgb, var(--border-focus) 55%, transparent)",
-          outlineOffset: 2,
-        },
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: breakpointTokens.mobile,
+        md: breakpointTokens.tablet,
+        lg: breakpointTokens.desktop,
+        xl: breakpointTokens.wide,
       },
     },
-    MuiPaper: {
-      styleOverrides: { root: { backgroundImage: "none" } },
+    spacing: 8,
+    shape: { borderRadius: radiusTokens.md },
+    shadows: appShadows,
+    typography: {
+      fontFamily: fontFamilyTokens.body,
+      h1: typographyTokens.displayXl,
+      h2: typographyTokens.displayLarge,
+      h3: typographyTokens.displayMedium,
+      h4: typographyTokens.displaySmall,
+      h5: typographyTokens.headingLarge,
+      h6: typographyTokens.headingMedium,
+      subtitle1: typographyTokens.headingSmall,
+      subtitle2: typographyTokens.bodySmallStrong,
+      body1: typographyTokens.bodyLarge,
+      body2: typographyTokens.bodyMedium,
+      button: {
+        ...typographyTokens.labelMedium,
+        textTransform: "none",
+      },
+      caption: typographyTokens.caption,
+      overline: typographyTokens.overline,
+      displayXl: typographyTokens.displayXl,
+      displayLarge: typographyTokens.displayLarge,
+      displayMedium: typographyTokens.displayMedium,
+      displaySmall: typographyTokens.displaySmall,
+      headingLarge: typographyTokens.headingLarge,
+      headingMedium: typographyTokens.headingMedium,
+      headingSmall: typographyTokens.headingSmall,
+      bodyLarge: typographyTokens.bodyLarge,
+      bodyMedium: typographyTokens.bodyMedium,
+      bodyMediumStrong: typographyTokens.bodyMediumStrong,
+      bodySmall: typographyTokens.bodySmall,
+      bodySmallStrong: typographyTokens.bodySmallStrong,
+      labelMedium: typographyTokens.labelMedium,
+      labelSmall: typographyTokens.labelSmall,
+      metricDisplay: typographyTokens.metricDisplay,
     },
-    MuiSkeleton: {
-      styleOverrides: { root: { backgroundColor: "var(--skeleton-base)" } },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          ":root": designSystemCssVariables.light,
+          '[data-mui-color-scheme="dark"]': designSystemCssVariables.dark,
+          "*, *::before, *::after": { boxSizing: "border-box" },
+          "::selection": {
+            color: "var(--text-primary)",
+            backgroundColor: "var(--primary-subtle)",
+          },
+          body: {
+            margin: 0,
+            color: "var(--text-primary)",
+            backgroundColor: "var(--bg-canvas)",
+            fontFamily: "var(--font-family-body)",
+          },
+          "a:focus-visible, button:focus-visible, [tabindex]:focus-visible": {
+            outline:
+              "3px solid color-mix(in srgb, var(--border-focus) 55%, transparent)",
+            outlineOffset: 2,
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: { root: { backgroundImage: "none" } },
+      },
+      MuiSkeleton: {
+        styleOverrides: { root: { backgroundColor: "var(--skeleton-base)" } },
+      },
     },
-  },
-});
+  });
+}
+
+export const appTheme = createAppTheme();
