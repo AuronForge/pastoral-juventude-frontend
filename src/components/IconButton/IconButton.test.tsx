@@ -1,4 +1,4 @@
-import { DeleteOutline, EditOutlined } from "@mui/icons-material";
+import { DeleteOutlined, EditOutlined } from "@mui/icons-material";
 import { render, screen } from "@testing-library/react";
 import { createRef } from "react";
 import { IconButton } from "./IconButton";
@@ -47,7 +47,11 @@ describe("IconButton", () => {
 
   it("respeita o estado desabilitado", () => {
     render(
-      <IconButton disabled icon={<DeleteOutline />} label="Excluir encontro" />,
+      <IconButton
+        disabled
+        icon={<DeleteOutlined />}
+        label="Excluir encontro"
+      />,
     );
 
     expect(
