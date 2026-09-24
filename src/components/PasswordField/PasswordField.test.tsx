@@ -1,5 +1,5 @@
-import { VisibilityOff } from "@mui/icons-material";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
 import { PasswordField } from "./PasswordField";
 
@@ -19,7 +19,6 @@ describe("PasswordField", () => {
         minLength={8}
         placeholder="Digite sua senha"
         required
-        trailingIcon={<VisibilityOff data-testid="icone-senha" />}
       />,
     );
 
@@ -31,7 +30,38 @@ describe("PasswordField", () => {
     expect(
       screen.getByText("A senha deve ter ao menos 8 caracteres."),
     ).toHaveClass("Mui-error");
-    expect(screen.getByTestId("icone-senha")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Mostrar senha" }),
+    ).toBeInTheDocument();
+  });
+
+  it("revela e oculta a senha sem alterar o valor do campo", async () => {
+    const user = userEvent.setup();
+
+    render(<PasswordField defaultValue="segredo123" label="Senha" />);
+
+    const input = screen.getByLabelText("Senha");
+    await user.click(screen.getByRole("button", { name: "Mostrar senha" }));
+
+    expect(input).toHaveAttribute("type", "text");
+    expect(input).toHaveValue("segredo123");
+    expect(
+      screen.getByRole("button", { name: "Ocultar senha" }),
+    ).toHaveAttribute("aria-pressed", "true");
+
+    await user.click(screen.getByRole("button", { name: "Ocultar senha" }));
+
+    expect(input).toHaveAttribute("type", "password");
+  });
+
+  it("permite personalizar os nomes acessíveis da ação", () => {
+    render(
+      <PasswordField label="Senha" showPasswordLabel="Exibir credencial" />,
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Exibir credencial" }),
+    ).toBeInTheDocument();
   });
 
   it("encaminha a referência ao input nativo", () => {
