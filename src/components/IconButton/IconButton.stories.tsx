@@ -1,4 +1,9 @@
-import { Add, DeleteOutline, EditOutlined, Refresh } from "@mui/icons-material";
+import {
+  Add,
+  DeleteOutlined,
+  EditOutlined,
+  Refresh,
+} from "@mui/icons-material";
 import { Stack } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IconButton } from "./IconButton";
@@ -56,7 +61,7 @@ export const Hierarquias: Story = {
         variant="tertiary"
       />
       <IconButton
-        icon={<DeleteOutline />}
+        icon={<DeleteOutlined />}
         label="Excluir encontro"
         variant="danger"
       />
@@ -102,7 +107,7 @@ export const Estados: Story = {
         disabled
       />
       <IconButton
-        icon={<DeleteOutline />}
+        icon={<DeleteOutlined />}
         label="Exclusão indisponível"
         disabled
         variant="danger"
