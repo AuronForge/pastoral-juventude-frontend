@@ -71,7 +71,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       disabled = false,
       errorMessage,
       hint,
+      inputProps,
       leadingIcon,
+      minLength,
       prefix,
       readOnly = false,
       size = "large",
@@ -113,6 +115,10 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             readOnly,
             startAdornment,
             endAdornment,
+          },
+          htmlInput: {
+            ...inputProps,
+            minLength,
           },
         }}
       />
