@@ -69,7 +69,7 @@ export const Hierarquias: Story = {
 
 export const Tamanhos: Story = {
   render: () => (
-    <Stack alignItems="center" direction="row" spacing={2}>
+    <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
       <IconButton
         icon={<EditOutlined />}
         label="Editar (pequeno)"
