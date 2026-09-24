@@ -1,4 +1,4 @@
-import { LockOutlined, VisibilityOff } from "@mui/icons-material";
+import { LockOutlined } from "@mui/icons-material";
 import { Stack } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PasswordField } from "./PasswordField";
@@ -85,7 +85,6 @@ export const Icones: Story = {
         label="Senha"
         placeholder="Digite sua senha"
         size="large"
-        trailingIcon={<VisibilityOff />}
       />
     </Stack>
   ),
@@ -93,7 +92,7 @@ export const Icones: Story = {
     docs: {
       description: {
         story:
-          "Os ícones seguem o contrato do Campo de texto. O protótipo permite ícones opcionais nos dois lados; um controle específico de visibilidade será avaliado com o componente IconButton.",
+          "O ícone à direita alterna entre mostrar e ocultar a senha, mantendo nome acessível e estado anunciado. Ícones à esquerda seguem o contrato do Campo de texto.",
       },
     },
   },
