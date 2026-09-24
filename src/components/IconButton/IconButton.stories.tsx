@@ -1,9 +1,7 @@
-import {
-  Add,
-  DeleteOutlined,
-  EditOutlined,
-  Refresh,
-} from "@mui/icons-material";
+import Add from "@mui/icons-material/Add";
+import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
+import EditOutlined from "@mui/icons-material/EditOutlined";
+import Refresh from "@mui/icons-material/Refresh";
 import { Stack } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IconButton } from "./IconButton";
