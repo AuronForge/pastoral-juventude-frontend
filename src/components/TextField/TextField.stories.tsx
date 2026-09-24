@@ -125,3 +125,53 @@ export const Tamanhos: Story = {
     </Box>
   ),
 };
+
+export const Validacao: Story = {
+  name: "Validação e mensagens externas",
+  render: () => (
+    <Stack spacing={2.5} sx={{ maxWidth: 420 }}>
+      <Typography variant="bodySmall" color="text.secondary">
+        O componente expõe os atributos nativos do HTML e recebe a mensagem
+        validada pela camada de formulário, sem conter regras de negócio.
+      </Typography>
+      <TextField
+        label="E-mail"
+        type="email"
+        placeholder="nome@exemplo.com"
+        hint="Informe um e-mail válido."
+        required
+      />
+      <TextField
+        label="Senha"
+        type="password"
+        placeholder="Crie uma senha"
+        hint="Use no mínimo 8 caracteres, sem espaços."
+        minLength={8}
+        required
+      />
+      <TextField
+        label="Quantidade de participantes"
+        type="number"
+        placeholder="0"
+        hint="Informe um número entre 1 e 100."
+        inputProps={{ min: 1, max: 100 }}
+        required
+      />
+      <TextField
+        label="E-mail"
+        defaultValue="jovem@"
+        type="email"
+        errorMessage="Informe um endereço de e-mail válido."
+        required
+      />
+    </Stack>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`errorMessage` é o ponto de integração para React Hook Form, Zod ou outro validador externo. Validações específicas, como senha e telefone, pertencem a componentes ou esquemas especializados.",
+      },
+    },
+  },
+};
