@@ -11,6 +11,8 @@ export interface ApiErrorDetails extends Omit<
   endpoint: string;
   status: number;
   timestamp?: string;
+  /** Deadline received through Retry-After; absent means no client timer. */
+  retryAfterAt?: number;
 }
 
 export class ApiRequestError extends Error {

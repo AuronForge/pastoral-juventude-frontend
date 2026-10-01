@@ -34,6 +34,27 @@ describe("API de autenticação", () => {
     ).resolves.toMatchObject({ tokenType: "Bearer", accessToken: "token" });
   });
 
+  it("transporta Retry-After como prazo absoluto somente em 429", async () => {
+    postMock.mockResolvedValue({
+      error: { ...problem, status: 429 },
+      response: new Response(null, {
+        status: 429,
+        headers: { "Retry-After": "73" },
+      }),
+    });
+    const now = Date.now();
+    await expect(
+      authenticateUser({ email: "u@exemplo.test", senha: "senha" }),
+    ).rejects.toMatchObject({ details: { retryAfterAt: expect.any(Number) } });
+    try {
+      await authenticateUser({ email: "u@exemplo.test", senha: "senha" });
+    } catch (error) {
+      expect(
+        (error as ApiRequestError).details.retryAfterAt,
+      ).toBeGreaterThanOrEqual(now + 73000);
+    }
+  });
+
   it("preserva o envelope de erro retornado pela API", async () => {
     postMock.mockResolvedValue({
       error: problem,

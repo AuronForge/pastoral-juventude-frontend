@@ -299,6 +299,8 @@ export interface operations {
             /** @description Default Response */
             429: {
                 headers: {
+                    /** @description Segundos restantes de bloqueio, obtidos do TTL do Redis. */
+                    "Retry-After"?: number;
                     [name: string]: unknown;
                 };
                 content: {
