@@ -1,0 +1,57 @@
+name: Publish development images
+run-name: Publish development ${{ github.event.workflow_run.head_sha }}
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [develop]
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish-development
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'develop' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish application image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/auronforge/pastoral-juventude-frontend:dev-${{ github.event.workflow_run.head_sha }}
+          labels: org.opencontainers.image.revision=${{ github.event.workflow_run.head_sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true
+      - name: Request development deployment
+        if: vars.DEV_AUTO_DEPLOY == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.INFRA_DISPATCH_TOKEN }}
+          SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          test -n "$GH_TOKEN"
+          gh api --method POST repos/AuronForge/pastoral-juventude-infra/actions/workflows/deploy-development.yml/dispatches \
+            -f ref=develop -f 'inputs[component]=frontend' -f "inputs[commit_sha]=$SOURCE_SHA"
