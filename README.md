@@ -76,7 +76,7 @@ O healthcheck fica disponível em `GET /health`.
 
 ## Publicação da imagem
 
-A imagem é publicada no GHCR somente por tags Git no formato exato `vMAJOR.MINOR.PATCH`. A versão da tag precisa coincidir com a versão do `package.json`.
+A imagem de release é publicada no GHCR por tags Git no formato exato `vMAJOR.MINOR.PATCH`. A versão da tag precisa coincidir com a versão do `package.json`.
 
 ```bash
 git tag -a v0.1.0 -m "release: frontend v0.1.0"
@@ -86,3 +86,7 @@ git push origin v0.1.0
 O exemplo publica `ghcr.io/auronforge/pastoral-juventude-frontend:0.1.0`. Não são criadas tags flutuantes como `latest`, `0` ou `0.1`.
 
 Após a primeira publicação, confirme que o pacote está público no GHCR ou configure autenticação no host de implantação.
+
+## Deploy contínuo em desenvolvimento
+
+Consulte [docs/DEPLOY-DESENVOLVIMENTO.md](docs/DEPLOY-DESENVOLVIMENTO.md) para a integração com a esteira da infraestrutura e seus pré-requisitos.
