@@ -17,3 +17,7 @@ workflows em outro repositório. Com a variável desativada, só as imagens são
 
 O procedimento completo, permissões, bootstrap, diagnóstico e rollback estão em
 [infra/docs/DESENVOLVIMENTO.md](https://github.com/AuronForge/pastoral-juventude-infra/blob/develop/docs/DESENVOLVIMENTO.md).
+
+O frontend público será publicado na Vercel por um job da CI após os gates,
+com proxy de `/api` para o backend no Ubuntu. Bootstrap, variáveis, smoke,
+promoção e rollback: [Vercel de desenvolvimento](./VERCEL-DESENVOLVIMENTO.md).
