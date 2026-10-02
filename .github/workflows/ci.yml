@@ -32,6 +32,18 @@ jobs:
       - name: Validate project
         run: npm run check
 
+      - name: Validate Vercel routing and artifact preparation
+        run: node --test scripts/prepare-vercel.test.mjs scripts/smoke-vercel.test.mjs
+
+      - name: Save validated application build
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
   container:
     name: Container build
     runs-on: ubuntu-latest
@@ -43,3 +55,74 @@ jobs:
 
       - name: Build image
         run: docker build --tag pastoral-juventude-frontend:ci .
+
+  vercel-development:
+    name: Deploy frontend development to Vercel
+    needs: [quality, container]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && vars.VERCEL_DEV_DEPLOY == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: vercel-development
+      cancel-in-progress: true
+    environment:
+      name: vercel-development
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      VERCEL_TELEMETRY_DISABLED: "1"
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+      BACKEND_PUBLIC_ORIGIN: ${{ vars.BACKEND_PUBLIC_ORIGIN }}
+    steps:
+      - name: Checkout validated revision
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24.8.0
+      - name: Download validated build
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist-${{ github.sha }}
+          path: dist/
+      - name: Prepare Vercel artifact and project link
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          test -n "$VERCEL_TOKEN"
+          test -n "$VERCEL_ORG_ID"
+          test -n "$VERCEL_PROJECT_ID"
+          node scripts/prepare-vercel.mjs
+          node --input-type=module -e 'import {writeFileSync} from "node:fs"; writeFileSync(".vercel/project.json", JSON.stringify({orgId:process.env.VERCEL_ORG_ID,projectId:process.env.VERCEL_PROJECT_ID}));'
+      - name: Install pinned Vercel CLI
+        run: npm install --global vercel@59.19.1
+      - name: Publish candidate without assigning stable domains
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel deploy --prebuilt --prod --skip-domain --yes --token "$VERCEL_TOKEN" --meta "githubCommitSha=$GITHUB_SHA" > deployment-url.txt
+          url="$(cat deployment-url.txt)"
+          echo "DEPLOYMENT_URL=$url" >> "$GITHUB_ENV"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - name: Smoke application, SPA route and backend proxy
+        run: node scripts/smoke-vercel.mjs
+      - name: Assign development project's stable domain
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel promote "$DEPLOYMENT_URL" --yes --token "$VERCEL_TOKEN"
+      - name: Save frontend deployment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vercel-development-${{ github.sha }}
+          path: |
+            deployment-url.txt
+            vercel-smoke.json
+            .vercel/output/config.json
+          if-no-files-found: ignore
+          include-hidden-files: true
+          retention-days: 14

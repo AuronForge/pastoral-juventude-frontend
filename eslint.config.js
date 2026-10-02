@@ -9,6 +9,7 @@ export default tseslint.config(
   {
     ignores: [
       "dist",
+      ".vercel",
       "coverage",
       "storybook-static",
       "node_modules",

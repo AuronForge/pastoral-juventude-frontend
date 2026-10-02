@@ -6,3 +6,6 @@ storybook-static/
 .env.local
 *.log
 .DS_Store
+.vercel/
+deployment-url.txt
+vercel-smoke.json
