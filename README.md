@@ -90,3 +90,13 @@ Após a primeira publicação, confirme que o pacote está público no GHCR ou c
 ## Deploy contínuo em desenvolvimento
 
 Consulte [docs/DEPLOY-DESENVOLVIMENTO.md](docs/DEPLOY-DESENVOLVIMENTO.md) para a integração com a esteira da infraestrutura e seus pré-requisitos.
+
+## Jornada de Login com API
+
+O acesso anônimo a `/` redireciona para `/login`. Login normal usa a página inicial existente; primeiro acesso navega para `/alterar-senha` e, após HTTP 204, exige novo Login. Os tokens ficam somente no Redux em memória. `Continuar conectado` e recuperação permanecem indisponíveis nesta entrega.
+
+O cliente usa a mesma origem por padrão, compatível com o proxy `/api` da infraestrutura. Em desenvolvimento separado, configure `VITE_API_BASE_URL` e a origem permitida no backend. Os tipos podem ser gerados do contrato local: `OPENAPI_URL=../pastoral-juventude-backend/docs/api/openapi.json npm run api:generate`.
+
+O prazo de 429 vem de `Retry-After`; sem cabeçalho válido não há contador artificial. Rede e 5xx preservam valores para nova tentativa. A validade local dos tokens usa `expiresIn`; a API deve continuar validando sessão e permissões em cada Resource. Renovação explícita e reconstrução de sessão após reload permanecem fora do escopo.
+
+As histórias de Login usam a mesma composição da aplicação. A troca obrigatória está em `Jornadas/Acesso/003 - Troca obrigatória de senha`. Esta entrega compõe os componentes aprovados, sem adicionar componentes públicos ao Design System nem criar `AccessLayout`.

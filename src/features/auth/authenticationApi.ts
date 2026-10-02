@@ -1,3 +1,4 @@
+import { parseRetryAfter } from "./retryAfter";
 import type { operations } from "../../shared/api/schema";
 import {
   ApiRequestError,
@@ -19,7 +20,7 @@ export async function authenticateUser(
   credentials: LoginCredentials,
 ): Promise<LoginResponse> {
   try {
-    const { data, error } = await apiClient.POST(LOGIN_ENDPOINT, {
+    const { data, error, response } = await apiClient.POST(LOGIN_ENDPOINT, {
       body: credentials,
     });
 
@@ -28,7 +29,16 @@ export async function authenticateUser(
     }
 
     if (error) {
-      throw new ApiRequestError(error);
+      throw new ApiRequestError({
+        ...error,
+        ...(error.status === 429
+          ? {
+              retryAfterAt: parseRetryAfter(
+                response.headers.get("Retry-After"),
+              ),
+            }
+          : {}),
+      });
     }
 
     throw new ApiRequestError(createCommunicationError(LOGIN_ENDPOINT));

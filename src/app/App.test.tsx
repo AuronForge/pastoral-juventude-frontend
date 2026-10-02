@@ -13,7 +13,7 @@ describe("App", () => {
     );
 
     expect(
-      await screen.findByRole("heading", { name: "Pastoral da Juventude" }),
+      await screen.findByRole("heading", { name: "Entrar" }),
     ).toBeInTheDocument();
   });
 });

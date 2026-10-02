@@ -22,7 +22,7 @@ const success: LoginResponse = {
 const problem = (status: number) =>
   new ApiRequestError({
     status,
-    codigo: "EXEMPLO",
+    codigo: status === 401 ? "CREDENCIAIS_INVALIDAS" : "EXEMPLO",
     titulo: "Detalhe interno",
     mensagem: "Usuário inexistente",
     endpoint: "/api/v1/autenticacao/login",
@@ -44,7 +44,7 @@ const password = () => screen.getByLabelText(/^Senha/);
 const submit = () => screen.getByRole("button", { name: "Entrar" });
 
 describe("Jornada de Login no Storybook", () => {
-  it("permite preencher, alternar senha, marcar opção e enviar pelo teclado", async () => {
+  it("permite preencher, alternar senha e enviar pelo teclado", async () => {
     const onAuthenticated = vi.fn();
     const { user, authenticate } = setup({ onAuthenticated });
     expect(email()).toHaveAttribute("autocomplete", "username");
@@ -54,10 +54,8 @@ describe("Jornada de Login no Storybook", () => {
     await user.type(password(), credentials.senha);
     await user.click(screen.getByRole("button", { name: "Mostrar senha" }));
     expect(password()).toHaveAttribute("type", "text");
-    await user.click(
-      screen.getByRole("checkbox", { name: "Continuar conectado" }),
-    );
-    expect(screen.getByRole("checkbox")).toBeChecked();
+    expect(screen.getByRole("checkbox")).toBeDisabled();
+    expect(screen.getByRole("checkbox")).not.toBeChecked();
     await user.click(password());
     await user.keyboard("{Enter}");
     await waitFor(() => expect(onAuthenticated).toHaveBeenCalledWith(success));
@@ -108,12 +106,12 @@ describe("Jornada de Login no Storybook", () => {
   it("401 limpa apenas a senha, usa mensagem genérica e devolve o foco", async () => {
     const authenticate = vi.fn().mockRejectedValue(problem(401));
     const { user } = setup({ initialCredentials: credentials, authenticate });
-    await user.click(screen.getByRole("checkbox"));
     await user.click(submit());
     await waitFor(() => expect(password()).toHaveFocus());
     expect(password()).toHaveValue("");
     expect(email()).toHaveValue(credentials.email);
-    expect(screen.getByRole("checkbox")).toBeChecked();
+    expect(screen.getByRole("checkbox")).toBeDisabled();
+    expect(screen.getByRole("checkbox")).not.toBeChecked();
     expect(screen.getByRole("alert")).toHaveTextContent(
       "E-mail ou senha incorretos",
     );

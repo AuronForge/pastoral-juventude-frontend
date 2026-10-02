@@ -62,6 +62,18 @@ const authSlice = createSlice({
         : "anonymous";
       state.error = action.payload;
     },
+    sessionExpired() {
+      return {
+        ...initialAuthState,
+        error: {
+          status: 401,
+          codigo: "SESSAO_EXPIRADA",
+          titulo: "Tempo esgotado",
+          mensagem: "Inicie novamente o acesso para continuar.",
+          endpoint: "/login",
+        },
+      };
+    },
     sessionCleared() {
       return initialAuthState;
     },
@@ -74,6 +86,7 @@ export const {
   authenticationSucceeded,
   passwordChangeRequired,
   passwordChangeStarted,
+  sessionExpired,
   sessionCleared,
 } = authSlice.actions;
 export const authReducer = authSlice.reducer;

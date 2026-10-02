@@ -61,7 +61,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Composição dos componentes aprovados, sem AccessLayout. Referências: Figma 86:433 (desktop), 86:759 (tablet), 103:2220 (celular), 86:560 (401) e 86:693 (alerta bloqueante). Usa BrandLockup oficial no lugar da antiga sigla PJ. Respostas simuladas com o contrato de login existente, sem backend, Redux global ou armazenamento de tokens. O término indica apenas a fronteira de navegação, sem implementar a página de troca de senha. Continuar conectado altera somente o checkbox nesta prévia; o contrato atual não recebe essa opção. Recuperação de senha permanece indisponível; logout e renovação estão fora do escopo. As mensagens de erro são genéricas, sem reproduzir detalhes internos da API. 429 sem temporizador ou prazo inventado. Os helpers reservados pelos campos aprovados são mantidos; não se altera a API dos componentes nesta composição.",
+          "Composição dos componentes aprovados, sem AccessLayout. Referências: Figma 86:433 (desktop), 86:759 (tablet), 103:2220 (celular), 86:560 (401) e 86:693 (alerta bloqueante). Usa BrandLockup oficial no lugar da antiga sigla PJ. Respostas simuladas com o contrato de login existente, sem backend, Redux global ou armazenamento de tokens. O término desta história indica a fronteira de navegação; a troca está na história 003. Continuar conectado permanece indisponível; o contrato atual não recebe essa opção. Recuperação de senha permanece indisponível; logout e renovação estão fora do escopo. As mensagens de erro são genéricas, sem reproduzir detalhes internos da API. 429 sem cabeçalho válido não usa temporizador; com prazo recebido, bloqueia envio até sua liberação. Os helpers reservados pelos campos aprovados são mantidos; não se altera a API dos componentes nesta composição.",
       },
     },
   },
@@ -121,7 +121,24 @@ export const PrimeiroAcesso: Story = {
     docs: {
       description: {
         story:
-          "Acione Entrar para demonstrar o desvio obrigatório: TROCA_SENHA não concede acesso normal. A página de alteração de senha será composta em outra jornada.",
+          "Acione Entrar para demonstrar o desvio obrigatório: TROCA_SENHA não concede acesso normal. A página de alteração de senha está disponível na jornada 003.",
+      },
+    },
+  },
+};
+
+export const SenhaAlterada: Story = { args: { notice: "passwordChanged" } };
+export const LimiteComPrazo: Story = {
+  args: {
+    initialCredentials: credentials,
+    authenticate: () =>
+      reject({ ...limited, retryAfterAt: Date.now() + 73000 }),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Acione Entrar para receber um prazo simulado da API; o contador não existe sem esse prazo.",
       },
     },
   },
