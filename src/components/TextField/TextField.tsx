@@ -59,6 +59,10 @@ const StyledTextField = styled(MuiTextField, {
     "&.Mui-disabled input": { WebkitTextFillColor: "var(--text-disabled)" },
   },
   "& .MuiOutlinedInput-input": { padding: "0 var(--spacing-md)" },
+  "& .MuiOutlinedInput-input::placeholder": {
+    color: "var(--text-placeholder)",
+    opacity: 1,
+  },
   "& .MuiInputAdornment-root": {
     color: "inherit",
     marginLeft: "var(--spacing-md)",
@@ -111,7 +115,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         inputRef={ref}
         variant="outlined"
         slotProps={{
+          inputLabel: { shrink: true },
           input: {
+            notched: false,
             readOnly,
             startAdornment,
             endAdornment,

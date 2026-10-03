@@ -214,7 +214,6 @@ export function PasswordRecoveryView({
               flexDirection: "column",
               mt: "28px",
               "& .MuiFormHelperText-root": { marginTop: 0 },
-              "& input::placeholder": { opacity: "1 !important" },
             },
             "& .login-submit": { mt: "var(--spacing-2xl)" },
           }}
