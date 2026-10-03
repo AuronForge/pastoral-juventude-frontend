@@ -97,6 +97,6 @@ O acesso anônimo a `/` redireciona para `/login`. Login normal usa a página in
 
 O cliente usa a mesma origem por padrão, compatível com o proxy `/api` da infraestrutura. Em desenvolvimento separado, configure `VITE_API_BASE_URL` e a origem permitida no backend. Os tipos podem ser gerados do contrato local: `OPENAPI_URL=../pastoral-juventude-backend/docs/api/openapi.json npm run api:generate`.
 
-O prazo de 429 vem de `Retry-After`; sem cabeçalho válido não há contador artificial. Rede e 5xx preservam valores para nova tentativa. A validade local dos tokens usa `expiresIn`; a API deve continuar validando sessão e permissões em cada Resource. Renovação explícita e reconstrução de sessão após reload permanecem fora do escopo.
+O prazo de 429 vem de `Retry-After`; sem cabeçalho válido não há contador artificial. Rede e 5xx preservam valores para nova tentativa. A validade local dos tokens usa `expiresIn`; a API deve continuar validando sessão e permissões em cada Resource. A reconstrução de sessão após reload usa RES-106; consulte docs/RESTAURACAO-SESSAO.md. A expiração do access token durante uma página aberta continua exigindo novo login; não há renovação periódica automática.
 
 As histórias de Login usam a mesma composição da aplicação. A troca obrigatória está em `Jornadas/Acesso/003 - Troca obrigatória de senha`. Esta entrega compõe os componentes aprovados, sem adicionar componentes públicos ao Design System nem criar `AccessLayout`.

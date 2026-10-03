@@ -171,12 +171,22 @@ export function LoginView({
                 title={
                   notice === "passwordChanged"
                     ? "Senha alterada"
-                    : "Tempo esgotado"
+                    : notice === "blocked"
+                      ? "Usuário bloqueado"
+                      : notice === "inactive"
+                        ? "Usuário inativo"
+                        : notice === "replaced"
+                          ? "Sessão substituída"
+                          : "Tempo esgotado"
                 }
               >
                 {notice === "passwordChanged"
                   ? "Entre com a sua nova senha."
-                  : "Inicie novamente o acesso para continuar."}
+                  : notice === "blocked" || notice === "inactive"
+                    ? "Entre em contato com o coordenador da pastoral."
+                    : notice === "replaced"
+                      ? "Um novo login encerrou esta sessão. Entre novamente para continuar."
+                      : "Inicie novamente o acesso para continuar."}
               </Alert>
             )}
             {error && (

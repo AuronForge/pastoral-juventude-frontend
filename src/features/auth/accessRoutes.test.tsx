@@ -22,7 +22,13 @@ import { apiClient } from "../../shared/api/client";
 
 vi.mock("../../shared/api/client", () => ({ apiClient: { POST: vi.fn() } }));
 const post = vi.mocked(apiClient.POST);
-function setup(path = "/", auth = initialAuthState) {
+function setup(
+  path = "/",
+  auth: import("./authSlice").AuthState = {
+    ...initialAuthState,
+    restoration: "complete" as const,
+  },
+) {
   const store = configureStore({
     reducer: { auth: authReducer, system: systemReducer },
     preloadedState: { auth },
@@ -102,7 +108,10 @@ it("conclui primeiro acesso, descarta token restrito e exige novo Login", async 
   });
   fireEvent.submit(screen.getByRole("form"));
   await screen.findByText("Senha alterada");
-  expect(store.getState().auth).toEqual(initialAuthState);
+  expect(store.getState().auth).toEqual({
+    ...initialAuthState,
+    restoration: "complete",
+  });
   expect(post).toHaveBeenLastCalledWith(
     "/api/v1/autenticacao/alterar-senha",
     expect.objectContaining({

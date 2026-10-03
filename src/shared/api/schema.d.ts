@@ -24,6 +24,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/autenticacao/renovar-token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Renovar Access Token
+         * @description RES-106: cookie HttpOnly com rotação obrigatória, até três renovações e sessão absoluta de uma hora. Exige Origin permitido. Não aceita Refresh Token no corpo.
+         */
+        post: operations["renovarAccessToken"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/autenticacao/alterar-senha": {
         parameters: {
             query?: never;
@@ -301,6 +321,202 @@ export interface operations {
                 headers: {
                     /** @description Segundos restantes de bloqueio, obtidos do TTL do Redis. */
                     "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+        };
+    };
+    renovarAccessToken: {
+        parameters: {
+            query?: never;
+            header?: {
+                origin?: string;
+                "x-correlation-id"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Default Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        accessToken: string;
+                        /** @enum {string} */
+                        tokenType: "Bearer";
+                        expiresIn: number;
+                    };
+                };
+            };
+            /** @description Default Response */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            413: {
+                headers: {
                     [name: string]: unknown;
                 };
                 content: {

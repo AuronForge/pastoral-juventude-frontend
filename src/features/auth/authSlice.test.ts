@@ -14,6 +14,7 @@ describe("authSlice", () => {
     expect(authReducer(initialAuthState, authenticationStarted())).toEqual({
       ...initialAuthState,
       status: "authenticating",
+      restoration: "complete",
     });
   });
 
@@ -76,8 +77,9 @@ describe("authSlice", () => {
       authenticationSucceeded({ accessToken: "access-token", expiresIn: 900 }),
     );
 
-    expect(authReducer(authenticatedState, sessionCleared())).toEqual(
-      initialAuthState,
-    );
+    expect(authReducer(authenticatedState, sessionCleared())).toEqual({
+      ...initialAuthState,
+      restoration: "complete",
+    });
   });
 });
