@@ -6,6 +6,7 @@ import {
 import {
   authenticateUser,
   changePassword,
+  refreshSession,
   type ChangePasswordRequest,
   type LoginCredentials,
 } from "./authenticationApi";
@@ -16,7 +17,41 @@ import {
   passwordChangeRequired,
   passwordChangeStarted,
   sessionCleared,
+  restorationStarted,
+  restorationFailed,
+  restorationRejected,
 } from "./authSlice";
+
+export function restoreSession() {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    // Synchronous state guard also deduplicates React StrictMode effects.
+    const state = getState().auth;
+    if (state.restoration !== "pending" && state.restoration !== "failed")
+      return;
+    dispatch(restorationStarted());
+    try {
+      const response = await refreshSession();
+      if (getState().auth.restoration !== "running") return;
+      dispatch(authenticationSucceeded(response));
+    } catch (error: unknown) {
+      if (getState().auth.restoration !== "running") return;
+      const details =
+        error instanceof ApiRequestError
+          ? error.details
+          : createCommunicationError("/api/v1/autenticacao/renovar-token");
+      if (details.status === 400 && details.codigo === "TOKEN_REFRESH_AUSENTE")
+        dispatch(sessionCleared());
+      else if (
+        details.status === 401 ||
+        details.status === 409 ||
+        (details.status === 403 &&
+          ["USUARIO_BLOQUEADO", "USUARIO_INATIVO"].includes(details.codigo))
+      )
+        dispatch(restorationRejected(details));
+      else dispatch(restorationFailed(details));
+    }
+  };
+}
 
 const CHANGE_PASSWORD_ENDPOINT = "/api/v1/autenticacao/alterar-senha";
 

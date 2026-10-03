@@ -12,9 +12,15 @@ export function LoginPage() {
   if (auth.passwordChangeToken) return <Navigate to="/alterar-senha" replace />;
   const notice = state?.passwordChanged
     ? "passwordChanged"
-    : state?.expired || auth.error?.codigo === "SESSAO_EXPIRADA"
-      ? "expired"
-      : undefined;
+    : auth.error?.codigo === "USUARIO_BLOQUEADO"
+      ? "blocked"
+      : auth.error?.codigo === "USUARIO_INATIVO"
+        ? "inactive"
+        : auth.error?.codigo === "SESSAO_SUBSTITUIDA"
+          ? "replaced"
+          : state?.expired || auth.error?.codigo === "SESSAO_EXPIRADA"
+            ? "expired"
+            : undefined;
   return (
     <LoginView
       notice={notice}

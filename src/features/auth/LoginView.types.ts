@@ -7,7 +7,7 @@ export interface LoginViewProps {
   initialCredentials?: LoginCredentials;
   initialError?: ApiErrorDetails;
   loading?: boolean;
-  notice?: "passwordChanged" | "expired";
+  notice?: "passwordChanged" | "expired" | "blocked" | "inactive" | "replaced";
   onAuthenticated?: (
     response: Extract<LoginResponse, { tokenType: "Bearer" }>,
   ) => void;

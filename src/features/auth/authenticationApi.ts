@@ -8,6 +8,20 @@ import { apiClient } from "../../shared/api/client";
 
 const LOGIN_ENDPOINT = "/api/v1/autenticacao/login" as const;
 const CHANGE_PASSWORD_ENDPOINT = "/api/v1/autenticacao/alterar-senha" as const;
+const REFRESH_ENDPOINT = "/api/v1/autenticacao/renovar-token" as const;
+
+export async function refreshSession() {
+  try {
+    const { data, error } = await apiClient.POST(REFRESH_ENDPOINT);
+    if (error) throw new ApiRequestError(error);
+    if (!data)
+      throw new ApiRequestError(createCommunicationError(REFRESH_ENDPOINT));
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof ApiRequestError) throw error;
+    throw new ApiRequestError(createCommunicationError(REFRESH_ENDPOINT));
+  }
+}
 
 export type LoginCredentials =
   operations["autenticarUsuario"]["requestBody"]["content"]["application/json"];
