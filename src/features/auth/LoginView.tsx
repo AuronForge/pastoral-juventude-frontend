@@ -34,6 +34,7 @@ export function LoginView({
   initialCredentials = { email: "", senha: "" },
   initialError,
   loading = false,
+  recoveryHref,
   notice,
   onAuthenticated,
   onPasswordChangeRequired,
@@ -243,9 +244,13 @@ export function LoginView({
                 aria-label="Continuar conectado (indisponível)"
               />
               <Link
-                href="#recuperacao-senha"
-                disabled
-                aria-label="Esqueci minha senha (indisponível)"
+                href={recoveryHref ?? "#recuperacao-senha"}
+                disabled={!recoveryHref}
+                aria-label={
+                  recoveryHref
+                    ? "Esqueci minha senha"
+                    : "Esqueci minha senha (indisponível)"
+                }
               >
                 Esqueci minha senha
               </Link>
