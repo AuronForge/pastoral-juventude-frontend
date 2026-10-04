@@ -24,7 +24,7 @@ function setup(
   );
   return { recover, onBack, ...rendered };
 }
-function fill(date = "29/02/2000") {
+function fill(date = "2000-02-29") {
   for (const [label, value] of [
     [/^Nome completo/, "  Maria Silva  "],
     [/^E-mail/, "  MARIA@EXEMPLO.TEST "],
@@ -48,11 +48,15 @@ it("foca título, valida os quatro campos e mantém foco no primeiro erro", () =
   submit();
   expect(recover).not.toHaveBeenCalled();
   expect(screen.getByLabelText(/^Nome completo/)).toHaveFocus();
-  fill("29/02/2001");
+  expect(screen.getByLabelText(/^Data de nascimento/)).toHaveAttribute(
+    "type",
+    "date",
+  );
+  fill("2001-02-29");
   submit();
   expect(recover).not.toHaveBeenCalled();
   expect(screen.getByLabelText(/^Data de nascimento/)).toHaveFocus();
-  expect(screen.getByText(/data válida no formato/)).toBeVisible();
+  expect(screen.getByText(/data de nascimento válida/)).toBeVisible();
 });
 it("normaliza request, exibe senha uma vez sem storage e devolve foco", async () => {
   const local = vi.spyOn(Storage.prototype, "setItem");

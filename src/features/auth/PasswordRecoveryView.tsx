@@ -11,6 +11,7 @@ import {
   Alert,
   BrandLockup,
   Button,
+  DatePicker,
   IconButton,
   TextField,
 } from "../../components";
@@ -36,9 +37,8 @@ export interface PasswordRecoveryViewProps {
 }
 
 function parseBirthDate(value: string): string | null {
-  const match = /^(\d{2})\/(\d{2})\/(\d{4})$/u.exec(value);
-  if (!match) return null;
-  const iso = `${match[3]}-${match[2]}-${match[1]}`;
+  if (!/^\d{4}-\d{2}-\d{2}$/u.test(value)) return null;
+  const iso = value;
   const date = new Date(`${iso}T00:00:00Z`);
   return Number.isFinite(date.getTime()) &&
     date.toISOString().slice(0, 10) === iso
@@ -144,7 +144,7 @@ export function PasswordRecoveryView({
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(normalized.email))
       errors.email = "Informe um e-mail válido.";
     if (!date)
-      errors.dataNascimento = "Informe uma data válida no formato dd/mm/aaaa.";
+      errors.dataNascimento = "Selecione uma data de nascimento válida.";
     if (!normalized.nomeParoquia)
       errors.nomeParoquia = "Informe o nome da sua paróquia.";
     setFieldErrors(errors);
@@ -365,45 +365,47 @@ export function PasswordRecoveryView({
                     ],
                     ["nomeParoquia", "Paróquia", "Nome da sua paróquia", "off"],
                   ] as const
-                ).map(([key, label, placeholder, autoComplete]) => (
-                  <TextField
-                    key={key}
-                    id={`${id}-${key}`}
-                    name={key}
-                    label={label}
-                    placeholder={placeholder}
-                    required
-                    size={tablet ? "medium" : "large"}
-                    disabled={blocked}
-                    readOnly={busy}
-                    autoComplete={autoComplete}
-                    value={values[key]}
-                    ref={(element) => {
-                      inputs.current[key] = element;
-                    }}
-                    inputProps={{
-                      maxLength: key === "dataNascimento" ? 10 : 500,
-                      ...(key === "dataNascimento"
-                        ? { inputMode: "numeric" as const }
-                        : {}),
-                      ...(key === "email"
-                        ? { inputMode: "email" as const }
-                        : {}),
-                    }}
-                    errorMessage={
-                      fieldErrors[key] ??
-                      error?.erros?.find((item) => item.campo === key)?.mensagem
-                    }
-                    onChange={(event) => {
-                      const value = event.target.value;
-                      setValues((current) => ({ ...current, [key]: value }));
-                      setFieldErrors((current) => ({
-                        ...current,
-                        [key]: undefined,
-                      }));
-                    }}
-                  />
-                ))}
+                ).map(([key, label, placeholder, autoComplete]) => {
+                  const Field =
+                    key === "dataNascimento" ? DatePicker : TextField;
+                  return (
+                    <Field
+                      key={key}
+                      id={`${id}-${key}`}
+                      name={key}
+                      label={label}
+                      {...(key !== "dataNascimento" ? { placeholder } : {})}
+                      required
+                      size={tablet ? "medium" : "large"}
+                      disabled={blocked}
+                      readOnly={busy}
+                      autoComplete={autoComplete}
+                      value={values[key]}
+                      ref={(element) => {
+                        inputs.current[key] = element;
+                      }}
+                      inputProps={{
+                        ...(key !== "dataNascimento" ? { maxLength: 500 } : {}),
+                        ...(key === "email"
+                          ? { inputMode: "email" as const }
+                          : {}),
+                      }}
+                      errorMessage={
+                        fieldErrors[key] ??
+                        error?.erros?.find((item) => item.campo === key)
+                          ?.mensagem
+                      }
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        setValues((current) => ({ ...current, [key]: value }));
+                        setFieldErrors((current) => ({
+                          ...current,
+                          [key]: undefined,
+                        }));
+                      }}
+                    />
+                  );
+                })}
               </Box>
               <Button
                 className="login-submit"
