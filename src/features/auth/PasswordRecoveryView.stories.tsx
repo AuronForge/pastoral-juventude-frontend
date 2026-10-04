@@ -1,4 +1,4 @@
-import { userEvent, within } from "storybook/test";
+import { fireEvent, userEvent, within } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PasswordRecoveryView } from "./PasswordRecoveryView";
 const error = {
@@ -65,10 +65,9 @@ export const SenhaTemporariaGerada: Story = {
       canvas.getByLabelText(/E-mail/u),
       "maria@exemplo.invalid",
     );
-    await userEvent.type(
-      canvas.getByLabelText(/Data de nascimento/u),
-      "01/01/2000",
-    );
+    fireEvent.change(canvas.getByLabelText(/Data de nascimento/u), {
+      target: { value: "2000-01-01" },
+    });
     await userEvent.type(canvas.getByLabelText(/Paróquia/u), "São João");
     await userEvent.click(
       canvas.getByRole("button", { name: "Ver minha senha temporária" }),

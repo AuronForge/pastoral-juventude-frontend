@@ -39,7 +39,7 @@ it("recuperação é pública, limpa estado sem guardar segredo e volta ao login
   for (const [label, value] of [
     [/^Nome completo/, "Maria"],
     [/^E-mail/, "maria@exemplo.test"],
-    [/^Data de nascimento/, "01/01/2000"],
+    [/^Data de nascimento/, "2000-01-01"],
     [/^Paróquia/, "São João"],
   ] as const)
     fireEvent.change(await screen.findByLabelText(label), {
