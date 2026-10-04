@@ -1,7 +1,29 @@
 import { writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
-export async function verifyDeployment(value, fetchImpl = fetch) {
+async function fetchWithRetry(url, fetchImpl, options) {
+  for (let attempt = 1; attempt <= options.maxAttempts; attempt++) {
+    try {
+      const response = await fetchImpl(url, {
+        signal: AbortSignal.timeout(15000),
+        redirect: "error",
+      });
+      const transient = response.status === 404 || response.status >= 500;
+      if (!transient || attempt === options.maxAttempts) return response;
+    } catch (error) {
+      if (attempt === options.maxAttempts) throw error;
+    }
+    await options.wait(options.delayMs);
+  }
+}
+
+export async function verifyDeployment(value, fetchImpl = fetch, retry = {}) {
+  const options = {
+    maxAttempts: 6,
+    delayMs: 5000,
+    wait: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+    ...retry,
+  };
   const origin = new URL(value);
   if (
     origin.protocol !== "https:" ||
@@ -10,11 +32,12 @@ export async function verifyDeployment(value, fetchImpl = fetch) {
     throw new Error("URL de deployment Vercel inválida.");
   }
   const results = [];
-  for (const path of ["/", "/login", "/api/v1/health"]) {
-    const response = await fetchImpl(new URL(path, origin), {
-      signal: AbortSignal.timeout(15000),
-      redirect: "error",
-    });
+  for (const path of ["/", "/login", "/recuperar-senha", "/api/v1/health"]) {
+    const response = await fetchWithRetry(
+      new URL(path, origin),
+      fetchImpl,
+      options,
+    );
     if (response.status !== 200) {
       throw new Error(`Smoke ${path}: HTTP ${response.status}`);
     }
