@@ -15,7 +15,7 @@ origem publicada na allow-list do backend antes do deploy.
 
 Cada reload restaurado consome uma das três renovações da sessão absoluta de
 uma hora. Após o limite, novo login é obrigatório. Token TROCA_SENHA não é
-persistido nem restaurado. Continuar conectado permanece indisponível.
+persistido nem restaurado. O login não oferece a opção de continuar conectado.
 
 Integração: backend com RES-106 primeiro, depois frontend e E2E. A validação
 publicada permanece pendente até merge/deploy e confirmação do operador.
