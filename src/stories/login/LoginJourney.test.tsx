@@ -54,8 +54,7 @@ describe("Jornada de Login no Storybook", () => {
     await user.type(password(), credentials.senha);
     await user.click(screen.getByRole("button", { name: "Mostrar senha" }));
     expect(password()).toHaveAttribute("type", "text");
-    expect(screen.getByRole("checkbox")).toBeDisabled();
-    expect(screen.getByRole("checkbox")).not.toBeChecked();
+    expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
     await user.click(password());
     await user.keyboard("{Enter}");
     await waitFor(() => expect(onAuthenticated).toHaveBeenCalledWith(success));
@@ -110,8 +109,7 @@ describe("Jornada de Login no Storybook", () => {
     await waitFor(() => expect(password()).toHaveFocus());
     expect(password()).toHaveValue("");
     expect(email()).toHaveValue(credentials.email);
-    expect(screen.getByRole("checkbox")).toBeDisabled();
-    expect(screen.getByRole("checkbox")).not.toBeChecked();
+    expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
     expect(screen.getByRole("alert")).toHaveTextContent(
       "E-mail ou senha incorretos",
     );

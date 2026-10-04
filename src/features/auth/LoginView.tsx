@@ -9,7 +9,6 @@ import {
   Alert,
   BrandLockup,
   Button,
-  Checkbox,
   Link,
   PasswordField,
   TextField,
@@ -237,12 +236,6 @@ export function LoginView({
               />
             </Box>
             <Box className="login-options">
-              <Checkbox
-                label="Continuar conectado"
-                checked={false}
-                disabled
-                aria-label="Continuar conectado (indisponível)"
-              />
               <Link
                 href={recoveryHref ?? "#recuperacao-senha"}
                 disabled={!recoveryHref}
