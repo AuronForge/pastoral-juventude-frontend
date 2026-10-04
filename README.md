@@ -93,7 +93,7 @@ Consulte [docs/DEPLOY-DESENVOLVIMENTO.md](docs/DEPLOY-DESENVOLVIMENTO.md) para a
 
 ## Jornada de Login com API
 
-O acesso anônimo a `/` redireciona para `/login`. Login normal usa a página inicial existente; primeiro acesso navega para `/alterar-senha` e, após HTTP 204, exige novo Login. Os tokens ficam somente no Redux em memória. `Continuar conectado` e recuperação permanecem indisponíveis nesta entrega.
+O acesso anônimo a `/` redireciona para `/login`. Login normal usa a página inicial existente; primeiro acesso navega para `/alterar-senha` e, após HTTP 204, exige novo Login. Os tokens ficam somente no Redux em memória. `Continuar conectado` permanece indisponível. A recuperação está disponível em `/recuperar-senha`; consulte [o fluxo RES-003](docs/RECUPERACAO-SENHA.md).
 
 O cliente usa a mesma origem por padrão, compatível com o proxy `/api` da infraestrutura. Em desenvolvimento separado, configure `VITE_API_BASE_URL` e a origem permitida no backend. Os tipos podem ser gerados do contrato local: `OPENAPI_URL=../pastoral-juventude-backend/docs/api/openapi.json npm run api:generate`.
 

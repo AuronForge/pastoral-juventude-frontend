@@ -9,6 +9,38 @@ import { apiClient } from "../../shared/api/client";
 const LOGIN_ENDPOINT = "/api/v1/autenticacao/login" as const;
 const CHANGE_PASSWORD_ENDPOINT = "/api/v1/autenticacao/alterar-senha" as const;
 const REFRESH_ENDPOINT = "/api/v1/autenticacao/renovar-token" as const;
+const RECOVERY_ENDPOINT = "/api/v1/autenticacao/recuperar-senha" as const;
+
+export type RecoveryRequest =
+  operations["recuperarSenha"]["requestBody"]["content"]["application/json"];
+export type RecoveryResponse =
+  operations["recuperarSenha"]["responses"][200]["content"]["application/json"];
+
+export async function recoverPassword(
+  request: RecoveryRequest,
+): Promise<RecoveryResponse> {
+  try {
+    const { data, error, response } = await apiClient.POST(RECOVERY_ENDPOINT, {
+      body: request,
+    });
+    if (data) return data;
+    if (error)
+      throw new ApiRequestError({
+        ...error,
+        ...(error.status === 429
+          ? {
+              retryAfterAt: parseRetryAfter(
+                response.headers.get("Retry-After"),
+              ),
+            }
+          : {}),
+      });
+    throw new ApiRequestError(createCommunicationError(RECOVERY_ENDPOINT));
+  } catch (error: unknown) {
+    if (error instanceof ApiRequestError) throw error;
+    throw new ApiRequestError(createCommunicationError(RECOVERY_ENDPOINT));
+  }
+}
 
 export async function refreshSession() {
   try {

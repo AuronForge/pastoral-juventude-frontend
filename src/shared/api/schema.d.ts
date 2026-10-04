@@ -24,6 +24,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/autenticacao/recuperar-senha": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Recuperar senha
+         * @description RES-003: confirmação de quatro dados, senha temporária entregue uma vez e válida por 15 minutos; invalida sessões sem autenticar automaticamente.
+         */
+        post: operations["recuperarSenha"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/autenticacao/renovar-token": {
         parameters: {
             query?: never;
@@ -321,6 +341,237 @@ export interface operations {
                 headers: {
                     /** @description Segundos restantes de bloqueio, obtidos do TTL do Redis. */
                     "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+        };
+    };
+    recuperarSenha: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-correlation-id"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    nome: string;
+                    /** Format: email */
+                    email: string;
+                    /** Format: date */
+                    dataNascimento: string;
+                    nomeParoquia: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Default Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        senhaTemporaria: string;
+                        /** Format: date-time */
+                        expiraEm: string;
+                        /** @enum {boolean} */
+                        trocaSenhaObrigatoria: true;
+                    };
+                };
+            };
+            /** @description Default Response */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            429: {
+                headers: {
                     [name: string]: unknown;
                 };
                 content: {
