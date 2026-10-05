@@ -164,10 +164,12 @@ function AccountMenu({
         </Box>
       </Stack>
       <Divider />
-      <MenuItem onClick={run(onProfile)}>
-        <PersonOutlineRounded fontSize="small" />
-        Meu perfil
-      </MenuItem>
+      {onProfile && (
+        <MenuItem onClick={run(onProfile)}>
+          <PersonOutlineRounded fontSize="small" />
+          Meu perfil
+        </MenuItem>
+      )}
       {onPasswordChange && (
         <MenuItem onClick={run(onPasswordChange)}>
           <PasswordRounded fontSize="small" />
@@ -275,19 +277,23 @@ export function AppShell({
         </SidebarBrand>
         {sidebarNavigation}
         <SidebarFooter compact={compact}>
-          <NavigationButton
-            aria-label={compact ? "Meu perfil" : undefined}
-            compact={compact}
-            onClick={() => onProfile?.()}
-            selected={false}
-            type="button"
-          >
-            <PersonOutlineRounded />
-            {!compact && (
-              <span className="app-shell-navigation-label">Meu perfil</span>
-            )}
-          </NavigationButton>
-          <Divider />
+          {onProfile && (
+            <>
+              <NavigationButton
+                aria-label={compact ? "Meu perfil" : undefined}
+                compact={compact}
+                onClick={onProfile}
+                selected={false}
+                type="button"
+              >
+                <PersonOutlineRounded />
+                {!compact && (
+                  <span className="app-shell-navigation-label">Meu perfil</span>
+                )}
+              </NavigationButton>
+              <Divider />
+            </>
+          )}
           <AccountButton
             aria-expanded={accountOpen}
             aria-haspopup="menu"
