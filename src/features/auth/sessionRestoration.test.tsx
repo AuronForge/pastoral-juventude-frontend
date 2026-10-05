@@ -62,7 +62,7 @@ it("aguarda refresh, evita redirecionamento prematuro e deduplica StrictMode", a
       response: new Response(null),
     }),
   );
-  await screen.findByRole("heading", { name: "Pastoral da Juventude" });
+  await screen.findByRole("heading", { name: "Bem-vindo(a)" });
   expect(store.getState().auth).toMatchObject({
     accessToken: "renewed",
     expiresIn: 75,
@@ -111,7 +111,7 @@ it.each(["network", "empty", 503, 403] as const)(
     expect(router.state.location.pathname).toBe("/");
     expect(store.getState().auth.restoration).toBe("failed");
     fireEvent.click(screen.getByRole("button", { name: "Tentar novamente" }));
-    await screen.findByRole("heading", { name: "Pastoral da Juventude" });
+    await screen.findByRole("heading", { name: "Bem-vindo(a)" });
     expect(post).toHaveBeenCalledTimes(2);
   },
 );

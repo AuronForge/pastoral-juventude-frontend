@@ -65,7 +65,7 @@ it("autentica com a API, guarda somente o token normal e protege Login contra re
     target: { value: "Senha123!" },
   });
   fireEvent.submit(screen.getByRole("form"));
-  await screen.findByRole("heading", { name: "Pastoral da Juventude" });
+  await screen.findByRole("heading", { name: "Bem-vindo(a)" });
   expect(store.getState().auth.accessToken).toBe("normal");
   expect(post).toHaveBeenCalledWith(
     "/api/v1/autenticacao/login",
