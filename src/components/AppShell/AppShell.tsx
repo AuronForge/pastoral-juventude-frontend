@@ -1,6 +1,7 @@
 import {
   DarkModeOutlined,
   KeyboardArrowLeftRounded,
+  KeyboardArrowRightRounded,
   LightModeOutlined,
   LogoutRounded,
   MenuRounded,
@@ -261,19 +262,25 @@ export function AppShell({
       <Sidebar aria-label="Navegação da aplicação" compact={compact}>
         <SidebarBrand compact={compact}>
           {compact ? (
-            <Avatar aria-label="Pastoral da Juventude" variant="rounded">
-              PJ
-            </Avatar>
+            <IconButton
+              icon={<KeyboardArrowRightRounded />}
+              label="Expandir menu lateral"
+              onClick={() => setExpanded(true)}
+              size="small"
+              variant="tertiary"
+            />
           ) : (
-            <BrandLockup label="Pastoral" size="compact" tone="on-dark" />
+            <>
+              <BrandLockup label="Pastoral" size="compact" tone="on-dark" />
+              <IconButton
+                icon={<KeyboardArrowLeftRounded />}
+                label="Recolher menu lateral"
+                onClick={() => setExpanded(false)}
+                size="small"
+                variant="tertiary"
+              />
+            </>
           )}
-          <IconButton
-            icon={<KeyboardArrowLeftRounded />}
-            label={expanded ? "Recolher menu lateral" : "Expandir menu lateral"}
-            onClick={() => setExpanded((current) => !current)}
-            size="small"
-            variant="tertiary"
-          />
         </SidebarBrand>
         {sidebarNavigation}
         <SidebarFooter compact={compact}>
