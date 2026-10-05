@@ -321,6 +321,18 @@ export function AppShell({
               </Box>
             )}
           </AccountButton>
+          {compact && (
+            <>
+              <Divider />
+              <Avatar
+                aria-label="Pastoral da Juventude"
+                className="app-shell-brand-mark"
+                variant="rounded"
+              >
+                PJ
+              </Avatar>
+            </>
+          )}
         </SidebarFooter>
       </Sidebar>
 
