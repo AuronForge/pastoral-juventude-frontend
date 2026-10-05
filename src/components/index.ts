@@ -1,4 +1,5 @@
 export * from "./Alert";
+export * from "./AppShell";
 export * from "./Button";
 export * from "./BrandLockup";
 export * from "./Checkbox";
