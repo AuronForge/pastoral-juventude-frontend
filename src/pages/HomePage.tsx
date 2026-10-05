@@ -30,7 +30,8 @@ function authenticatedPerson(accessToken: string | null) {
     const displayName = [nome, name, email].find(
       (claim): claim is string => typeof claim === "string" && claim.length > 0,
     );
-    const displayRole = typeof role === "string" && role.length > 0 ? role : null;
+    const displayRole =
+      typeof role === "string" && role.length > 0 ? role : null;
 
     return {
       name: displayName ?? "Pessoa autenticada",
