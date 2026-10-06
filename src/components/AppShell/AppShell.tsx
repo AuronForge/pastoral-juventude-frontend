@@ -28,7 +28,6 @@ import {
 import { useColorScheme } from "@mui/material/styles";
 import { useId, useState } from "react";
 import { BrandLockup } from "../BrandLockup/BrandLockup";
-import { IconButton } from "../IconButton/IconButton";
 import type {
   AppShellNavigationItem,
   AppShellProps,
@@ -262,24 +261,11 @@ export function AppShell({
       <Sidebar aria-label="Navegação da aplicação" compact={compact}>
         <SidebarBrand compact={compact}>
           {compact ? (
-            <IconButton
-              icon={<KeyboardArrowRightRounded />}
-              label="Expandir menu lateral"
-              onClick={() => setExpanded(true)}
-              size="small"
-              variant="tertiary"
-            />
+            <Avatar aria-label="Pastoral da Juventude" variant="rounded">
+              PJ
+            </Avatar>
           ) : (
-            <>
-              <BrandLockup label="Pastoral" size="compact" tone="on-dark" />
-              <IconButton
-                icon={<KeyboardArrowLeftRounded />}
-                label="Recolher menu lateral"
-                onClick={() => setExpanded(false)}
-                size="small"
-                variant="tertiary"
-              />
-            </>
+            <BrandLockup label="Pastoral" size="compact" tone="on-dark" />
           )}
         </SidebarBrand>
         {sidebarNavigation}
@@ -321,18 +307,25 @@ export function AppShell({
               </Box>
             )}
           </AccountButton>
-          {compact && (
-            <>
-              <Divider />
-              <Avatar
-                aria-label="Pastoral da Juventude"
-                className="app-shell-brand-mark"
-                variant="rounded"
-              >
-                PJ
-              </Avatar>
-            </>
-          )}
+          <Divider />
+          <NavigationButton
+            aria-label={compact ? "Expandir menu lateral" : undefined}
+            compact={compact}
+            onClick={() => setExpanded((current) => !current)}
+            selected={false}
+            type="button"
+          >
+            {compact ? (
+              <KeyboardArrowRightRounded />
+            ) : (
+              <>
+                <KeyboardArrowLeftRounded />
+                <span className="app-shell-navigation-label">
+                  Recolher menu lateral
+                </span>
+              </>
+            )}
+          </NavigationButton>
         </SidebarFooter>
       </Sidebar>
 

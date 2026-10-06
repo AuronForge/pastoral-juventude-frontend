@@ -120,13 +120,6 @@ export const SidebarFooter = styled("div", {
     borderColor: "var(--sidebar-border)",
     marginBlock: "var(--spacing-sm)",
   },
-  "& .app-shell-brand-mark": {
-    width: "var(--size-control-sm)",
-    height: "var(--size-control-sm)",
-    color: "var(--text-on-primary)",
-    backgroundColor: "var(--primary-solid)",
-    fontSize: "var(--font-size-xs)",
-  },
   ...(compact && { display: "grid", justifyItems: "center" }),
 }));
 
