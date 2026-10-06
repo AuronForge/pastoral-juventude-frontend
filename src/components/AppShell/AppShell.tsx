@@ -34,7 +34,6 @@ import type {
   AppShellUser,
 } from "./AppShell.types";
 import {
-  AccountButton,
   AppFrame,
   BottomNavigation,
   BottomNavigationButton,
@@ -284,29 +283,8 @@ export function AppShell({
                   <span className="app-shell-navigation-label">Meu perfil</span>
                 )}
               </NavigationButton>
-              <Divider />
             </>
           )}
-          <AccountButton
-            aria-expanded={accountOpen}
-            aria-haspopup="menu"
-            aria-label={accountLabel}
-            compact={compact}
-            onClick={openAccount}
-            type="button"
-          >
-            <Avatar>{initialsFor(user)}</Avatar>
-            {!compact && (
-              <Box sx={{ minWidth: 0, textAlign: "left" }}>
-                <Typography noWrap variant="labelMedium">
-                  {user.name}
-                </Typography>
-                <Typography noWrap variant="caption">
-                  {user.role}
-                </Typography>
-              </Box>
-            )}
-          </AccountButton>
           <Divider />
           <NavigationButton
             aria-label={compact ? "Expandir menu lateral" : undefined}
