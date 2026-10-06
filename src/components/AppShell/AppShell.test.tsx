@@ -67,6 +67,8 @@ describe("AppShell", () => {
   it("recolhe e expande o menu lateral", () => {
     setup();
 
+    expect(screen.getByLabelText("Pastoral da Juventude")).toBeInTheDocument();
+
     const button = screen.getByRole("button", {
       hidden: true,
       name: "Expandir menu lateral",
