@@ -6,9 +6,10 @@ type AppFrameOwnerState = { sidebarExpanded: boolean };
 export const AppFrame = styled("div", {
   shouldForwardProp: (prop) => prop !== "sidebarExpanded",
 })<AppFrameOwnerState>(({ sidebarExpanded }) => ({
-  minHeight: "100dvh",
+  height: "100dvh",
   backgroundColor: "var(--bg-canvas)",
   display: "grid",
+  overflow: "hidden",
   gridTemplateColumns: "1fr",
   gridTemplateRows: "var(--size-topbar) minmax(0, 1fr)",
   "@media (min-width: 768px)": {
@@ -123,32 +124,6 @@ export const SidebarFooter = styled("div", {
   ...(compact && { display: "grid", justifyItems: "center" }),
 }));
 
-export const AccountButton = styled("button", {
-  shouldForwardProp: (prop) => prop !== "compact",
-})<SidebarOwnerState>(({ compact }) => ({
-  width: "100%",
-  minHeight: "var(--size-touch-min)",
-  padding: compact ? "var(--spacing-xs)" : "var(--spacing-xs)",
-  display: "flex",
-  gap: "var(--spacing-sm)",
-  alignItems: "center",
-  justifyContent: compact ? "center" : "flex-start",
-  border: 0,
-  borderRadius: "var(--radius-md)",
-  color: "var(--sidebar-text-active)",
-  background: "transparent",
-  cursor: "pointer",
-  "&:hover": { backgroundColor: "var(--sidebar-item-hover-bg)" },
-  "& .MuiAvatar-root": {
-    width: "var(--size-avatar-md)",
-    height: "var(--size-avatar-md)",
-    backgroundColor: "var(--bg-surface)",
-    color: "var(--primary-text)",
-    fontSize: "var(--font-size-xs)",
-  },
-  "& .MuiTypography-caption": { color: "var(--sidebar-text-muted)" },
-}));
-
 export const Topbar = styled("header")({
   gridColumn: 1,
   gridRow: 1,
@@ -168,6 +143,8 @@ export const Content = styled("main")({
   gridColumn: 1,
   gridRow: 2,
   minWidth: 0,
+  minHeight: 0,
+  overflow: "auto",
   padding:
     "var(--spacing-xl) var(--spacing-lg) calc(var(--size-bottom-nav) + var(--spacing-xl))",
   "@media (min-width: 768px)": {
