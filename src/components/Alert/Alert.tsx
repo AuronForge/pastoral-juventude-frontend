@@ -78,13 +78,15 @@ const StyledAlert = styled(MuiAlert, {
     "& .MuiAlert-action": {
       margin: 0,
       padding: 0,
+      flexShrink: 0,
     },
   };
 });
 
 const CloseButton = styled(MuiIconButton)({
-  width: "var(--size-icon-md)",
-  height: "var(--size-icon-md)",
+  width: "var(--size-touch-min)",
+  height: "var(--size-touch-min)",
+  flexShrink: 0,
   padding: 0,
   color: "var(--text-secondary)",
   "& .MuiSvgIcon-root": {

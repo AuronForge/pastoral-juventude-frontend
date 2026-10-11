@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { Button } from "../Button";
 import { Alert } from "./Alert";
 
 const description =
@@ -14,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Aviso ancorado no conteúdo, usado quando a pessoa precisa compreender uma situação antes de continuar. O ícone acompanha o tom para que a distinção não dependa somente de cor.",
+          "Aviso ancorado no conteúdo, usado quando a pessoa precisa compreender uma situação antes de continuar. O ícone acompanha o tom para que a distinção não dependa somente de cor. Quando dispensável, a ação de fechar tem área de 44 × 44 px e ícone de 20 px, com foco visível e acionamento por clique, Enter ou Espaço. A área da ação não encolhe em linhas flexíveis; o texto pode quebrar em várias linhas. O consumidor controla a remoção do alerta em onClose.",
       },
     },
   },
@@ -105,6 +106,65 @@ export const ConflitoDeConcorrencia: Story = {
       description: {
         story:
           "O conflito de concorrência recebe estado próprio; não deve ser comunicado como um erro genérico.",
+      },
+    },
+  },
+};
+
+function CloseTargetExample() {
+  const [shortVisible, setShortVisible] = useState(true);
+  const [longVisible, setLongVisible] = useState(true);
+
+  return (
+    <Stack spacing={2} sx={{ width: "100%", maxWidth: 560 }}>
+      {shortVisible ? (
+        <Alert
+          closeLabel="Fechar dica"
+          dismissible
+          onClose={() => setShortVisible(false)}
+          title="Dica"
+          tone="info"
+        >
+          Você pode atualizar os dados depois.
+        </Alert>
+      ) : (
+        <Typography role="status">A dica foi dispensada.</Typography>
+      )}
+      {longVisible ? (
+        <Alert
+          closeLabel="Fechar confirmação"
+          dismissible
+          onClose={() => setLongVisible(false)}
+          title="As informações do encontro foram atualizadas"
+          tone="success"
+        >
+          Os dados foram salvos com sucesso. Você pode revisar o endereço, a
+          programação e as informações complementares a qualquer momento antes
+          de compartilhar o encontro com os participantes.
+        </Alert>
+      ) : (
+        <Typography role="status">A confirmação foi dispensada.</Typography>
+      )}
+      <Button
+        onClick={() => {
+          setShortVisible(true);
+          setLongVisible(true);
+        }}
+      >
+        Exibir avisos novamente
+      </Button>
+    </Stack>
+  );
+}
+
+export const AlvoDeFechamento: Story = {
+  name: "Alvo de fechamento",
+  render: () => <CloseTargetExample />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Compare avisos com textos curtos e longos, inclusive em viewport móvel. Toda a área de 44 × 44 px do fechamento pode ser acionada, inclusive fora do desenho do ícone. Use Tab para focar e Enter ou Espaço para dispensar. Exibir avisos novamente restaura os exemplos.",
       },
     },
   },

@@ -66,6 +66,32 @@ describe("Alert", () => {
     ).toBeInTheDocument();
   });
 
+  it("oferece um alvo de toque sem ampliar o ícone de fechamento", () => {
+    render(<Alert {...defaultProps} dismissible onClose={vi.fn()} />);
+    const button = screen.getByRole("button", { name: "Fechar alerta" });
+
+    expect(button).toHaveStyle({
+      width: "var(--size-touch-min)",
+      height: "var(--size-touch-min)",
+      flexShrink: "0",
+    });
+    expect(button.querySelector("svg")).toHaveStyle({
+      width: "var(--size-icon-md)",
+      height: "var(--size-icon-md)",
+    });
+  });
+
+  it.each(["{Enter}", " "])("dispensa pelo teclado com %s", async (key) => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    render(<Alert {...defaultProps} dismissible onClose={onClose} />);
+
+    await user.tab();
+    expect(screen.getByRole("button", { name: "Fechar alerta" })).toHaveFocus();
+    await user.keyboard(key);
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
   it("encaminha a referência ao elemento raiz", () => {
     const ref = createRef<HTMLDivElement>();
 
