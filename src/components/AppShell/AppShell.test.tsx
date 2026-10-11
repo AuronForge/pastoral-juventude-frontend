@@ -4,7 +4,14 @@ import {
   PeopleOutlineRounded,
 } from "@mui/icons-material";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { createAppTheme } from "../../theme/appTheme";
 import { AppShell } from "./AppShell";
 
@@ -41,6 +48,27 @@ function setup(props: Partial<React.ComponentProps<typeof AppShell>> = {}) {
   );
   return { onPasswordChange, onProfile, onSignOut };
 }
+
+function setViewportWidth(width: number) {
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn((query: string) => ({
+      matches: [...query.matchAll(/\((min|max)-width:\s*([\d.]+)px\)/g)].every(
+        ([, limit, value]) =>
+          limit === "min" ? width >= Number(value) : width <= Number(value),
+      ),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  );
+}
+
+afterEach(() => vi.unstubAllGlobals());
 
 describe("AppShell", () => {
   it("renderiza conteúdo, navegação e identificação da pessoa", () => {
@@ -115,5 +143,93 @@ describe("AppShell", () => {
     expect(
       screen.getByRole("navigation", { name: "Navegação móvel" }),
     ).not.toHaveTextContent("Pessoas");
+  });
+
+  it.each([320, 360, 390, 414, 767])(
+    "permite acessar todos os destinos pelo menu em %i px",
+    async (width) => {
+      setViewportWidth(width);
+      const user = userEvent.setup();
+      const onLeadership = vi.fn();
+      setup({
+        activeNavigationId: "lideranca",
+        navigationItems: [
+          ...items,
+          {
+            id: "lideranca",
+            label: "Liderança",
+            icon: <PeopleOutlineRounded />,
+            onClick: onLeadership,
+          },
+          {
+            id: "administracao",
+            label: "Administração",
+            icon: <PeopleOutlineRounded />,
+          },
+        ],
+      });
+
+      const trigger = screen.getByRole("button", {
+        name: "Abrir menu de navegação",
+      });
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+      const shortcuts = screen.getByRole("navigation", {
+        name: "Navegação móvel",
+      });
+      expect(within(shortcuts).getAllByRole("button")).toHaveLength(3);
+      expect(
+        within(shortcuts).queryByRole("button", { name: "Liderança" }),
+      ).not.toBeInTheDocument();
+
+      await user.click(trigger);
+      const menu = screen.getByRole("navigation", {
+        name: "Menu de navegação móvel",
+      });
+      expect(trigger).toHaveAttribute("aria-controls", menu.id);
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(within(menu).getAllByRole("button")).toHaveLength(5);
+      expect(
+        within(menu).getByRole("button", { name: "Administração" }),
+      ).toBeInTheDocument();
+      const leadership = within(menu).getByRole("button", {
+        name: "Liderança",
+      });
+      expect(leadership).toHaveAttribute("aria-current", "page");
+
+      await user.click(leadership);
+      expect(onLeadership).toHaveBeenCalledOnce();
+      await waitFor(() =>
+        expect(
+          screen.queryByRole("navigation", { name: "Menu de navegação móvel" }),
+        ).not.toBeInTheDocument(),
+      );
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+    },
+  );
+
+  it.each([768, 1200])("não oferece o acionador móvel em %i px", (width) => {
+    setViewportWidth(width);
+    setup();
+    expect(
+      screen.queryByRole("button", { name: "Abrir menu de navegação" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("fecha o menu móvel com Esc e devolve o foco ao acionador", async () => {
+    setViewportWidth(390);
+    const user = userEvent.setup();
+    setup();
+    const trigger = screen.getByRole("button", {
+      name: "Abrir menu de navegação",
+    });
+    await user.click(trigger);
+    await user.keyboard("{Escape}");
+    await waitFor(() =>
+      expect(
+        screen.queryByRole("navigation", { name: "Menu de navegação móvel" }),
+      ).not.toBeInTheDocument(),
+    );
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(trigger).toHaveFocus();
   });
 });

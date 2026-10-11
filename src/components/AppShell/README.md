@@ -10,6 +10,16 @@ o item ativo, a identificação da pessoa e o conteúdo da página.
 - Abaixo de 768 px, a sidebar é substituída pela navegação inferior e por um
   menu lateral aberto pelo cabeçalho.
 
+O botão de abrir o menu fica disponível em toda a faixa abaixo de 768 px,
+incluindo celulares com 360, 390 e 414 px de largura. O menu lateral apresenta
+todos os `navigationItems`; a barra inferior mantém até três atalhos, definidos
+por `mobileNavigationItems` ou pelos três primeiros itens da navegação principal.
+Escolher um destino no menu lateral executa a ação do item e fecha o menu.
+Também é possível fechá-lo pela tecla Esc ou clicando fora dele.
+
+O botão anuncia seu estado por `aria-expanded` e, quando aberto, referencia
+o menu lateral móvel por `aria-controls`.
+
 O componente não define permissões nem busca dados de usuário. A aplicação
 fornece somente as opções que a pessoa pode acessar, evitando renderizar
 destinos não autorizados.
