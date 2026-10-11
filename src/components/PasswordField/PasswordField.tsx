@@ -42,6 +42,7 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
           <VisibilityButton
             aria-label={toggleLabel}
             aria-pressed={isPasswordVisible}
+            disabled={props.disabled}
             disableRipple
             onClick={() => setIsPasswordVisible((visible) => !visible)}
             onMouseDown={(event) => event.preventDefault()}
