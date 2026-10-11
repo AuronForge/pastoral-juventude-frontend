@@ -1,6 +1,8 @@
 import { LockOutlined } from "@mui/icons-material";
 import { Stack } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
+import { Button } from "../Button";
 import { PasswordField } from "./PasswordField";
 
 const meta = {
@@ -11,7 +13,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Especialização do Campo de texto para informações sigilosas. Mantém os mesmos tamanhos, estados, ajuda, erro e adornos, fixando o tipo nativo como senha.",
+          "Especialização do Campo de texto para informações sigilosas. Mantém os mesmos tamanhos, estados, ajuda, erro e adornos, fixando o tipo nativo como senha. O estado desabilitado também bloqueia a ação de mostrar/ocultar senha e a retira da navegação por Tab. Reabilitar o campo permite usar a ação novamente, sem alterar o valor ou o estado de visibilidade já escolhido.",
       },
     },
   },
@@ -93,6 +95,48 @@ export const Icones: Story = {
       description: {
         story:
           "O ícone à direita alterna entre mostrar e ocultar a senha, mantendo nome acessível e estado anunciado. Ícones à esquerda seguem o contrato do Campo de texto.",
+      },
+    },
+  },
+};
+
+function DisabledVisibilityExample() {
+  const [disabled, setDisabled] = useState(true);
+
+  return (
+    <Stack spacing={2.5} sx={{ maxWidth: 420 }}>
+      <PasswordField
+        defaultValue="exemplo123"
+        hint="Use o ícone para mostrar ou ocultar esta senha de exemplo."
+        label="Senha habilitada"
+        size="large"
+      />
+      <PasswordField
+        defaultValue="exemplo123"
+        disabled={disabled}
+        hint={
+          disabled
+            ? "Campo e ícone indisponíveis."
+            : "Campo e ícone disponíveis novamente."
+        }
+        label="Senha com estado alternável"
+        size="large"
+      />
+      <Button onClick={() => setDisabled((current) => !current)}>
+        {disabled ? "Habilitar campo" : "Desabilitar campo"}
+      </Button>
+    </Stack>
+  );
+}
+
+export const VisibilidadeComCampoDesabilitado: Story = {
+  name: "Visibilidade com campo desabilitado",
+  render: () => <DisabledVisibilityExample />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Compare o campo habilitado com o desabilitado. O ícone do segundo não pode ser acionado nem receber foco por Tab. Use Habilitar campo para conferir a retomada da ação. Desabilitar novamente bloqueia a ação e preserva o valor e a visibilidade já escolhida.",
       },
     },
   },
