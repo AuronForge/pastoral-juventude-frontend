@@ -228,11 +228,12 @@ export function AppShell({
 }: AppShellProps) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [expanded, setExpanded] = useState(isDesktop);
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
   const [accountAnchor, setAccountAnchor] = useState<HTMLElement | null>(null);
   const navigationId = useId();
+  const mobileNavigationId = useId();
   const bottomItems = (mobileNavigationItems ?? navigationItems).slice(0, 3);
 
   const compact = !expanded;
@@ -308,15 +309,18 @@ export function AppShell({
       </Sidebar>
 
       <Topbar>
-        <MuiIconButton
-          aria-controls={mobileNavigationOpen ? navigationId : undefined}
-          aria-expanded={mobileNavigationOpen}
-          aria-label="Abrir menu de navegação"
-          onClick={() => setMobileNavigationOpen(true)}
-          sx={{ display: { sm: "none" } }}
-        >
-          <MenuRounded />
-        </MuiIconButton>
+        {isMobile && (
+          <MuiIconButton
+            aria-controls={
+              mobileNavigationOpen ? mobileNavigationId : undefined
+            }
+            aria-expanded={mobileNavigationOpen}
+            aria-label="Abrir menu de navegação"
+            onClick={() => setMobileNavigationOpen(true)}
+          >
+            <MenuRounded />
+          </MuiIconButton>
+        )}
         <Box className="app-shell-header-content">{headerContent}</Box>
         <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
           {headerActions}
@@ -374,7 +378,10 @@ export function AppShell({
         <Box sx={{ p: 1.5 }}>
           <BrandLockup label="Pastoral" size="compact" tone="on-dark" />
         </Box>
-        <NavigationList aria-label="Navegação móvel">
+        <NavigationList
+          aria-label="Menu de navegação móvel"
+          id={mobileNavigationId}
+        >
           {navigationItems.map((item) => (
             <NavigationItem
               compact={false}

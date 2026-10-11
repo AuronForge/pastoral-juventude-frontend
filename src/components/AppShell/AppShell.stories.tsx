@@ -7,6 +7,7 @@ import {
 } from "@mui/icons-material";
 import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { AppShell } from "./AppShell";
 
 const navigationItems = [
@@ -33,6 +34,25 @@ const meta = {
   },
   parameters: {
     layout: "fullscreen",
+    viewport: {
+      options: {
+        celular390: {
+          name: "Celular — 390 px",
+          styles: { width: "390px", height: "844px" },
+          type: "mobile",
+        },
+        limiteMovel767: {
+          name: "Limite móvel — 767 px",
+          styles: { width: "767px", height: "900px" },
+          type: "mobile",
+        },
+        tablet768: {
+          name: "Tablet — 768 px",
+          styles: { width: "768px", height: "900px" },
+          type: "tablet",
+        },
+      },
+    },
     docs: {
       description: {
         component:
@@ -129,4 +149,68 @@ export const JovemNoCelular: Story = {
       <ExampleContent />
     </AppShell>
   ),
+};
+
+function InteractiveNavigation(args: React.ComponentProps<typeof AppShell>) {
+  const [activeId, setActiveId] = useState("encontros");
+  const activeItem = navigationItems.find((item) => item.id === activeId);
+
+  return (
+    <AppShell
+      {...args}
+      activeNavigationId={activeId}
+      headerContent={
+        <Typography variant="bodySmallStrong">PastorApp</Typography>
+      }
+      navigationItems={navigationItems.map((item) => ({
+        ...item,
+        onClick: () => setActiveId(item.id),
+      }))}
+    >
+      <Stack spacing={2}>
+        <Typography component="h1" variant="headingLarge">
+          {activeItem?.label}
+        </Typography>
+        <Typography color="text.secondary" variant="bodySmall">
+          Abra o menu no cabeçalho para acessar os cinco destinos. Escolha
+          Liderança ou Administração: o menu fecha e esta área mostra o destino
+          selecionado. Os três atalhos inferiores continuam disponíveis.
+        </Typography>
+        <Paper sx={{ p: 2 }} variant="outlined">
+          <Typography variant="bodySmallStrong">
+            Destino selecionado: {activeItem?.label}
+          </Typography>
+        </Paper>
+      </Stack>
+    </AppShell>
+  );
+}
+
+export const NavegacaoCompletaNoCelular: Story = {
+  name: "Navegação completa no celular (390 px)",
+  args: { children: null },
+  globals: { viewport: { value: "celular390", isRotated: false } },
+  render: (args) => <InteractiveNavigation {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Regressão da faixa de 360 a 767 px: o acionador fica disponível e o menu apresenta todos os destinos permitidos, inclusive os que não cabem nos três atalhos inferiores. Valide também fechamento por Esc e clique fora.",
+      },
+    },
+  },
+};
+
+export const LimiteDaNavegacaoMovel: Story = {
+  name: "Limite da navegação móvel (767 px)",
+  args: { children: null },
+  globals: { viewport: { value: "limiteMovel767", isRotated: false } },
+  render: (args) => <InteractiveNavigation {...args} />,
+};
+
+export const NavegacaoNoTablet: Story = {
+  name: "Navegação no tablet (768 px)",
+  args: { children: null },
+  globals: { viewport: { value: "tablet768", isRotated: false } },
+  render: (args) => <InteractiveNavigation {...args} />,
 };
