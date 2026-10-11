@@ -18,9 +18,9 @@ const StyledIconButton = styled(MuiIconButton, {
 })<IconButtonStyleOwnerState>(({ buttonSize, buttonVariant }) => {
   const size =
     buttonSize === "small"
-      ? { control: "var(--spacing-3xl)", icon: "var(--size-icon-sm)" }
+      ? { control: "var(--size-touch-min)", icon: "var(--size-icon-sm)" }
       : buttonSize === "medium"
-        ? { control: "var(--spacing-4xl)", icon: "var(--size-icon-md)" }
+        ? { control: "var(--size-touch-min)", icon: "var(--size-icon-md)" }
         : { control: "var(--spacing-5xl)", icon: "var(--size-icon-lg)" };
 
   const variant =
@@ -77,6 +77,7 @@ const StyledIconButton = styled(MuiIconButton, {
   return {
     width: size.control,
     height: size.control,
+    flexShrink: 0,
     padding: 0,
     borderRadius: "var(--radius-md)",
     transition: "background-color 120ms ease",

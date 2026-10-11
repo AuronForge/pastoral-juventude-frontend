@@ -1,5 +1,6 @@
 import { DeleteOutlined, EditOutlined } from "@mui/icons-material";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
 import { IconButton } from "./IconButton";
 
@@ -13,8 +14,8 @@ describe("IconButton", () => {
   });
 
   it.each([
-    ["small", "var(--spacing-3xl)"],
-    ["medium", "var(--spacing-4xl)"],
+    ["small", "var(--size-touch-min)"],
+    ["medium", "var(--size-touch-min)"],
     ["large", "var(--spacing-5xl)"],
   ] as const)("mapeia o tamanho %s", (size, control) => {
     render(<IconButton icon={<EditOutlined />} label="Editar" size={size} />);
@@ -22,6 +23,7 @@ describe("IconButton", () => {
     expect(screen.getByRole("button")).toHaveStyle({
       width: control,
       height: control,
+      flexShrink: "0",
     });
   });
 
@@ -72,5 +74,30 @@ describe("IconButton", () => {
     );
 
     expect(ref.current).toBe(screen.getByTestId("botao-de-edicao"));
+  });
+
+  it("aciona pelo teclado e ignora ações indisponíveis na navegação", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    render(
+      <>
+        <IconButton
+          icon={<EditOutlined />}
+          label="Editar"
+          size="small"
+          onClick={onClick}
+        />
+        <IconButton icon={<EditOutlined />} label="Indisponível" disabled />
+        <IconButton icon={<EditOutlined />} label="Carregando" loading />
+        <button type="button">Próxima ação</button>
+      </>,
+    );
+
+    await user.tab();
+    expect(screen.getByRole("button", { name: "Editar" })).toHaveFocus();
+    await user.keyboard("{Enter} ");
+    expect(onClick).toHaveBeenCalledTimes(2);
+    await user.tab();
+    expect(screen.getByRole("button", { name: "Próxima ação" })).toHaveFocus();
   });
 });
