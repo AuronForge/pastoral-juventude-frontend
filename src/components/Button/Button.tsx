@@ -110,7 +110,7 @@ const StyledButton = styled(MuiButton, {
   const size = sizes[buttonSize];
 
   return {
-    minWidth: 0,
+    minWidth: "var(--space-extended-44px)",
     minHeight: size.height,
     paddingBlock: 0,
     paddingInline: size.paddingInline,
