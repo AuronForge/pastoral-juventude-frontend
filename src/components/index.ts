@@ -9,6 +9,7 @@ export * from "./DatePicker";
 export * from "./Icon";
 export * from "./IconButton";
 export * from "./Link";
+export * from "./PasswordRequirements";
 export * from "./Progress";
 export * from "./TextField";
 export * from "./Tooltip";
