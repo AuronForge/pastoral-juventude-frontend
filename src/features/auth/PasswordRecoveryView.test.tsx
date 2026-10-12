@@ -32,7 +32,7 @@ function fill(date = "29/02/2000") {
     [/^Nome completo/, "  Maria Silva  "],
     [/^E-mail/, "  MARIA@EXEMPLO.TEST "],
     [/^Data de nascimento/, date],
-    [/^Paróquia/, "  São   João  "],
+    [/^Nome da paróquia/, "  São   João  "],
   ] as const)
     fireEvent.change(screen.getByLabelText(label), { target: { value } });
 }
@@ -46,7 +46,7 @@ afterEach(() => {
 it("foca título, valida os quatro campos e mantém foco no primeiro erro", () => {
   const { recover } = setup();
   expect(
-    screen.getByRole("heading", { name: "Esqueci minha senha" }),
+    screen.getByRole("heading", { name: "Recupere seu acesso" }),
   ).toHaveFocus();
   submit();
   expect(recover).not.toHaveBeenCalled();
@@ -59,14 +59,25 @@ it("foca título, valida os quatro campos e mantém foco no primeiro erro", () =
   submit();
   expect(recover).not.toHaveBeenCalled();
   expect(screen.getByLabelText(/^Data de nascimento/)).toHaveFocus();
-  expect(screen.getByText(/data de nascimento válida/)).toBeVisible();
+  expect(screen.getByText("Data inválida")).toBeVisible();
+});
+it("usa as mensagens de validação do Figma", () => {
+  setup();
+  submit();
+  for (const text of [
+    "Informe seu nome completo.",
+    "Informe um e-mail válido.",
+    "Data inválida",
+    "Informe o nome da paróquia.",
+  ])
+    expect(screen.getByText(text)).toBeVisible();
 });
 it("normaliza request, exibe senha uma vez sem storage e devolve foco", async () => {
   const local = vi.spyOn(Storage.prototype, "setItem");
   const { recover } = setup();
   fill();
   submit();
-  await screen.findByRole("heading", { name: "Sua senha temporária" });
+  await screen.findByRole("heading", { name: "Senha temporária gerada" });
   expect(recover).toHaveBeenCalledWith({
     nome: "Maria Silva",
     email: "maria@exemplo.test",
@@ -75,12 +86,26 @@ it("normaliza request, exibe senha uma vez sem storage e devolve foco", async ()
   });
   await waitFor(() =>
     expect(
-      screen.getByRole("heading", { name: "Sua senha temporária" }),
+      screen.getByRole("heading", { name: "Senha temporária gerada" }),
     ).toHaveFocus(),
   );
-  expect(screen.getByText("fictional-temporary")).toBeVisible();
+  const field = screen.getByLabelText("Sua senha temporária");
+  expect(field).toHaveValue("fictional-temporary");
+  expect(field).toHaveAttribute("type", "password");
+  expect(field).toHaveAttribute("readonly");
+  fireEvent.click(screen.getByRole("button", { name: "Mostrar senha" }));
+  expect(field).toHaveAttribute("type", "text");
   expect(local).not.toHaveBeenCalled();
   expect(screen.getByRole("button", { name: /Pedir outra em/ })).toBeDisabled();
+});
+it("Entrar com senha temporária leva ao Login", async () => {
+  const { onBack } = setup();
+  fill();
+  submit();
+  fireEvent.click(
+    await screen.findByRole("button", { name: "Entrar com senha temporária" }),
+  );
+  expect(onBack).toHaveBeenCalledOnce();
 });
 it("previne envio duplicado e ignora resposta após sair da tela", async () => {
   let release!: (value: ReturnType<typeof result>) => void;
@@ -96,14 +121,17 @@ it("previne envio duplicado e ignora resposta após sair da tela", async () => {
   submit();
   expect(recover).toHaveBeenCalledOnce();
   expect(
-    screen.getByRole("button", { name: "Ver minha senha temporária" }),
+    screen.getByRole("button", { name: "Gerar senha temporária" }),
   ).toBeDisabled();
+  expect(screen.getByLabelText(/^Nome completo/)).toBeDisabled();
   unmount();
   await act(async () => {
     release(result());
   });
   setup();
-  expect(screen.queryByText("fictional-temporary")).not.toBeInTheDocument();
+  expect(
+    screen.queryByDisplayValue("fictional-temporary"),
+  ).not.toBeInTheDocument();
 });
 it("copia somente após ação explícita e trata indisponibilidade do clipboard", async () => {
   const writeText = vi.fn().mockResolvedValue(undefined);
@@ -114,33 +142,21 @@ it("copia somente após ação explícita e trata indisponibilidade do clipboard
   setup();
   fill();
   submit();
-  await screen.findByRole("heading", { name: "Sua senha temporária" });
+  await screen.findByRole("heading", { name: "Senha temporária gerada" });
   expect(writeText).not.toHaveBeenCalled();
-  fireEvent.click(
-    screen.getByRole("button", { name: "Copiar senha temporária" }),
-  );
+  fireEvent.click(screen.getByRole("button", { name: "Copiar senha" }));
   await screen.findByText("Senha temporária copiada.");
   expect(writeText).toHaveBeenCalledWith("fictional-temporary");
   writeText.mockRejectedValue(new Error("clipboard"));
-  fireEvent.click(
-    screen.getByRole("button", { name: "Copiar senha temporária" }),
-  );
+  fireEvent.click(screen.getByRole("button", { name: "Copiar senha" }));
   await screen.findByText(/Selecione o valor e copie manualmente/);
 });
 it.each([
-  [
-    404,
-    "DADOS_RECUPERACAO_NAO_LOCALIZADOS",
-    "Não foi possível confirmar seus dados",
-  ],
-  [
-    409,
-    "RECUPERACAO_SENHA_EM_ANDAMENTO",
-    "Já existe uma recuperação em andamento",
-  ],
+  [404, "DADOS_RECUPERACAO_NAO_LOCALIZADOS", "Confira os dados informados"],
+  [409, "RECUPERACAO_SENHA_EM_ANDAMENTO", "Recuperação já iniciada"],
   [403, "USUARIO_INATIVO", "Esta conta está inativa"],
-  [429, "LIMITE_TENTATIVAS_EXCEDIDO", "Muitas tentativas"],
-  [503, "SERVICO_INDISPONIVEL", "Não foi possível recuperar sua senha"],
+  [429, "LIMITE_TENTATIVAS_EXCEDIDO", "Aguarde para tentar novamente"],
+  [503, "SERVICO_INDISPONIVEL", "Não foi possível recuperar"],
 ])(
   "trata %s sem divulgar campo divergente ou segredo",
   async (status, codigo, title) => {
@@ -165,7 +181,7 @@ it.each([
     );
     if (status === 429)
       expect(
-        screen.getByRole("button", { name: "Ver minha senha temporária" }),
+        screen.getByRole("button", { name: "Gerar senha temporária" }),
       ).toBeDisabled();
   },
 );
@@ -174,13 +190,15 @@ it("erro de rede mantém valores e permite tentar novamente", async () => {
   recover.mockRejectedValueOnce(new TypeError("network"));
   fill();
   submit();
-  await screen.findByText("Não foi possível recuperar sua senha");
+  await screen.findByText("Não foi possível recuperar");
   submit();
-  await screen.findByRole("heading", { name: "Sua senha temporária" });
+  await screen.findByRole("heading", { name: "Senha temporária gerada" });
 });
-it("volta ao login e usa a marca aprovada", () => {
+it("volta ao login pelo link e usa a marca aprovada", () => {
   const { onBack } = setup({});
-  fireEvent.click(screen.getByRole("button", { name: "Voltar para entrar" }));
+  const link = screen.getByRole("link", { name: "Voltar ao login" });
+  expect(link).toHaveAttribute("href", "/login");
+  fireEvent.click(link);
   expect(onBack).toHaveBeenCalledOnce();
   expect(screen.getByRole("img", { name: /PastorApp/ })).toHaveAttribute(
     "src",
@@ -196,12 +214,15 @@ it("expiração libera novo formulário e remove o valor da tela", async () => {
   await act(async () => {
     vi.advanceTimersByTime(901000);
   });
-  expect(screen.queryByText("fictional-temporary")).not.toBeInTheDocument();
+  expect(
+    screen.queryByDisplayValue("fictional-temporary"),
+  ).not.toBeInTheDocument();
+  expect(screen.getByText("Senha temporária expirada.")).toBeVisible();
   fireEvent.click(
     screen.getByRole("button", { name: "Pedir outra senha temporária" }),
   );
   expect(
-    screen.getByRole("heading", { name: "Esqueci minha senha" }),
+    screen.getByRole("heading", { name: "Recupere seu acesso" }),
   ).toBeVisible();
 });
 it("Retry-After libera nova tentativa sem retry automático", async () => {
@@ -217,13 +238,13 @@ it("Retry-After libera nova tentativa sem retry automático", async () => {
     },
   });
   expect(
-    screen.getByRole("button", { name: "Ver minha senha temporária" }),
+    screen.getByRole("button", { name: "Gerar senha temporária" }),
   ).toBeDisabled();
   await act(async () => {
     vi.advanceTimersByTime(3000);
   });
   expect(
-    screen.getByRole("button", { name: "Ver minha senha temporária" }),
+    screen.getByRole("button", { name: "Gerar senha temporária" }),
   ).not.toBeDisabled();
   expect(recover).not.toHaveBeenCalled();
 });

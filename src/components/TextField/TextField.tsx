@@ -139,7 +139,8 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   ) {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const isPassword = type === "password";
-    const showVisibilityAction = isPassword && !readOnly;
+    // Figma: Senha editável ou somente leitura usa a visibilidade integrada.
+    const showVisibilityAction = isPassword;
     const helperText = errorMessage ?? hint;
 
     const trailing = showVisibilityAction ? (

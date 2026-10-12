@@ -40,18 +40,20 @@ it("recuperação é pública, limpa estado sem guardar segredo e volta ao login
     [/^Nome completo/, "Maria"],
     [/^E-mail/, "maria@exemplo.test"],
     [/^Data de nascimento/, "01/01/2000"],
-    [/^Paróquia/, "São João"],
+    [/^Nome da paróquia/, "São João"],
   ] as const)
     fireEvent.change(await screen.findByLabelText(label), {
       target: { value },
     });
   fireEvent.submit(screen.getByRole("form"));
-  await screen.findByRole("heading", { name: "Sua senha temporária" });
+  await screen.findByRole("heading", { name: "Senha temporária gerada" });
   expect(JSON.stringify(store.getState())).not.toContain(temporary);
   expect(store.getState().auth.accessToken).toBeNull();
-  fireEvent.click(screen.getByRole("button", { name: "Voltar para entrar" }));
+  fireEvent.click(
+    screen.getByRole("button", { name: "Entrar com senha temporária" }),
+  );
   await screen.findByRole("heading", { name: "Entrar" });
-  expect(screen.queryByText(temporary)).not.toBeInTheDocument();
+  expect(screen.queryByDisplayValue(temporary)).not.toBeInTheDocument();
   await waitFor(() => expect(router.state.location.pathname).toBe("/login"));
   expect(
     screen.getByRole("link", { name: "Esqueci minha senha" }),

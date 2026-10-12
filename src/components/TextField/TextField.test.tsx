@@ -84,12 +84,13 @@ describe("TextField", () => {
     });
   });
 
-  it("não oferece a ação de visibilidade na Senha somente leitura", () => {
-    render(<TextField label="Senha" readOnly type="password" />);
+  it("oferece a ação de visibilidade na Senha somente leitura", async () => {
+    const user = userEvent.setup();
+    render(<TextField label="Senha" readOnly type="password" value="PJ-27" />);
 
-    expect(
-      screen.queryByRole("button", { name: "Mostrar senha" }),
-    ).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Mostrar senha" }));
+    expect(screen.getByLabelText("Senha")).toHaveAttribute("type", "text");
+    expect(screen.getByLabelText("Senha")).toHaveAttribute("readonly");
   });
 
   it("aplica os estados desabilitado e somente leitura", () => {
