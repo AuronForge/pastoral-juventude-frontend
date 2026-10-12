@@ -4,8 +4,9 @@ export function loginFeedback(error?: ApiErrorDetails) {
   switch (error?.codigo) {
     case "CREDENCIAIS_INVALIDAS":
       return {
-        title: "E-mail ou senha incorretos",
-        message: "Confira os dados e tente de novo.",
+        title: "Não foi possível entrar",
+        message:
+          "E-mail ou senha inválidos. Confira os dados e tente novamente.",
       };
     case "USUARIO_BLOQUEADO":
       return {
@@ -29,9 +30,8 @@ export function loginFeedback(error?: ApiErrorDetails) {
   }
   if (error?.status === 429)
     return {
-      title: "Limite de tentativas atingido",
-      message:
-        "Tente novamente mais tarde. Se precisar, fale com o coordenador da sua pastoral.",
+      title: "Aguarde para tentar novamente",
+      message: "Muitas tentativas. Tente novamente em 15 minutos.",
     };
   if (error?.status === 400)
     return {
@@ -39,7 +39,7 @@ export function loginFeedback(error?: ApiErrorDetails) {
       message: "Verifique o e-mail e a senha informados.",
     };
   return {
-    title: "Não foi possível entrar",
-    message: "Verifique sua conexão e tente novamente.",
+    title: "Serviço indisponível",
+    message: "Não foi possível conectar. Tente novamente.",
   };
 }

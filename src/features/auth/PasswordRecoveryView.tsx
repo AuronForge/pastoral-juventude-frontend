@@ -2,7 +2,7 @@ import { Box, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
   Alert,
-  BrandLockup,
+  AccessLayout,
   Button,
   DatePicker,
   IconButton,
@@ -15,12 +15,7 @@ import {
 } from "../../shared/api/apiError";
 import { pendingLayoutTokens } from "../../theme/tokens";
 import type { RecoveryRequest, RecoveryResponse } from "./authenticationApi";
-import {
-  JourneyAside,
-  JourneyCanvas,
-  LoginForm,
-  LoginPanel,
-} from "./LoginView.styles";
+import { LoginForm } from "./LoginView.styles";
 import { Icon } from "../../components/Icon";
 
 export interface PasswordRecoveryViewProps {
@@ -184,291 +179,241 @@ export function PasswordRecoveryView({
   }
   const message = error ? feedback(error) : undefined;
   return (
-    <JourneyCanvas
-      sx={{
-        [`@media (min-width: ${pendingLayoutTokens.breakpoints.desktop}px)`]: {
-          minHeight: "max(1060px, 100svh)",
-        },
-      }}
-    >
-      <LoginPanel aria-labelledby={`${id}-title`}>
-        <Box sx={{ alignSelf: "flex-start" }}>
-          <BrandLockup size="compact" tone="on-light" />
-        </Box>
-        <LoginForm
-          noValidate
-          aria-labelledby={`${id}-title`}
-          aria-busy={busy}
-          onSubmit={(event) => void submit(event)}
-          sx={{
-            "& .recovery-fields": {
-              display: "flex",
-              flexDirection: "column",
-              mt: "28px",
-              "& .MuiFormHelperText-root": { marginTop: 0 },
-            },
-            "& .login-submit": { mt: "var(--pj-space-5)" },
-          }}
-        >
-          {result ? (
-            <>
-              <Box
-                sx={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: "var(--pj-radius-full)",
-                  bgcolor: "var(--pj-color-feedback-success-soft)",
-                  color: "var(--pj-color-feedback-success)",
-                  display: "grid",
-                  placeItems: "center",
-                  mb: "var(--pj-space-4)",
-                }}
-              >
-                <Icon name="password" />
-              </Box>
+    <AccessLayout aria-labelledby={`${id}-title`}>
+      <LoginForm
+        noValidate
+        aria-labelledby={`${id}-title`}
+        aria-busy={busy}
+        onSubmit={(event) => void submit(event)}
+        sx={{
+          "& .recovery-fields": {
+            display: "flex",
+            flexDirection: "column",
+            mt: "28px",
+            "& .MuiFormHelperText-root": { marginTop: 0 },
+          },
+          "& .login-submit": { mt: "var(--pj-space-5)" },
+        }}
+      >
+        {result ? (
+          <>
+            <Box
+              sx={{
+                width: 48,
+                height: 48,
+                borderRadius: "var(--pj-radius-full)",
+                bgcolor: "var(--pj-color-feedback-success-soft)",
+                color: "var(--pj-color-feedback-success)",
+                display: "grid",
+                placeItems: "center",
+                mb: "var(--pj-space-4)",
+              }}
+            >
+              <Icon name="password" />
+            </Box>
+            <Typography
+              id={`${id}-title`}
+              component="h1"
+              variant="headingLarge"
+              ref={heading}
+              tabIndex={-1}
+            >
+              Sua senha temporária
+            </Typography>
+            <Typography
+              variant="bodyMedium"
+              sx={{ color: "var(--pj-color-text-secondary)" }}
+            >
+              Ela vale por 15 minutos e só serve para iniciar a troca
+              obrigatória de senha — guarde-a agora.
+            </Typography>
+            <Box
+              sx={{
+                mt: "var(--pj-space-4)",
+                p: "var(--pj-space-4)",
+                bgcolor: "var(--pj-color-bg-canvas)",
+                border: "1px solid var(--pj-color-border-default)",
+                borderRadius: "var(--pj-radius-lg)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "var(--pj-space-2)",
+              }}
+            >
               <Typography
-                id={`${id}-title`}
-                component="h1"
-                variant="headingLarge"
-                ref={heading}
-                tabIndex={-1}
-              >
-                Sua senha temporária
-              </Typography>
-              <Typography
-                variant="bodyMedium"
-                sx={{ color: "var(--pj-color-text-secondary)" }}
-              >
-                Ela vale por 15 minutos e só serve para iniciar a troca
-                obrigatória de senha — guarde-a agora.
-              </Typography>
-              <Box
+                component="code"
+                variant="title"
                 sx={{
-                  mt: "var(--pj-space-4)",
-                  p: "var(--pj-space-4)",
-                  bgcolor: "var(--pj-color-bg-canvas)",
-                  border: "1px solid var(--pj-color-border-default)",
-                  borderRadius: "var(--pj-radius-lg)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "var(--pj-space-2)",
-                }}
-              >
-                <Typography
-                  component="code"
-                  variant="title"
-                  sx={{
-                    letterSpacing: "2px",
-                    overflowWrap: "anywhere",
-                  }}
-                >
-                  {seconds > 0
-                    ? result.senhaTemporaria
-                    : "Senha temporária expirada"}
-                </Typography>
-                <IconButton
-                  label="Copiar senha temporária"
-                  icon={<Icon name="content_copy" />}
-                  variant="tertiary"
-                  size="large"
-                  disabled={seconds === 0}
-                  onClick={() => void copy()}
-                />
-              </Box>
-              <Typography
-                variant="bodySmall"
-                sx={{
-                  display: "block",
-                  mt: "var(--pj-space-2)",
-                  color: "var(--pj-color-text-secondary)",
-                }}
-              >
-                Copie agora — ela some ao sair desta tela.
-              </Typography>
-              <Typography role="status" variant="bodySmall">
-                {copyFeedback}
-              </Typography>
-              <Button
-                className="login-submit"
-                size="large"
-                fullWidth
-                onClick={onBack}
-              >
-                Voltar para entrar
-              </Button>
-              <Button
-                variant="tertiary"
-                size="large"
-                fullWidth
-                disabled={seconds > 0}
-                sx={{ mt: "var(--pj-space-3)" }}
-                onClick={() => {
-                  setResult(undefined);
-                  setCopyFeedback("");
-                  setError(undefined);
+                  letterSpacing: "2px",
+                  overflowWrap: "anywhere",
                 }}
               >
                 {seconds > 0
-                  ? `Pedir outra em ${remaining}`
-                  : "Pedir outra senha temporária"}
-              </Button>
-            </>
-          ) : (
-            <>
-              <Typography
-                id={`${id}-title`}
-                component="h1"
-                variant="headingLarge"
-                ref={heading}
-                tabIndex={-1}
-              >
-                Esqueci minha senha
+                  ? result.senhaTemporaria
+                  : "Senha temporária expirada"}
               </Typography>
-              <Typography
-                variant="bodyMedium"
-                sx={{ color: "var(--pj-color-text-secondary)" }}
-              >
-                Para confirmar que é você, informe os quatro dados do seu
-                cadastro. Sua senha temporária aparece na tela, se os dados
-                conferirem.
-              </Typography>
-              {message && (
-                <Alert
-                  className="login-feedback"
-                  title={message.title}
-                  severity={message.severity}
-                >
-                  {message.text}
-                </Alert>
-              )}
-              <Box className="recovery-fields">
-                {(
-                  [
-                    ["nome", "Nome completo", "Como está no cadastro", "name"],
-                    ["email", "E-mail", "seu.nome@exemplo.com.br", "email"],
-                    [
-                      "dataNascimento",
-                      "Data de nascimento",
-                      "dd/mm/aaaa",
-                      "bday",
-                    ],
-                    ["nomeParoquia", "Paróquia", "Nome da sua paróquia", "off"],
-                  ] as const
-                ).map(([key, label, placeholder, autoComplete]) => {
-                  const common = {
-                    id: `${id}-${key}`,
-                    name: key,
-                    label,
-                    required: true,
-                    size: (tablet ? "medium" : "large") as "medium" | "large",
-                    disabled: blocked,
-                    readOnly: busy,
-                    autoComplete,
-                    errorMessage:
-                      fieldErrors[key] ??
-                      error?.erros?.find((item) => item.campo === key)
-                        ?.mensagem,
-                  };
-                  const update = (value: string) => {
-                    setValues((current) => ({ ...current, [key]: value }));
-                    setFieldErrors((current) => ({
-                      ...current,
-                      [key]: undefined,
-                    }));
-                  };
-                  return key === "dataNascimento" ? (
-                    <DatePicker
-                      key={key}
-                      {...common}
-                      value={values[key]}
-                      ref={(element) => {
-                        inputs.current[key] = element;
-                      }}
-                      onChange={update}
-                    />
-                  ) : (
-                    <TextField
-                      key={key}
-                      {...common}
-                      placeholder={placeholder}
-                      value={values[key]}
-                      ref={(element) => {
-                        inputs.current[key] = element;
-                      }}
-                      inputProps={{
-                        maxLength: 500,
-                        ...(key === "email"
-                          ? { inputMode: "email" as const }
-                          : {}),
-                      }}
-                      onChange={(event) => update(event.target.value)}
-                    />
-                  );
-                })}
-              </Box>
-              <Button
-                className="login-submit"
-                type="submit"
-                size="large"
-                fullWidth
-                loading={busy}
-                disabled={blocked}
-              >
-                Ver minha senha temporária
-              </Button>
-              <Button
+              <IconButton
+                label="Copiar senha temporária"
+                icon={<Icon name="content_copy" />}
                 variant="tertiary"
                 size="large"
-                fullWidth
-                disabled={busy}
-                onClick={onBack}
-                sx={{ mt: "var(--pj-space-3)" }}
+                disabled={seconds === 0}
+                onClick={() => void copy()}
+              />
+            </Box>
+            <Typography
+              variant="bodySmall"
+              sx={{
+                display: "block",
+                mt: "var(--pj-space-2)",
+                color: "var(--pj-color-text-secondary)",
+              }}
+            >
+              Copie agora — ela some ao sair desta tela.
+            </Typography>
+            <Typography role="status" variant="bodySmall">
+              {copyFeedback}
+            </Typography>
+            <Button
+              className="login-submit"
+              size="large"
+              fullWidth
+              onClick={onBack}
+            >
+              Voltar para entrar
+            </Button>
+            <Button
+              variant="tertiary"
+              size="large"
+              fullWidth
+              disabled={seconds > 0}
+              sx={{ mt: "var(--pj-space-3)" }}
+              onClick={() => {
+                setResult(undefined);
+                setCopyFeedback("");
+                setError(undefined);
+              }}
+            >
+              {seconds > 0
+                ? `Pedir outra em ${remaining}`
+                : "Pedir outra senha temporária"}
+            </Button>
+          </>
+        ) : (
+          <>
+            <Typography
+              id={`${id}-title`}
+              component="h1"
+              variant="headingLarge"
+              ref={heading}
+              tabIndex={-1}
+            >
+              Esqueci minha senha
+            </Typography>
+            <Typography
+              variant="bodyMedium"
+              sx={{ color: "var(--pj-color-text-secondary)" }}
+            >
+              Para confirmar que é você, informe os quatro dados do seu
+              cadastro. Sua senha temporária aparece na tela, se os dados
+              conferirem.
+            </Typography>
+            {message && (
+              <Alert
+                className="login-feedback"
+                title={message.title}
+                severity={message.severity}
               >
-                Voltar para entrar
-              </Button>
-            </>
-          )}
-        </LoginForm>
-        <Typography
-          variant="bodySmall"
-          sx={{ color: "var(--pj-color-text-secondary)" }}
-        >
-          Problemas para entrar? Fale com o coordenador da sua pastoral.
-        </Typography>
-      </LoginPanel>
-      <JourneyAside aria-label="Sobre a Pastoral da Juventude">
-        <Typography className="login-overline" variant="labelLarge">
-          Pastoral da Juventude
-        </Typography>
-        <Box>
-          <blockquote>
-            “Porque onde dois ou três estiverem reunidos em meu nome, ali estou
-            eu no meio deles.”
-          </blockquote>
-          <cite>Mt 18,20</cite>
-        </Box>
-        <Box component="ul" className="login-benefits">
-          <li>
-            <Icon name="calendar_month" />
-            <Typography variant="bodyMedium">
-              Encontros, presença e pendências no mesmo lugar
-            </Typography>
-          </li>
-          <li>
-            <Icon name="groups" />
-            <Typography variant="bodyMedium">
-              Cada pessoa da pastoral com a sua história
-            </Typography>
-          </li>
-          <li>
-            <Icon name="workspace_premium" />
-            <Typography variant="bodyMedium">
-              Lideranças acompanhadas, não improvisadas
-            </Typography>
-          </li>
-        </Box>
-      </JourneyAside>
-    </JourneyCanvas>
+                {message.text}
+              </Alert>
+            )}
+            <Box className="recovery-fields">
+              {(
+                [
+                  ["nome", "Nome completo", "Como está no cadastro", "name"],
+                  ["email", "E-mail", "seu.nome@exemplo.com.br", "email"],
+                  [
+                    "dataNascimento",
+                    "Data de nascimento",
+                    "dd/mm/aaaa",
+                    "bday",
+                  ],
+                  ["nomeParoquia", "Paróquia", "Nome da sua paróquia", "off"],
+                ] as const
+              ).map(([key, label, placeholder, autoComplete]) => {
+                const common = {
+                  id: `${id}-${key}`,
+                  name: key,
+                  label,
+                  required: true,
+                  size: (tablet ? "medium" : "large") as "medium" | "large",
+                  disabled: blocked,
+                  readOnly: busy,
+                  autoComplete,
+                  errorMessage:
+                    fieldErrors[key] ??
+                    error?.erros?.find((item) => item.campo === key)?.mensagem,
+                };
+                const update = (value: string) => {
+                  setValues((current) => ({ ...current, [key]: value }));
+                  setFieldErrors((current) => ({
+                    ...current,
+                    [key]: undefined,
+                  }));
+                };
+                return key === "dataNascimento" ? (
+                  <DatePicker
+                    key={key}
+                    {...common}
+                    value={values[key]}
+                    ref={(element) => {
+                      inputs.current[key] = element;
+                    }}
+                    onChange={update}
+                  />
+                ) : (
+                  <TextField
+                    key={key}
+                    {...common}
+                    placeholder={placeholder}
+                    value={values[key]}
+                    ref={(element) => {
+                      inputs.current[key] = element;
+                    }}
+                    inputProps={{
+                      maxLength: 500,
+                      ...(key === "email"
+                        ? { inputMode: "email" as const }
+                        : {}),
+                    }}
+                    onChange={(event) => update(event.target.value)}
+                  />
+                );
+              })}
+            </Box>
+            <Button
+              className="login-submit"
+              type="submit"
+              size="large"
+              fullWidth
+              loading={busy}
+              disabled={blocked}
+            >
+              Ver minha senha temporária
+            </Button>
+            <Button
+              variant="tertiary"
+              size="large"
+              fullWidth
+              disabled={busy}
+              onClick={onBack}
+              sx={{ mt: "var(--pj-space-3)" }}
+            >
+              Voltar para entrar
+            </Button>
+          </>
+        )}
+      </LoginForm>
+    </AccessLayout>
   );
 }

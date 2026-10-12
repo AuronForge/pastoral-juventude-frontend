@@ -61,7 +61,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Composição dos componentes aprovados, sem AccessLayout. Referências: Figma 86:433 (desktop), 86:759 (tablet), 103:2220 (celular), 86:560 (401) e 86:693 (alerta bloqueante). Usa BrandLockup oficial no lugar da antiga sigla PJ. Respostas simuladas com o contrato de login existente, sem backend, Redux global ou armazenamento de tokens. O término desta história indica a fronteira de navegação; a troca está na história 003. O formulário não oferece a opção de continuar conectado; o contrato atual não recebe essa opção. Recuperação de senha permanece indisponível; logout e renovação estão fora do escopo. As mensagens de erro são genéricas, sem reproduzir detalhes internos da API. 429 sem cabeçalho válido não usa temporizador; com prazo recebido, bloqueia envio até sua liberação. Os helpers reservados pelos campos aprovados são mantidos; não se altera a API dos componentes nesta composição.",
+          "Jornada JA-01 / Login do Figma (página 03.01.1), montada sobre o Access Layout. Telas de referência no desktop: login 402:14, preenchido 479:506, autenticando 479:524, sessão concedida 479:542, campos inválidos 479:556, credenciais inválidas 479:574, limite de tentativas 479:594, falha de conexão 479:614 e senha visível 479:634; seções de tablet 479:2532/479:2533 e de mobile 479:2534/479:2535. E-mail normalizado por trim + lowercase, erro genérico sem indicar qual credencial divergiu e sem Continuar conectado. Respostas simuladas, sem backend nem armazenamento de tokens. Cenários sem tela no Figma (usuário bloqueado ou inativo, senha temporária indisponível, erro 400, contagem regressiva e avisos ao voltar) são mantidos como pendência de desenho.",
       },
     },
   },
@@ -78,6 +78,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Padrao: Story = { name: "Login padrão" };
+export const Preenchido: Story = {
+  args: { initialCredentials: credentials },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Acione Entrar para ver a sessão concedida (Acesso autorizado) antes do redirecionamento.",
+      },
+    },
+  },
+};
 export const Carregando: Story = {
   args: { initialCredentials: credentials, loading: true },
 };

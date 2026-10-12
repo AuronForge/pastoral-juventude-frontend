@@ -1,3 +1,4 @@
+export * from "./AccessLayout";
 export * from "./Alert";
 export * from "./AppShell";
 export * from "./Avatar";
