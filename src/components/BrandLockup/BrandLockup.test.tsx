@@ -21,10 +21,28 @@ describe("BrandLockup", () => {
     );
   });
 
-  it("respeita o tamanho mínimo oficial no modo compacto", () => {
-    render(<BrandLockup size="compact" />);
+  it("usa a geometria do Figma para a Assinatura", () => {
+    const { rerender } = render(<BrandLockup />);
+    expect(screen.getByRole("img")).toHaveStyle({
+      width: "240px",
+      height: "72px",
+    });
 
-    expect(screen.getByRole("img")).toHaveStyle({ height: "36px" });
+    rerender(<BrandLockup size="compact" />);
+    expect(screen.getByRole("img")).toHaveStyle({
+      width: "144px",
+      height: "43px",
+    });
+  });
+
+  it("oferece o formato Símbolo", () => {
+    render(<BrandLockup format="symbol" />);
+
+    const img = screen.getByRole("img", { name: "PastorApp" });
+    expect(img.getAttribute("src")).toMatch(
+      /pastorapp-symbol\.svg|^data:image\/svg\+xml/,
+    );
+    expect(img).toHaveStyle({ width: "72px", height: "72px" });
   });
 
   it("remove a marca decorativa da árvore acessível", () => {
