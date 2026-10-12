@@ -12,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Aciona uma ação. O catálogo contém as variantes primária, secundária, discreta e de perigo, nos tamanhos P, M e G. As 216 variantes publicadas no Figma definem alturas de 44 px para pequeno e médio e 48 px para grande; essas medidas prevalecem sobre os textos auxiliares antigos que ainda citam 32/40/48 px. Clique, Enter e Espaço acionam o botão. Estados desabilitado e carregando não recebem foco por Tab.",
+          "Aciona uma ação. O catálogo contém as variantes primária, secundária, discreta e de perigo, nos tamanhos P, M e G. As 216 variantes publicadas no Figma definem raio de 8 px, alturas de 44 px para pequeno e médio e 48 px para grande. Durante o carregamento, texto e ícones dão lugar a três pontos, mas o rótulo continua disponível para tecnologias assistivas. Clique, Enter e Espaço acionam o botão. Estados desabilitado e carregando não recebem foco por Tab.",
       },
     },
   },
@@ -117,7 +117,56 @@ export const CarregandoEDesabilitado: Story = {
     docs: {
       description: {
         story:
-          "Enquanto carrega, o botão fica indisponível, preserva seu rótulo e expõe `aria-busy` para tecnologias assistivas.",
+          "Enquanto carrega, o conteúdo visível dá lugar ao indicador de três pontos do Figma. O botão fica indisponível, preserva seu nome acessível e expõe `aria-busy` para tecnologias assistivas.",
+      },
+    },
+  },
+};
+
+export const AlinhamentoComFigma: Story = {
+  name: "Alinhamento com o Figma",
+  render: () => (
+    <Stack spacing={3} sx={{ alignItems: "flex-start" }}>
+      <Typography variant="headingSmall" component="h2">
+        Raio, alturas e carregamento
+      </Typography>
+      {variants.map((variant) => (
+        <Stack key={variant} spacing={1} sx={{ alignItems: "flex-start" }}>
+          <Typography>{variant}</Typography>
+          <Stack
+            direction="row"
+            spacing={1.5}
+            useFlexGap
+            sx={{ alignItems: "center", flexWrap: "wrap" }}
+          >
+            {sizes.map((size) => (
+              <Button key={size} size={size} variant={variant}>
+                Continuar
+              </Button>
+            ))}
+            <Button
+              loading
+              startIcon={<MaterialSymbol name="add" />}
+              endIcon={<MaterialSymbol name="arrow_forward" />}
+              variant={variant}
+            >
+              Carregando
+            </Button>
+          </Stack>
+        </Stack>
+      ))}
+      <Typography variant="body2" sx={{ maxWidth: 680 }}>
+        Todos os botões usam raio de 8 px. Pequeno e médio têm 44 px de altura;
+        grande tem 48 px. No carregamento, texto e ícones ficam visualmente
+        ocultos e apenas os três pontos permanecem visíveis.
+      </Typography>
+    </Stack>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Revisão consolidada das quatro hierarquias, três tamanhos e do estado de carregamento conforme o componente publicado no Figma.",
       },
     },
   },
