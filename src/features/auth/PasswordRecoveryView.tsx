@@ -1,11 +1,11 @@
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
-  Alert,
   AccessLayout,
+  Alert,
   Button,
   DatePicker,
-  IconButton,
+  Link,
   TextField,
 } from "../../components";
 import {
@@ -13,13 +13,12 @@ import {
   createCommunicationError,
   type ApiErrorDetails,
 } from "../../shared/api/apiError";
-import { pendingLayoutTokens } from "../../theme/tokens";
 import type { RecoveryRequest, RecoveryResponse } from "./authenticationApi";
-import { LoginForm } from "./LoginView.styles";
-import { Icon } from "../../components/Icon";
+import { LoginStructure } from "./LoginView.styles";
 
 export interface PasswordRecoveryViewProps {
   recover: (request: RecoveryRequest) => Promise<RecoveryResponse>;
+  /** Voltar ao login e Entrar com senha temporária levam ao Login. */
   onBack: () => void;
   loading?: boolean;
   initialError?: ApiErrorDetails;
@@ -27,25 +26,28 @@ export interface PasswordRecoveryViewProps {
 
 function parseBirthDate(value: string): string | null {
   if (!/^\d{4}-\d{2}-\d{2}$/u.test(value)) return null;
-  const iso = value;
-  const date = new Date(`${iso}T00:00:00Z`);
+  const date = new Date(`${value}T00:00:00Z`);
   return Number.isFinite(date.getTime()) &&
-    date.toISOString().slice(0, 10) === iso
-    ? iso
+    date.toISOString().slice(0, 10) === value
+    ? value
     : null;
 }
 
+/**
+ * Alertas da JA-02. 404, 409, 429 e falha de conexão seguem o Figma;
+ * USUARIO_INATIVO não tem tela no Figma (PENDÊNCIA de desenho).
+ */
 function feedback(error: ApiErrorDetails) {
   if (error.codigo === "RECUPERACAO_SENHA_EM_ANDAMENTO")
     return {
-      title: "Já existe uma recuperação em andamento",
-      text: "A senha temporária que você recebeu ainda vale. Use-a para entrar ou espere ela expirar (15 minutos) para pedir outra.",
+      title: "Recuperação já iniciada",
+      text: "Já existe uma recuperação válida. Use a senha temporária obtida ou aguarde sua expiração.",
       severity: "attention" as const,
     };
   if (error.codigo === "DADOS_RECUPERACAO_NAO_LOCALIZADOS")
     return {
-      title: "Não foi possível confirmar seus dados",
-      text: "Confira nome, e-mail, data de nascimento e paróquia. Se continuar, fale com o coordenador da sua pastoral.",
+      title: "Confira os dados informados",
+      text: "Não foi possível localizar os dados de recuperação. Revise as informações.",
       severity: "error" as const,
     };
   if (error.codigo === "USUARIO_INATIVO")
@@ -56,17 +58,25 @@ function feedback(error: ApiErrorDetails) {
     };
   if (error.status === 429)
     return {
-      title: "Muitas tentativas",
-      text: "Por segurança, aguarde antes de tentar de novo. As tentativas ficam bloqueadas por 30 minutos.",
-      severity: "error" as const,
+      title: "Aguarde para tentar novamente",
+      text: "Muitas tentativas de recuperação. Tente novamente em 30 minutos.",
+      severity: "attention" as const,
     };
   return {
-    title: "Não foi possível recuperar sua senha",
-    text: "Verifique sua conexão e tente novamente.",
+    title: "Não foi possível recuperar",
+    text: "Tente novamente quando a conexão estiver disponível.",
     severity: "error" as const,
   };
 }
 
+const FIELDS = [
+  ["nome", "Nome completo", "Nome completo", "name"],
+  ["email", "E-mail", "seuemail@exemplo.com", "email"],
+  ["dataNascimento", "Data de nascimento", "", "bday"],
+  ["nomeParoquia", "Nome da paróquia", "Nome da paróquia", "off"],
+] as const;
+
+/** Jornada JA-02 / Recuperação de senha do Figma, sobre o Access Layout. */
 export function PasswordRecoveryView({
   recover,
   onBack,
@@ -74,9 +84,6 @@ export function PasswordRecoveryView({
   initialError,
 }: PasswordRecoveryViewProps) {
   const id = useId();
-  const tablet = useMediaQuery(
-    `(min-width: ${pendingLayoutTokens.breakpoints.tablet}px)`,
-  );
   const [values, setValues] = useState({
     nome: "",
     email: "",
@@ -103,6 +110,7 @@ export function PasswordRecoveryView({
   const expiresAt = result ? Date.parse(result.expiraEm) : 0;
   const seconds = Math.max(0, Math.ceil((expiresAt - now) / 1000));
   const remaining = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+
   useEffect(() => {
     mounted.current = true;
     heading.current?.focus();
@@ -133,10 +141,9 @@ export function PasswordRecoveryView({
     if (!normalized.nome) errors.nome = "Informe seu nome completo.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(normalized.email))
       errors.email = "Informe um e-mail válido.";
-    if (!date)
-      errors.dataNascimento = "Selecione uma data de nascimento válida.";
+    if (!date) errors.dataNascimento = "Data inválida";
     if (!normalized.nomeParoquia)
-      errors.nomeParoquia = "Informe o nome da sua paróquia.";
+      errors.nomeParoquia = "Informe o nome da paróquia.";
     setFieldErrors(errors);
     const first = Object.keys(errors)[0] as keyof RecoveryRequest | undefined;
     if (first) {
@@ -165,6 +172,7 @@ export function PasswordRecoveryView({
       if (mounted.current) setPending(false);
     }
   }
+
   async function copy() {
     if (!result || seconds === 0) return;
     try {
@@ -177,117 +185,66 @@ export function PasswordRecoveryView({
         );
     }
   }
+
+  const header = (title: string, description: string) => (
+    <>
+      <Typography
+        ref={heading}
+        tabIndex={-1}
+        component="h1"
+        id={`${id}-title`}
+        variant="headingMedium"
+      >
+        {title}
+      </Typography>
+      <Typography className="login-description" variant="bodyMedium">
+        {description}
+      </Typography>
+    </>
+  );
   const message = error ? feedback(error) : undefined;
+
   return (
     <AccessLayout aria-labelledby={`${id}-title`}>
-      <LoginForm
-        noValidate
-        aria-labelledby={`${id}-title`}
-        aria-busy={busy}
-        onSubmit={(event) => void submit(event)}
-        sx={{
-          "& .recovery-fields": {
-            display: "flex",
-            flexDirection: "column",
-            mt: "28px",
-            "& .MuiFormHelperText-root": { marginTop: 0 },
-          },
-          "& .login-submit": { mt: "var(--pj-space-5)" },
-        }}
-      >
-        {result ? (
-          <>
-            <Box
-              sx={{
-                width: 48,
-                height: 48,
-                borderRadius: "var(--pj-radius-full)",
-                bgcolor: "var(--pj-color-feedback-success-soft)",
-                color: "var(--pj-color-feedback-success)",
-                display: "grid",
-                placeItems: "center",
-                mb: "var(--pj-space-4)",
-              }}
-            >
-              <Icon name="password" />
-            </Box>
-            <Typography
-              id={`${id}-title`}
-              component="h1"
-              variant="headingLarge"
-              ref={heading}
-              tabIndex={-1}
-            >
-              Sua senha temporária
-            </Typography>
-            <Typography
-              variant="bodyMedium"
-              sx={{ color: "var(--pj-color-text-secondary)" }}
-            >
-              Ela vale por 15 minutos e só serve para iniciar a troca
-              obrigatória de senha — guarde-a agora.
-            </Typography>
-            <Box
-              sx={{
-                mt: "var(--pj-space-4)",
-                p: "var(--pj-space-4)",
-                bgcolor: "var(--pj-color-bg-canvas)",
-                border: "1px solid var(--pj-color-border-default)",
-                borderRadius: "var(--pj-radius-lg)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: "var(--pj-space-2)",
-              }}
-            >
-              <Typography
-                component="code"
-                variant="title"
-                sx={{
-                  letterSpacing: "2px",
-                  overflowWrap: "anywhere",
-                }}
-              >
-                {seconds > 0
-                  ? result.senhaTemporaria
-                  : "Senha temporária expirada"}
-              </Typography>
-              <IconButton
-                label="Copiar senha temporária"
-                icon={<Icon name="content_copy" />}
-                variant="tertiary"
-                size="large"
-                disabled={seconds === 0}
-                onClick={() => void copy()}
-              />
-            </Box>
-            <Typography
-              variant="bodySmall"
-              sx={{
-                display: "block",
-                mt: "var(--pj-space-2)",
-                color: "var(--pj-color-text-secondary)",
-              }}
-            >
-              Copie agora — ela some ao sair desta tela.
-            </Typography>
-            <Typography role="status" variant="bodySmall">
-              {copyFeedback}
-            </Typography>
+      {result ? (
+        <LoginStructure as="div">
+          {header(
+            "Senha temporária gerada",
+            "Guarde a senha para continuar com a recuperação.",
+          )}
+          <div className="login-sections">
+            <Alert severity="success" title="Senha temporária gerada">
+              Esta senha é exibida uma única vez e vale por 15 minutos. Guarde-a
+              antes de continuar.
+            </Alert>
+            <TextField
+              id={`${id}-temporaria`}
+              label="Sua senha temporária"
+              type="password"
+              size="large"
+              readOnly
+              disabled={seconds === 0}
+              value={seconds > 0 ? result.senhaTemporaria : ""}
+              hint={seconds > 0 ? undefined : "Senha temporária expirada."}
+            />
             <Button
-              className="login-submit"
+              variant="secondary"
               size="large"
               fullWidth
-              onClick={onBack}
+              disabled={seconds === 0}
+              onClick={() => void copy()}
             >
-              Voltar para entrar
+              Copiar senha
             </Button>
+            <Button size="large" fullWidth onClick={onBack}>
+              Entrar com senha temporária
+            </Button>
+            {/* PENDÊNCIA: sem desenho no Figma (validade e nova solicitação). */}
             <Button
               variant="tertiary"
               size="large"
               fullWidth
               disabled={seconds > 0}
-              sx={{ mt: "var(--pj-space-3)" }}
               onClick={() => {
                 setResult(undefined);
                 setCopyFeedback("");
@@ -298,122 +255,97 @@ export function PasswordRecoveryView({
                 ? `Pedir outra em ${remaining}`
                 : "Pedir outra senha temporária"}
             </Button>
-          </>
-        ) : (
-          <>
             <Typography
-              id={`${id}-title`}
-              component="h1"
-              variant="headingLarge"
-              ref={heading}
-              tabIndex={-1}
-            >
-              Esqueci minha senha
-            </Typography>
-            <Typography
-              variant="bodyMedium"
+              role="status"
+              variant="bodySmall"
               sx={{ color: "var(--pj-color-text-secondary)" }}
             >
-              Para confirmar que é você, informe os quatro dados do seu
-              cadastro. Sua senha temporária aparece na tela, se os dados
-              conferirem.
+              {copyFeedback}
             </Typography>
+          </div>
+        </LoginStructure>
+      ) : (
+        <LoginStructure
+          noValidate
+          aria-labelledby={`${id}-title`}
+          aria-busy={busy}
+          onSubmit={(event) => void submit(event)}
+        >
+          {header(
+            "Recupere seu acesso",
+            "Informe os dados do seu cadastro para recuperar a senha.",
+          )}
+          <div className="login-sections">
             {message && (
-              <Alert
-                className="login-feedback"
-                title={message.title}
-                severity={message.severity}
-              >
+              <Alert title={message.title} severity={message.severity}>
                 {message.text}
               </Alert>
             )}
-            <Box className="recovery-fields">
-              {(
-                [
-                  ["nome", "Nome completo", "Como está no cadastro", "name"],
-                  ["email", "E-mail", "seu.nome@exemplo.com.br", "email"],
-                  [
-                    "dataNascimento",
-                    "Data de nascimento",
-                    "dd/mm/aaaa",
-                    "bday",
-                  ],
-                  ["nomeParoquia", "Paróquia", "Nome da sua paróquia", "off"],
-                ] as const
-              ).map(([key, label, placeholder, autoComplete]) => {
-                const common = {
-                  id: `${id}-${key}`,
-                  name: key,
-                  label,
-                  required: true,
-                  size: (tablet ? "medium" : "large") as "medium" | "large",
-                  disabled: blocked,
-                  readOnly: busy,
-                  autoComplete,
-                  errorMessage:
-                    fieldErrors[key] ??
-                    error?.erros?.find((item) => item.campo === key)?.mensagem,
-                };
-                const update = (value: string) => {
-                  setValues((current) => ({ ...current, [key]: value }));
-                  setFieldErrors((current) => ({
-                    ...current,
-                    [key]: undefined,
-                  }));
-                };
-                return key === "dataNascimento" ? (
-                  <DatePicker
-                    key={key}
-                    {...common}
-                    value={values[key]}
-                    ref={(element) => {
-                      inputs.current[key] = element;
-                    }}
-                    onChange={update}
-                  />
-                ) : (
-                  <TextField
-                    key={key}
-                    {...common}
-                    placeholder={placeholder}
-                    value={values[key]}
-                    ref={(element) => {
-                      inputs.current[key] = element;
-                    }}
-                    inputProps={{
-                      maxLength: 500,
-                      ...(key === "email"
-                        ? { inputMode: "email" as const }
-                        : {}),
-                    }}
-                    onChange={(event) => update(event.target.value)}
-                  />
-                );
-              })}
-            </Box>
+            {FIELDS.map(([key, label, placeholder, autoComplete]) => {
+              const common = {
+                id: `${id}-${key}`,
+                name: key,
+                label,
+                required: true,
+                size: "large" as const,
+                disabled: blocked || busy,
+                autoComplete,
+                errorMessage:
+                  fieldErrors[key] ??
+                  error?.erros?.find((item) => item.campo === key)?.mensagem,
+              };
+              const update = (value: string) => {
+                setValues((current) => ({ ...current, [key]: value }));
+                setFieldErrors((current) => ({ ...current, [key]: undefined }));
+              };
+              return key === "dataNascimento" ? (
+                <DatePicker
+                  key={key}
+                  {...common}
+                  value={values[key]}
+                  ref={(element) => {
+                    inputs.current[key] = element;
+                  }}
+                  onChange={update}
+                />
+              ) : (
+                <TextField
+                  key={key}
+                  {...common}
+                  type={key === "email" ? "email" : "text"}
+                  placeholder={placeholder}
+                  value={values[key]}
+                  ref={(element) => {
+                    inputs.current[key] = element;
+                  }}
+                  inputProps={{ maxLength: 500 }}
+                  onChange={(event) => update(event.target.value)}
+                />
+              );
+            })}
             <Button
-              className="login-submit"
               type="submit"
               size="large"
               fullWidth
               loading={busy}
               disabled={blocked}
             >
-              Ver minha senha temporária
+              Gerar senha temporária
             </Button>
-            <Button
-              variant="tertiary"
-              size="large"
-              fullWidth
-              disabled={busy}
-              onClick={onBack}
-              sx={{ mt: "var(--pj-space-3)" }}
-            >
-              Voltar para entrar
-            </Button>
-          </>
-        )}
-      </LoginForm>
+            <div className="login-recovery">
+              <Link
+                href="/login"
+                onClick={(event) => {
+                  event.preventDefault();
+                  onBack();
+                }}
+              >
+                Voltar ao login
+              </Link>
+            </div>
+          </div>
+        </LoginStructure>
+      )}
     </AccessLayout>
   );
 }
