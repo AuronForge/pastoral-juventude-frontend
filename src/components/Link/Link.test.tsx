@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { createRef } from "react";
 import { Link } from "./Link";
-import { Icon } from "../Icon";
 
 describe("Link", () => {
   it("renderiza um link semântico com destino", () => {
@@ -12,17 +11,17 @@ describe("Link", () => {
     ).toHaveAttribute("href", "/acesso");
   });
 
-  it("preserva ícones de apoio no conteúdo", () => {
+  it("exibe o ícone externo opcional sem alterar o nome acessível", () => {
     render(
-      <Link
-        endIcon={<Icon name="arrow_forward" data-testid="seta" />}
-        href="/acesso"
-      >
-        Voltar ao acesso
+      <Link externalIcon href="https://exemplo.org/termo">
+        Visualizar termo
       </Link>,
     );
 
-    expect(screen.getByTestId("seta")).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: "Visualizar termo" });
+    expect(link.querySelector(".material-symbols-outlined")).toHaveTextContent(
+      "open_in_new",
+    );
   });
 
   it("impede interação e retira o destino quando desabilitado", () => {
@@ -60,12 +59,7 @@ describe("Link", () => {
     const ref = createRef<HTMLAnchorElement>();
 
     render(
-      <Link
-        ref={ref}
-        data-testid="link-ajuda"
-        endIcon={<Icon name="open_in_new" />}
-        href="/ajuda"
-      >
+      <Link ref={ref} data-testid="link-ajuda" externalIcon href="/ajuda">
         Preciso de ajuda
       </Link>,
     );
