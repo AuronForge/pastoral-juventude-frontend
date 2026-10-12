@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { sessionExpired } from "./authSlice";
 import { restoreSession } from "./authThunks";
 import { Box, Stack } from "@mui/material";
-import { Alert, Button, LoadingIndicator } from "../../components";
+import { Alert, Button, Progress } from "../../components";
 
 /** Always mounted across access routes so changing pages cannot extend token lifetime. */
 export function AuthLifetime() {
@@ -29,7 +29,7 @@ export function AuthLifetime() {
         component="main"
         sx={{ display: "grid", placeItems: "center", minHeight: "100dvh" }}
       >
-        <LoadingIndicator label="Restaurando sua sessão" />
+        <Progress label="Restaurando sua sessão" />
       </Box>
     );
   }

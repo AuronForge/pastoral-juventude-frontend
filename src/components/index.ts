@@ -7,6 +7,6 @@ export * from "./DatePicker";
 export * from "./Icon";
 export * from "./IconButton";
 export * from "./Link";
-export * from "./LoadingIndicator";
 export * from "./PasswordField";
+export * from "./Progress";
 export * from "./TextField";
