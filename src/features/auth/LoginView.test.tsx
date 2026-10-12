@@ -44,13 +44,31 @@ it("429 sem prazo não fornece contagem nem bloqueio artificial", () => {
   expect(screen.queryByText(/segundos/)).not.toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Entrar" })).toBeEnabled();
 });
+it.each(["USUARIO_BLOQUEADO", "USUARIO_INATIVO"])(
+  "orienta o usuário para %s",
+  (codigo) => {
+    expect(loginFeedback({ ...details, codigo }).message).toMatch(
+      /coordenador/,
+    );
+  },
+);
 it.each([
-  "USUARIO_BLOQUEADO",
-  "USUARIO_INATIVO",
-  "SENHA_TEMPORARIA_EXPIRADA",
-  "SENHA_TEMPORARIA_INVALIDADA",
-])("orienta o usuário para %s", (codigo) => {
-  expect(loginFeedback({ ...details, codigo }).message).toMatch(/coordenador/);
+  ["SENHA_TEMPORARIA_EXPIRADA", "Senha temporária expirada"],
+  ["SENHA_TEMPORARIA_INVALIDADA", "Limite atingido"],
+])("%s oferece Recuperar senha", async (codigo, title) => {
+  const onRecover = vi.fn();
+  render(
+    <ThemeProvider theme={createAppTheme()}>
+      <LoginView
+        authenticate={vi.fn()}
+        initialError={{ ...details, status: 401, codigo }}
+        onRecover={onRecover}
+      />
+    </ThemeProvider>,
+  );
+  expect(screen.getByText(title)).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Recuperar senha" }));
+  expect(onRecover).toHaveBeenCalledOnce();
 });
 it("orienta correção de validação", () => {
   expect(loginFeedback({ ...details, status: 400 }).title).toBe(

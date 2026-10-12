@@ -96,18 +96,24 @@ it("conclui primeiro acesso, descarta token restrito e exige novo Login", async 
     target: { value: "Senha123!" },
   });
   fireEvent.submit(screen.getByRole("form"));
-  await screen.findByRole("heading", { name: "Crie sua senha" });
+  await screen.findByRole("heading", { name: "Defina sua senha" });
   expect(store.getState().auth.accessToken).toBeNull();
   await act(() => router.navigate("/"));
   expect(router.state.location.pathname).toBe("/alterar-senha");
+  fireEvent.click(
+    await screen.findByRole("button", { name: "Definir minha senha" }),
+  );
   fireEvent.change(screen.getByLabelText(/^Nova senha/), {
     target: { value: "NovaSenha123!" },
   });
-  fireEvent.change(screen.getByLabelText(/^Repita a nova senha/), {
+  fireEvent.change(screen.getByLabelText(/^Confirmar nova senha/), {
     target: { value: "NovaSenha123!" },
   });
   fireEvent.submit(screen.getByRole("form"));
+  await screen.findByRole("heading", { name: "Senha definida" });
+  fireEvent.click(screen.getByRole("button", { name: "Ir para o login" }));
   await screen.findByText("Senha alterada");
+  expect(router.state.location.pathname).toBe("/login");
   expect(store.getState().auth).toEqual({
     ...initialAuthState,
     restoration: "complete",
@@ -137,17 +143,18 @@ it("retorna ao Login ao reiniciar após token rejeitado pela API", async () => {
     response: new Response(null, { status: 401 }),
   });
   const { store, router } = setup("/login", auth);
-  await screen.findByRole("heading", { name: "Crie sua senha" });
+  fireEvent.click(
+    await screen.findByRole("button", { name: "Definir minha senha" }),
+  );
   fireEvent.change(screen.getByLabelText(/^Nova senha/), {
     target: { value: "NovaSenha123!" },
   });
-  fireEvent.change(screen.getByLabelText(/^Repita a nova senha/), {
+  fireEvent.change(screen.getByLabelText(/^Confirmar nova senha/), {
     target: { value: "NovaSenha123!" },
   });
   fireEvent.submit(screen.getByRole("form"));
-  fireEvent.click(
-    await screen.findByRole("button", { name: "Voltar ao Login" }),
-  );
+  await screen.findByRole("heading", { name: "Valide seu acesso novamente" });
+  fireEvent.click(screen.getByRole("link", { name: "Voltar ao login" }));
   await waitFor(() => expect(router.state.location.pathname).toBe("/login"));
   expect(store.getState().auth.passwordChangeToken).toBeNull();
 });

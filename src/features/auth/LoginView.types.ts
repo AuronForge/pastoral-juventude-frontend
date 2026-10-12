@@ -8,6 +8,8 @@ export interface LoginViewProps {
   initialError?: ApiErrorDetails;
   loading?: boolean;
   recoveryHref?: string;
+  /** Ação "Recuperar senha" quando a senha temporária expirou ou foi invalidada. */
+  onRecover?: () => void;
   notice?: "passwordChanged" | "expired" | "blocked" | "inactive" | "replaced";
   onAuthenticated?: (
     response: Extract<LoginResponse, { tokenType: "Bearer" }>,

@@ -48,6 +48,7 @@ export function LoginView({
   initialError,
   loading = false,
   recoveryHref,
+  onRecover,
   notice,
   onAuthenticated,
   onPasswordChangeRequired,
@@ -192,8 +193,17 @@ export function LoginView({
             )}
             {error && (
               <Alert
-                severity={error.status === 429 ? "attention" : "error"}
+                severity={
+                  error.status === 429 || "recover" in feedback
+                    ? "attention"
+                    : "error"
+                }
                 title={feedback.title}
+                action={
+                  "recover" in feedback && onRecover
+                    ? { label: "Recuperar senha", onClick: onRecover }
+                    : undefined
+                }
               >
                 {feedback.message}
                 {blocked && (

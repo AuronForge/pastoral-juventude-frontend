@@ -21,11 +21,17 @@ export function loginFeedback(error?: ApiErrorDetails) {
           "Fale com o coordenador da sua pastoral para verificar seu acesso.",
       };
     case "SENHA_TEMPORARIA_EXPIRADA":
+      return {
+        title: "Senha temporária expirada",
+        message: "Inicie uma nova recuperação para obter outra senha.",
+        recover: true,
+      };
     case "SENHA_TEMPORARIA_INVALIDADA":
       return {
-        title: "Senha temporária indisponível",
+        title: "Limite atingido",
         message:
-          "Solicite uma nova senha temporária ao coordenador da sua pastoral.",
+          "Após 5 tentativas inválidas, a senha temporária é invalidada.",
+        recover: true,
       };
   }
   if (error?.status === 429)

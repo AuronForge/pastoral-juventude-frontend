@@ -24,6 +24,7 @@ export function LoginPage() {
   return (
     <LoginView
       recoveryHref="/recuperar-senha"
+      onRecover={() => void navigate("/recuperar-senha")}
       notice={notice}
       authenticate={(credentials) => dispatch(authenticate(credentials))}
       onAuthenticated={() => void navigate("/", { replace: true })}
