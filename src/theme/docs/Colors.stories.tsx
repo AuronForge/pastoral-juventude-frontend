@@ -1,8 +1,11 @@
 import { Box, Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { primitiveColors, semanticColors } from "../tokens";
+import {
+  primitiveColorTokens,
+  resolveColor,
+  semanticColorTokens,
+} from "../tokens";
 import { FoundationPage, FoundationSection, TokenCode } from "./FoundationPage";
-import { flattenTokens } from "./tokenHelpers";
 
 const meta = {
   title: "Design System/Fundações/Cores",
@@ -12,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Paleta vigente do Figma. O modo Light é oficial; o modo escuro preservado no produto é uma extensão documentada.",
+          "Primitivos e tokens semânticos espelhados das coleções Primitives e Color do Figma. Componentes devem consumir tokens semânticos, nunca cores primitivas diretamente.",
       },
     },
   },
@@ -21,152 +24,97 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const semanticLight = flattenTokens(semanticColors.light);
-const semanticDark = new Map(flattenTokens(semanticColors.dark));
+function Swatch({ color, label }: { color: string; label: string }) {
+  return (
+    <Box
+      role="img"
+      aria-label={label}
+      sx={{
+        width: 40,
+        height: 40,
+        flex: "0 0 auto",
+        bgcolor: color,
+        border:
+          "var(--pj-border-width-default) solid var(--pj-color-border-default)",
+        borderRadius: "var(--pj-radius-sm)",
+      }}
+    />
+  );
+}
 
 export const Paleta: Story = {
   render: () => (
     <FoundationPage
-      title="Cores"
-      description="Azul petróleo, terracota, dourado e neutros quentes formam a paleta oficial. Estados de feedback usam aliases próprios."
+      title="Tokens de cor"
+      description="Direção: azul-petróleo, terracota, dourado suave e superfícies em areia/creme. Os tokens semânticos são aliases dos valores primitivos."
     >
       <FoundationSection
-        title="Primitivas"
-        description="Valores de referência. Não devem ser usados diretamente nos componentes da aplicação."
+        title="Primitivos"
+        description="Valores de referência. Não devem ser usados diretamente nos componentes."
       >
-        <Stack spacing={4}>
-          {Object.entries(primitiveColors).map(([family, scale]) => (
-            <Stack key={family} spacing={1.5}>
-              <Typography
-                variant="headingSmall"
-                sx={{ textTransform: "capitalize" }}
-              >
-                {family}
-              </Typography>
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: {
-                    xs: "repeat(2, minmax(0, 1fr))",
-                    md: "repeat(5, minmax(0, 1fr))",
-                    lg: "repeat(10, minmax(0, 1fr))",
-                  },
-                  gap: 1.5,
-                }}
-              >
-                {Object.entries(scale).map(([step, color]) => (
-                  <Stack key={step} spacing={0.75}>
-                    <Box
-                      role="img"
-                      aria-label={`${family} ${step}: ${color}`}
-                      sx={{
-                        height: 64,
-                        bgcolor: color,
-                        border:
-                          "var(--border-thin) solid var(--border-default)",
-                        borderRadius: "var(--radius-sm)",
-                      }}
-                    />
-                    <Typography variant="labelSmall">{step}</Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {color.toUpperCase()}
-                    </Typography>
-                  </Stack>
-                ))}
-              </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              md: "repeat(2, minmax(0, 1fr))",
+              lg: "repeat(3, minmax(0, 1fr))",
+            },
+            gap: 2,
+          }}
+        >
+          {primitiveColorTokens.map((token) => (
+            <Stack
+              key={token.name}
+              direction="row"
+              spacing={1.5}
+              sx={{ alignItems: "center" }}
+            >
+              <Swatch
+                color={token.value}
+                label={`${token.name}: ${token.value}`}
+              />
+              <Stack spacing={0.5} sx={{ alignItems: "flex-start" }}>
+                <TokenCode>{token.name}</TokenCode>
+                <Typography variant="bodySmall" color="text.secondary">
+                  {token.value}
+                </Typography>
+              </Stack>
             </Stack>
           ))}
-        </Stack>
+        </Box>
       </FoundationSection>
 
       <FoundationSection
-        title="Semânticas"
-        description="Aliases consumidos pela aplicação. Cada token possui resolução específica para Light e Dark."
+        title="Semânticos"
+        description="Aliases consumidos pelos componentes. A variável CSS segue o code syntax definido no Figma."
       >
-        <Box sx={{ overflowX: "auto" }}>
-          <Box
-            role="table"
-            aria-label="Tokens de cor semânticos"
-            sx={{ minWidth: 720 }}
-          >
-            <Box
-              role="row"
+        <Stack spacing={1.5}>
+          {semanticColorTokens.map((token) => (
+            <Stack
+              key={token.name}
+              direction={{ xs: "column", md: "row" }}
+              spacing={1.5}
               sx={{
-                display: "grid",
-                gridTemplateColumns: "minmax(280px, 1fr) 180px 180px",
-                gap: 2,
+                alignItems: { xs: "flex-start", md: "center" },
                 pb: 1.5,
-                borderBottom: "var(--border-thin) solid var(--border-default)",
+                borderBottom:
+                  "var(--pj-border-width-default) solid var(--pj-color-border-default)",
               }}
             >
-              <Typography role="columnheader" variant="labelMedium">
-                Token
-              </Typography>
-              <Typography role="columnheader" variant="labelMedium">
-                Light
-              </Typography>
-              <Typography role="columnheader" variant="labelMedium">
-                Dark
-              </Typography>
-            </Box>
-            {semanticLight.map(([name, lightValue]) => {
-              const darkValue = semanticDark.get(name);
-              const cssVariable = `--${name.replaceAll("/", "-")}`;
-
-              return (
-                <Box
-                  role="row"
-                  key={name}
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns: "minmax(280px, 1fr) 180px 180px",
-                    alignItems: "center",
-                    gap: 2,
-                    py: 1.25,
-                    borderBottom:
-                      "var(--border-thin) solid var(--border-subtle)",
-                  }}
-                >
-                  <Stack
-                    role="cell"
-                    spacing={0.5}
-                    sx={{ alignItems: "flex-start" }}
-                  >
-                    <TokenCode>{`color/${name}`}</TokenCode>
-                    <Typography variant="caption" color="text.secondary">
-                      {cssVariable}
-                    </Typography>
-                  </Stack>
-                  {[lightValue, darkValue].map((value, index) => (
-                    <Stack
-                      role="cell"
-                      key={`${name}-${index}`}
-                      direction="row"
-                      spacing={1}
-                      sx={{ alignItems: "center" }}
-                    >
-                      <Box
-                        aria-hidden
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          flex: "0 0 auto",
-                          bgcolor: String(value),
-                          border:
-                            "var(--border-thin) solid var(--border-default)",
-                          borderRadius: "var(--radius-xs)",
-                        }}
-                      />
-                      <Typography variant="caption">
-                        {String(value).toUpperCase()}
-                      </Typography>
-                    </Stack>
-                  ))}
-                </Box>
-              );
-            })}
-          </Box>
-        </Box>
+              <Swatch
+                color={`var(${token.cssVar})`}
+                label={`${token.name}: ${resolveColor(token.name)}`}
+              />
+              <Stack spacing={0.5} sx={{ alignItems: "flex-start", flex: 1 }}>
+                <TokenCode>{token.name}</TokenCode>
+                <Typography variant="bodySmall" color="text.secondary">
+                  {`var(${token.cssVar}) → ${token.alias}`}
+                </Typography>
+              </Stack>
+            </Stack>
+          ))}
+        </Stack>
       </FoundationSection>
     </FoundationPage>
   ),

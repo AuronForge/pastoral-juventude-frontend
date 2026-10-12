@@ -17,20 +17,17 @@ const result = () => ({
   expiraEm: new Date(Date.now() + 900000).toISOString(),
   trocaSenhaObrigatoria: true as const,
 });
-function setup(
-  props: Partial<PasswordRecoveryViewProps> = {},
-  mode: "light" | "dark" = "light",
-) {
+function setup(props: Partial<PasswordRecoveryViewProps> = {}) {
   const recover = vi.fn().mockImplementation(async () => result());
   const onBack = vi.fn();
   const rendered = render(
-    <ThemeProvider theme={createAppTheme(mode)}>
+    <ThemeProvider theme={createAppTheme()}>
       <PasswordRecoveryView recover={recover} onBack={onBack} {...props} />
     </ThemeProvider>,
   );
   return { recover, onBack, ...rendered };
 }
-function fill(date = "2000-02-29") {
+function fill(date = "29/02/2000") {
   for (const [label, value] of [
     [/^Nome completo/, "  Maria Silva  "],
     [/^E-mail/, "  MARIA@EXEMPLO.TEST "],
@@ -55,10 +52,10 @@ it("foca título, valida os quatro campos e mantém foco no primeiro erro", () =
   expect(recover).not.toHaveBeenCalled();
   expect(screen.getByLabelText(/^Nome completo/)).toHaveFocus();
   expect(screen.getByLabelText(/^Data de nascimento/)).toHaveAttribute(
-    "type",
-    "date",
+    "placeholder",
+    "DD/MM/AAAA",
   );
-  fill("2001-02-29");
+  fill("29/02/2001");
   submit();
   expect(recover).not.toHaveBeenCalled();
   expect(screen.getByLabelText(/^Data de nascimento/)).toHaveFocus();
@@ -181,13 +178,13 @@ it("erro de rede mantém valores e permite tentar novamente", async () => {
   submit();
   await screen.findByRole("heading", { name: "Sua senha temporária" });
 });
-it("volta ao login e usa a marca aprovada no tema escuro", () => {
-  const { onBack } = setup({}, "dark");
+it("volta ao login e usa a marca aprovada", () => {
+  const { onBack } = setup({});
   fireEvent.click(screen.getByRole("button", { name: "Voltar para entrar" }));
   expect(onBack).toHaveBeenCalledOnce();
   expect(screen.getByRole("img", { name: /PastorApp/ })).toHaveAttribute(
     "src",
-    expect.stringContaining("on-dark"),
+    expect.stringContaining("on-light"),
   );
 });
 it("expiração libera novo formulário e remove o valor da tela", async () => {

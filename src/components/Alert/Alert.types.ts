@@ -1,35 +1,35 @@
-import type { AlertProps as MuiAlertProps } from "@mui/material";
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 
-export type AlertTone = "info" | "success" | "warning" | "danger";
+/** Severidades do Alert do Figma. */
+export type AlertSeverity = "success" | "information" | "attention" | "error";
+
+/** Modelos do Figma: Suave (fundo 12%) e Contornado (borda semântica). */
+export type AlertModel = "soft" | "outlined";
+
+export type AlertAction = {
+  /** Rótulo iniciado por verbo que indica o resultado esperado. */
+  label: string;
+  onClick: () => void;
+};
 
 type AlertBaseProps = Omit<
-  MuiAlertProps,
-  | "action"
-  | "children"
-  | "closeText"
-  | "color"
-  | "icon"
-  | "iconMapping"
-  | "onClose"
-  | "role"
-  | "severity"
-  | "slotProps"
-  | "variant"
+  HTMLAttributes<HTMLDivElement>,
+  "children" | "role" | "title"
 > & {
-  /** Conteúdo que explica a situação e a ação esperada. */
+  /** Mensagem que explica o ocorrido e orienta o próximo passo. */
   children: ReactNode;
-  /** Nome acessível da ação de dispensar o alerta. */
-  closeLabel?: string;
-  /** Exibe uma ação para dispensar um aviso não bloqueante. */
-  dismissible?: boolean;
-  /** Título conciso da situação apresentada. */
+  /** Título curto e específico que resume a condição. */
   title: ReactNode;
-  /** Tom semântico disponível no catálogo do Design System. */
-  tone?: AlertTone;
+  severity?: AlertSeverity;
+  model?: AlertModel;
+  /** Ação opcional (propriedade "Com ação" do Figma). */
+  action?: AlertAction;
+  /** Nome acessível da ação de fechar. */
+  closeLabel?: string;
 };
 
 type DismissibleAlertProps = {
+  /** Fechável: permite dispensar o alerta quando isso for seguro. */
   dismissible: true;
   onClose: () => void;
 };

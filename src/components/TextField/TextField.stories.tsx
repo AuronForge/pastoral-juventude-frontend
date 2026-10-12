@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MaterialSymbol } from "../MaterialSymbol";
 import { TextField } from "./TextField";
+import { Icon } from "../Icon";
 
 const meta = {
   title: "Design System/Componentes/Campo de texto",
@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Campo de uma linha baseado na anatomia outlined do MUI. O tamanho grande é o padrão e atende ao alvo mínimo de toque de 44 px.",
+          "Text Field do Figma. O tipo descreve o conteúdo esperado (Texto, E-mail, Senha, Número, Busca); o estado descreve a condição de interação e validação. Médio (40 px) é o padrão da interface; Grande (48 px) atende contextos de maior toque. Use label visível; não dependa apenas do placeholder. A Senha integra a ação Mostrar/Ocultar senha no próprio campo.",
       },
     },
   },
@@ -19,7 +19,7 @@ const meta = {
     label: "E-mail",
     placeholder: "nome@exemplo.com",
     hint: "Use o e-mail cadastrado na pastoral.",
-    size: "large",
+    size: "medium",
   },
   argTypes: {
     disabled: { control: "boolean" },
@@ -73,32 +73,24 @@ export const Estados: Story = {
   ),
 };
 
-export const IconesEAdornos: Story = {
-  name: "Ícones, prefixos e sufixos",
+export const TiposEIcones: Story = {
+  name: "Tipos e ícones",
   render: () => (
     <Stack spacing={2.5} sx={{ maxWidth: 420 }}>
-      <TextField
-        label="Buscar pessoa"
-        placeholder="Nome ou e-mail"
-        leadingIcon={<MaterialSymbol name="search" />}
-      />
+      <TextField label="Nome completo" placeholder="Digite seu nome" />
       <TextField
         label="E-mail"
-        placeholder="nome"
-        suffix="@pastoral.org"
-        trailingIcon={<MaterialSymbol name="alternate_email" />}
+        type="email"
+        placeholder="jovem@email.com"
+        trailingIcon={<Icon name="alternate_email" />}
       />
+      <TextField label="Senha" type="password" defaultValue="segredo123" />
+      <TextField label="Quantidade" type="number" defaultValue={42} />
       <TextField
-        label="Senha"
-        value="segredo"
-        trailingIcon={<MaterialSymbol name="visibility_off" />}
-        readOnly
-      />
-      <TextField
-        label="Valor"
-        placeholder="0,00"
-        prefix="R$"
-        suffix="por encontro"
+        label="Buscar"
+        type="search"
+        placeholder="Pastoral"
+        leadingIcon={<Icon name="search" />}
       />
     </Stack>
   ),
@@ -107,17 +99,14 @@ export const IconesEAdornos: Story = {
 export const Tamanhos: Story = {
   render: () => (
     <Box sx={{ maxWidth: 420 }}>
-      <Typography variant="bodySmall" color="text.secondary" sx={{ mb: 2 }}>
-        Use o tamanho grande como padrão, especialmente em fluxos móveis.
-      </Typography>
       <Stack spacing={2.5}>
         <TextField
-          label="Tamanho médio — 40 px"
+          label="Médio — 40 px · padrão da interface"
           placeholder="Valor"
           size="medium"
         />
         <TextField
-          label="Tamanho grande — 44 px"
+          label="Grande — 48 px · contextos de maior toque"
           placeholder="Valor"
           size="large"
         />

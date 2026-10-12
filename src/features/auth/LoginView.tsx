@@ -1,29 +1,47 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
-import {
-  Alert,
-  BrandLockup,
-  Button,
-  Link,
-  MaterialSymbol,
-  PasswordField,
-  TextField,
-} from "../../components";
+import { AccessLayout, Alert, Button, Link, TextField } from "../../components";
 import {
   ApiRequestError,
   createCommunicationError,
 } from "../../shared/api/apiError";
+import type { LoginResponse } from "./authenticationApi";
 import type { LoginViewProps } from "./LoginView.types";
-import {
-  JourneyAside,
-  JourneyCanvas,
-  LoginForm,
-  LoginPanel,
-} from "./LoginView.styles";
-
+import { LoginStructure } from "./LoginView.styles";
 import { loginFeedback } from "./loginFeedback";
 
-/** Composição da Jornada de Login, compartilhada com as histórias. */
+type Authenticated = Extract<LoginResponse, { tokenType: "Bearer" }>;
+
+const NOTICES = {
+  passwordChanged: {
+    severity: "success",
+    title: "Senha alterada",
+    message: "Entre com a sua nova senha.",
+  },
+  blocked: {
+    severity: "attention",
+    title: "Usuário bloqueado",
+    message: "Entre em contato com o coordenador da pastoral.",
+  },
+  inactive: {
+    severity: "attention",
+    title: "Usuário inativo",
+    message: "Entre em contato com o coordenador da pastoral.",
+  },
+  replaced: {
+    severity: "attention",
+    title: "Sessão substituída",
+    message:
+      "Um novo login encerrou esta sessão. Entre novamente para continuar.",
+  },
+  expired: {
+    severity: "attention",
+    title: "Tempo esgotado",
+    message: "Inicie novamente o acesso para continuar.",
+  },
+} as const;
+
+/** Jornada JA-01 / Login do Figma, montada sobre o Access Layout. */
 export function LoginView({
   authenticate,
   initialCredentials = { email: "", senha: "" },
@@ -35,7 +53,6 @@ export function LoginView({
   onPasswordChangeRequired,
 }: LoginViewProps) {
   const id = useId();
-  const theme = useTheme();
   const [email, setEmail] = useState(initialCredentials.email);
   const [password, setPassword] = useState(
     initialError?.status === 401 ? "" : initialCredentials.senha,
@@ -43,15 +60,15 @@ export function LoginView({
   const [now, setNow] = useState(Date.now);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState(initialError);
-  const [destination, setDestination] = useState<
-    "authenticated" | "passwordChangeRequired" | null
-  >(null);
+  const [invalid, setInvalid] = useState({ email: false, password: false });
+  const [authenticated, setAuthenticated] = useState<Authenticated | null>(
+    null,
+  );
+  const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const destinationRef = useRef<HTMLHeadingElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const submittingRef = useRef(false);
   const busy = loading || pending;
-  const invalidCredentials =
-    error?.status === 401 && error.codigo === "CREDENCIAIS_INVALIDAS";
   const blocked =
     error?.status === 429 &&
     error.retryAfterAt !== undefined &&
@@ -69,8 +86,20 @@ export function LoginView({
   }, [error]);
 
   useEffect(() => {
-    if (destination) destinationRef.current?.focus();
-  }, [destination]);
+    if (authenticated) titleRef.current?.focus();
+  }, [authenticated]);
+
+  function validate() {
+    const input = emailRef.current;
+    const next = {
+      email: email.trim() === "" || (input ? !input.checkValidity() : false),
+      password: password === "",
+    };
+    setInvalid(next);
+    if (next.email) emailRef.current?.focus();
+    else if (next.password) passwordRef.current?.focus();
+    return !next.email && !next.password;
+  }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -80,6 +109,7 @@ export function LoginView({
       (error?.retryAfterAt !== undefined && Date.now() < error.retryAfterAt)
     )
       return;
+    if (!validate()) return;
     submittingRef.current = true;
     setPending(true);
     setError(undefined);
@@ -90,10 +120,9 @@ export function LoginView({
       });
       setPassword("");
       if (response.tokenType === "TROCA_SENHA") {
-        setDestination("passwordChangeRequired");
         onPasswordChangeRequired?.(response);
       } else {
-        setDestination("authenticated");
+        setAuthenticated(response);
         onAuthenticated?.(response);
       }
     } catch (failure: unknown) {
@@ -109,86 +138,61 @@ export function LoginView({
     }
   }
 
+  const header = (title: string, description: string) => (
+    <>
+      <Typography
+        ref={titleRef}
+        tabIndex={-1}
+        component="h1"
+        id={`${id}-title`}
+        variant="headingMedium"
+      >
+        {title}
+      </Typography>
+      <Typography className="login-description" variant="bodyMedium">
+        {description}
+      </Typography>
+    </>
+  );
+
   return (
-    <JourneyCanvas>
-      <LoginPanel aria-labelledby={`${id}-title`}>
-        <Box sx={{ alignSelf: "flex-start" }}>
-          <BrandLockup
-            size="compact"
-            tone={theme.palette.mode === "dark" ? "on-dark" : "on-light"}
-          />
-        </Box>
-        {destination ? (
-          <Box>
-            <Typography
-              ref={destinationRef}
-              tabIndex={-1}
-              id={`${id}-title`}
-              component="h1"
-              variant="displayLarge"
+    <AccessLayout aria-labelledby={`${id}-title`}>
+      {authenticated ? (
+        <LoginStructure as="div">
+          {header("Acesso autorizado", "Você entrou na Pastoral da Juventude.")}
+          <div className="login-sections">
+            <Alert severity="success" title="Acesso concluído">
+              O início será aberto conforme suas permissões.
+            </Alert>
+            <Button
+              size="large"
+              fullWidth
+              onClick={() => onAuthenticated?.(authenticated)}
             >
-              {destination === "passwordChangeRequired"
-                ? "Altere sua senha"
-                : "Acesso autorizado"}
-            </Typography>
-            <Typography
-              role="status"
-              variant="bodyMedium"
-              sx={{ mt: "var(--spacing-lg)" }}
-            >
-              {destination === "passwordChangeRequired"
-                ? "Para continuar seu primeiro acesso, é necessário alterar a senha."
-                : "Seu acesso foi autorizado."}
-            </Typography>
-          </Box>
-        ) : (
-          <LoginForm
-            aria-labelledby={`${id}-title`}
-            aria-busy={busy}
-            onSubmit={(event) => void submit(event)}
-          >
-            <Typography
-              component="h1"
-              id={`${id}-title`}
-              variant="displayLarge"
-            >
-              Entrar
-            </Typography>
-            <Typography
-              variant="bodyMedium"
-              sx={{ color: "var(--text-secondary)" }}
-            >
-              Use o e-mail cadastrado na sua pastoral.
-            </Typography>
+              Abrir início
+            </Button>
+          </div>
+        </LoginStructure>
+      ) : (
+        <LoginStructure
+          noValidate
+          aria-labelledby={`${id}-title`}
+          aria-busy={busy}
+          onSubmit={(event) => void submit(event)}
+        >
+          {header("Entrar", "Use o e-mail cadastrado na sua pastoral.")}
+          <div className="login-sections">
             {notice && !error && (
               <Alert
-                className="login-feedback"
-                tone={notice === "passwordChanged" ? "success" : "warning"}
-                title={
-                  notice === "passwordChanged"
-                    ? "Senha alterada"
-                    : notice === "blocked"
-                      ? "Usuário bloqueado"
-                      : notice === "inactive"
-                        ? "Usuário inativo"
-                        : notice === "replaced"
-                          ? "Sessão substituída"
-                          : "Tempo esgotado"
-                }
+                severity={NOTICES[notice].severity}
+                title={NOTICES[notice].title}
               >
-                {notice === "passwordChanged"
-                  ? "Entre com a sua nova senha."
-                  : notice === "blocked" || notice === "inactive"
-                    ? "Entre em contato com o coordenador da pastoral."
-                    : notice === "replaced"
-                      ? "Um novo login encerrou esta sessão. Entre novamente para continuar."
-                      : "Inicie novamente o acesso para continuar."}
+                {NOTICES[notice].message}
               </Alert>
             )}
             {error && (
               <Alert
-                className="login-feedback"
-                tone={error.status === 429 ? "warning" : "danger"}
+                severity={error.status === 429 ? "attention" : "error"}
                 title={feedback.title}
               >
                 {feedback.message}
@@ -201,37 +205,47 @@ export function LoginView({
                 )}
               </Alert>
             )}
-            <Box className="login-fields">
-              <TextField
-                id={`${id}-email`}
-                name="email"
-                label="E-mail"
-                type="email"
-                required
-                autoComplete="username"
-                placeholder="seu.nome@exemplo.com.br"
-                value={email}
-                readOnly={busy}
-                inputProps={{ autoCapitalize: "none", spellCheck: false }}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <PasswordField
-                ref={passwordRef}
-                id={`${id}-password`}
-                name="senha"
-                label="Senha"
-                required
-                autoComplete="current-password"
-                placeholder="Sua senha"
-                value={password}
-                readOnly={busy}
-                errorMessage={
-                  invalidCredentials ? "Digite a senha novamente." : undefined
-                }
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </Box>
-            <Box className="login-options">
+            <TextField
+              size="large"
+              ref={emailRef}
+              id={`${id}-email`}
+              name="email"
+              label="E-mail"
+              type="email"
+              required
+              autoComplete="username"
+              placeholder="seuemail@exemplo.com"
+              value={email}
+              readOnly={busy}
+              errorMessage={
+                invalid.email ? "Informe um e-mail válido." : undefined
+              }
+              inputProps={{ autoCapitalize: "none", spellCheck: false }}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                if (invalid.email) setInvalid((v) => ({ ...v, email: false }));
+              }}
+            />
+            <TextField
+              size="large"
+              type="password"
+              ref={passwordRef}
+              id={`${id}-password`}
+              name="senha"
+              label="Senha"
+              required
+              autoComplete="current-password"
+              placeholder="Digite sua senha"
+              value={password}
+              readOnly={busy}
+              errorMessage={invalid.password ? "Informe sua senha." : undefined}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                if (invalid.password)
+                  setInvalid((v) => ({ ...v, password: false }));
+              }}
+            />
+            <div className="login-recovery">
               <Link
                 href={recoveryHref ?? "#recuperacao-senha"}
                 disabled={!recoveryHref}
@@ -243,9 +257,8 @@ export function LoginView({
               >
                 Esqueci minha senha
               </Link>
-            </Box>
+            </div>
             <Button
-              className="login-submit"
               type="submit"
               size="large"
               fullWidth
@@ -254,44 +267,9 @@ export function LoginView({
             >
               Entrar
             </Button>
-          </LoginForm>
-        )}
-        <Typography variant="caption" sx={{ color: "var(--text-secondary)" }}>
-          Problemas para entrar? Fale com o coordenador da sua pastoral.
-        </Typography>
-      </LoginPanel>
-      <JourneyAside aria-label="Sobre a Pastoral da Juventude">
-        <Typography className="login-overline" variant="overline">
-          Pastoral da Juventude
-        </Typography>
-        <Box>
-          <blockquote>
-            “Porque onde dois ou três estiverem reunidos em meu nome, ali estou
-            eu no meio deles.”
-          </blockquote>
-          <cite>Mt 18,20</cite>
-        </Box>
-        <Box component="ul" className="login-benefits">
-          <li>
-            <MaterialSymbol name="calendar_month" />
-            <Typography variant="bodyMedium">
-              Encontros, presença e pendências no mesmo lugar
-            </Typography>
-          </li>
-          <li>
-            <MaterialSymbol name="groups" />
-            <Typography variant="bodyMedium">
-              Cada pessoa da pastoral com a sua história
-            </Typography>
-          </li>
-          <li>
-            <MaterialSymbol name="workspace_premium" />
-            <Typography variant="bodyMedium">
-              Lideranças acompanhadas, não improvisadas
-            </Typography>
-          </li>
-        </Box>
-      </JourneyAside>
-    </JourneyCanvas>
+          </div>
+        </LoginStructure>
+      )}
+    </AccessLayout>
   );
 }

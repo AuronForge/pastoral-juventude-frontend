@@ -1,183 +1,60 @@
-export const fontFamilyTokens = {
-  display: '"Roboto", Arial, sans-serif',
-  body: '"Roboto", Arial, sans-serif',
-} as const;
+/**
+ * Estilos tipográficos espelhados dos 11 text styles do Figma.
+ * Roboto é a família oficial; tamanhos avulsos não devem ser introduzidos.
+ */
 
-export const fontWeightTokens = {
-  regular: 400,
-  medium: 500,
-  semibold: 500,
-  bold: 700,
-} as const;
+export const fontFamily = '"Roboto", sans-serif';
 
-export const fontSizeTokens = {
-  xs: 11,
-  sm: 12,
-  md: 14,
-  lg: 16,
-  xl: 18,
-  "2xl": 20,
-  "3xl": 24,
-  "4xl": 28,
-  "5xl": 40,
-  "6xl": 40,
-} as const;
+export type TypographyToken = {
+  /** Nome do text style no Figma. */
+  name: string;
+  fontFamily: string;
+  fontSize: number;
+  lineHeight: string;
+  fontWeight: 400 | 500 | 700;
+  letterSpacing: number;
+};
 
-export const lineHeightTokens = {
-  xs: 16,
-  sm: 16,
-  md: 20,
-  lg: 24,
-  xl: 24,
-  "2xl": 28,
-  "3xl": 32,
-  "4xl": 36,
-  "5xl": 48,
-  "6xl": 48,
-} as const;
-
-export const letterSpacingTokens = {
-  tight: 0,
-  normal: 0,
-  wide: 0,
-  caps: 0,
-} as const;
-
-const roboto = fontFamilyTokens.body;
+function style(
+  name: string,
+  fontSize: number,
+  lineHeight: number,
+  fontWeight: TypographyToken["fontWeight"],
+): TypographyToken {
+  return {
+    name,
+    fontFamily,
+    fontSize,
+    lineHeight: `${lineHeight}px`,
+    fontWeight,
+    letterSpacing: 0,
+  };
+}
 
 export const typographyTokens = {
-  displayXl: {
-    fontFamily: roboto,
-    fontSize: 40,
-    lineHeight: "48px",
-    fontWeight: 700,
-    letterSpacing: 0,
-  },
-  displayLarge: {
-    fontFamily: roboto,
-    fontSize: 40,
-    lineHeight: "48px",
-    fontWeight: 700,
-    letterSpacing: 0,
-  },
-  displayMedium: {
-    fontFamily: roboto,
-    fontSize: 28,
-    lineHeight: "36px",
-    fontWeight: 700,
-    letterSpacing: 0,
-  },
-  displaySmall: {
-    fontFamily: roboto,
-    fontSize: 24,
-    lineHeight: "32px",
-    fontWeight: 700,
-    letterSpacing: 0,
-  },
-  headingLarge: {
-    fontFamily: roboto,
-    fontSize: 28,
-    lineHeight: "36px",
-    fontWeight: 700,
-    letterSpacing: 0,
-  },
-  headingMedium: {
-    fontFamily: roboto,
-    fontSize: 24,
-    lineHeight: "32px",
-    fontWeight: 700,
-    letterSpacing: 0,
-  },
-  headingSmall: {
-    fontFamily: roboto,
-    fontSize: 20,
-    lineHeight: "28px",
-    fontWeight: 500,
-    letterSpacing: 0,
-  },
-  title: {
-    fontFamily: roboto,
-    fontSize: 18,
-    lineHeight: "24px",
-    fontWeight: 500,
-    letterSpacing: 0,
-  },
-  bodyLarge: {
-    fontFamily: roboto,
-    fontSize: 16,
-    lineHeight: "24px",
-    fontWeight: 400,
-    letterSpacing: 0,
-  },
-  bodyMedium: {
-    fontFamily: roboto,
-    fontSize: 14,
-    lineHeight: "20px",
-    fontWeight: 400,
-    letterSpacing: 0,
-  },
-  bodyMediumStrong: {
-    fontFamily: roboto,
-    fontSize: 14,
-    lineHeight: "20px",
-    fontWeight: 500,
-    letterSpacing: 0,
-  },
-  bodySmall: {
-    fontFamily: roboto,
-    fontSize: 12,
-    lineHeight: "16px",
-    fontWeight: 400,
-    letterSpacing: 0,
-  },
-  bodySmallStrong: {
-    fontFamily: roboto,
-    fontSize: 12,
-    lineHeight: "16px",
-    fontWeight: 500,
-    letterSpacing: 0,
-  },
-  labelLarge: {
-    fontFamily: roboto,
-    fontSize: 14,
-    lineHeight: "20px",
-    fontWeight: 500,
-    letterSpacing: 0,
-  },
-  labelMedium: {
-    fontFamily: roboto,
-    fontSize: 12,
-    lineHeight: "16px",
-    fontWeight: 500,
-    letterSpacing: 0,
-  },
-  labelSmall: {
-    fontFamily: roboto,
-    fontSize: 11,
-    lineHeight: "16px",
-    fontWeight: 500,
-    letterSpacing: 0,
-  },
-  caption: {
-    fontFamily: roboto,
-    fontSize: 12,
-    lineHeight: "16px",
-    fontWeight: 400,
-    letterSpacing: 0,
-  },
-  overline: {
-    fontFamily: roboto,
-    fontSize: 11,
-    lineHeight: "16px",
-    fontWeight: 500,
-    letterSpacing: 0,
-    textTransform: "uppercase" as const,
-  },
-  metricDisplay: {
-    fontFamily: roboto,
-    fontSize: 40,
-    lineHeight: "48px",
-    fontWeight: 700,
-    letterSpacing: 0,
-  },
+  display: style("Typography/Display", 40, 48, 700),
+  headingLarge: style("Typography/Heading/Large", 28, 36, 700),
+  headingMedium: style("Typography/Heading/Medium", 24, 32, 700),
+  headingSmall: style("Typography/Heading/Small", 20, 28, 500),
+  title: style("Typography/Title", 18, 24, 500),
+  bodyLarge: style("Typography/Body/Large", 16, 24, 400),
+  bodyMedium: style("Typography/Body/Medium", 14, 20, 400),
+  bodySmall: style("Typography/Body/Small", 12, 16, 400),
+  labelLarge: style("Typography/Label/Large", 14, 20, 500),
+  labelMedium: style("Typography/Label/Medium", 12, 16, 500),
+  labelSmall: style("Typography/Label/Small", 11, 16, 500),
 } as const;
+
+export type TypographyStyleName = keyof typeof typographyTokens;
+
+/** Propriedades CSS de um estilo, sem o nome do Figma. */
+export function typographyStyle(name: TypographyStyleName) {
+  const token = typographyTokens[name];
+  return {
+    fontFamily: token.fontFamily,
+    fontSize: token.fontSize,
+    lineHeight: token.lineHeight,
+    fontWeight: token.fontWeight,
+    letterSpacing: token.letterSpacing,
+  };
+}

@@ -39,4 +39,32 @@ describe("Checkbox", () => {
 
     expect(ref.current).toBe(screen.getByRole("checkbox"));
   });
+
+  it("exibe a ajuda e prioriza a mensagem de erro", () => {
+    const { rerender } = render(
+      <Checkbox hint="Visível para a coordenação." label="Participar" />,
+    );
+    expect(
+      screen.getByRole("checkbox", { name: "Participar" }),
+    ).toHaveAccessibleDescription("Visível para a coordenação.");
+
+    rerender(
+      <Checkbox
+        errorMessage="Confirme a participação."
+        hint="Visível para a coordenação."
+        label="Participar"
+      />,
+    );
+    const checkbox = screen.getByRole("checkbox", { name: "Participar" });
+    expect(checkbox).toHaveAttribute("aria-invalid", "true");
+    expect(checkbox).toHaveAccessibleDescription("Confirme a participação.");
+  });
+
+  it("aceita a variante sem label com nome acessível", () => {
+    render(<Checkbox aria-label="Selecionar todos" />);
+
+    expect(
+      screen.getByRole("checkbox", { name: "Selecionar todos" }),
+    ).toBeInTheDocument();
+  });
 });

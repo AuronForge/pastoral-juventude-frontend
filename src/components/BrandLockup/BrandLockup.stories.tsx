@@ -10,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Assinatura horizontal oficial do PastorApp, renderizada a partir dos arquivos de marca fornecidos. Use `on-light` ou `on-dark` conforme o fundo; não altere cores, proporção ou tipografia da marca.",
+          "Brand / Logo do Figma: Assinatura (horizontal) ou Símbolo, para fundo claro ou escuro. Não altere cores, proporção ou tipografia da marca.",
       },
     },
   },
@@ -20,6 +20,7 @@ const meta = {
   },
   argTypes: {
     decorative: { control: "boolean" },
+    format: { control: "inline-radio", options: ["signature", "symbol"] },
     size: {
       control: "inline-radio",
       options: ["compact", "default"],
@@ -40,7 +41,9 @@ export const Playground: Story = {
       sx={{
         display: "inline-flex",
         bgcolor:
-          args.tone === "on-dark" ? "var(--bg-inverse)" : "var(--bg-canvas)",
+          args.tone === "on-dark"
+            ? "var(--color-bg-access)"
+            : "var(--pj-color-bg-canvas)",
         p: 4,
       }}
     >
@@ -52,24 +55,26 @@ export const Playground: Story = {
 export const Fundos: Story = {
   render: () => (
     <Stack direction="row" sx={{ flexWrap: "wrap", gap: 3 }}>
-      <Box sx={{ bgcolor: "var(--bg-canvas)", p: 4 }}>
+      <Box sx={{ bgcolor: "var(--pj-color-bg-canvas)", p: 4 }}>
         <BrandLockup tone="on-light" />
       </Box>
-      <Box sx={{ bgcolor: "var(--bg-inverse)", p: 4 }}>
+      <Box sx={{ bgcolor: "var(--color-bg-access)", p: 4 }}>
         <BrandLockup tone="on-dark" />
       </Box>
     </Stack>
   ),
 };
 
-export const Tamanhos: Story = {
+export const FormatosETamanhos: Story = {
+  name: "Formatos e tamanhos",
   render: () => (
     <Stack spacing={3} sx={{ alignItems: "flex-start" }}>
-      <BrandLockup size="compact" />
       <BrandLockup size="default" />
+      <BrandLockup size="compact" />
+      <BrandLockup format="symbol" />
       <Typography color="text.secondary" variant="bodySmall">
-        O tamanho compacto tem 36 px de altura e é o menor uso permitido da
-        assinatura horizontal.
+        Assinatura 240 × 72 px, Assinatura compacta 144 × 43 px (App Shell) e
+        Símbolo 72 × 72 px, já com a área de respiro do Figma.
       </Typography>
     </Stack>
   ),

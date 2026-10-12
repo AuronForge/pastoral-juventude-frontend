@@ -27,13 +27,10 @@ const problem = (status: number) =>
     mensagem: "Usuário inexistente",
     endpoint: "/api/v1/autenticacao/login",
   });
-function setup(
-  props: Partial<LoginJourneyProps> = {},
-  mode: "light" | "dark" = "light",
-) {
+function setup(props: Partial<LoginJourneyProps> = {}) {
   const authenticate = vi.fn().mockResolvedValue(success);
   render(
-    <ThemeProvider theme={createAppTheme(mode)}>
+    <ThemeProvider theme={createAppTheme()}>
       <LoginJourney authenticate={authenticate} {...props} />
     </ThemeProvider>,
   );
@@ -65,11 +62,24 @@ describe("Jornada de Login no Storybook", () => {
     expect(screen.queryByLabelText(/^Senha/)).not.toBeInTheDocument();
   });
 
-  it("não envia um formulário vazio", async () => {
+  it("valida campos vazios com as mensagens do Figma e foca o primeiro", async () => {
     const { user, authenticate } = setup();
     await user.click(submit());
     expect(authenticate).not.toHaveBeenCalled();
-    expect(email()).toBeInvalid();
+    expect(screen.getByText("Informe um e-mail válido.")).toBeVisible();
+    expect(screen.getByText("Informe sua senha.")).toBeVisible();
+    expect(email()).toHaveAttribute("aria-invalid", "true");
+    expect(email()).toHaveFocus();
+  });
+
+  it("rejeita e-mail em formato inválido", async () => {
+    const { user, authenticate } = setup();
+    await user.type(email(), "jovem@");
+    await user.type(password(), "Senha");
+    await user.click(submit());
+    expect(authenticate).not.toHaveBeenCalled();
+    expect(screen.getByText("Informe um e-mail válido.")).toBeVisible();
+    expect(screen.queryByText("Informe sua senha.")).not.toBeInTheDocument();
   });
 
   it("impede envio duplicado durante a requisição e preserva os campos", async () => {
@@ -111,10 +121,9 @@ describe("Jornada de Login no Storybook", () => {
     expect(email()).toHaveValue(credentials.email);
     expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
     expect(screen.getByRole("alert")).toHaveTextContent(
-      "E-mail ou senha incorretos",
+      "E-mail ou senha inválidos. Confira os dados e tente novamente.",
     );
     expect(screen.queryByText("Usuário inexistente")).not.toBeInTheDocument();
-    expect(password()).toHaveAttribute("aria-invalid", "true");
     await user.type(password(), "OutraSenha123");
     await user.click(submit());
     await waitFor(() => expect(authenticate).toHaveBeenCalledTimes(2));
@@ -140,15 +149,13 @@ describe("Jornada de Login no Storybook", () => {
       await user.click(submit());
       await screen.findByText(
         status === 429
-          ? "Limite de tentativas atingido"
-          : "Não foi possível entrar",
+          ? "Aguarde para tentar novamente"
+          : "Serviço indisponível",
       );
       expect(email()).toHaveValue(credentials.email);
       expect(password()).toHaveValue(credentials.senha);
       expect(submit()).toBeEnabled();
-      expect(
-        screen.queryByText(/\d+\s*(segundos|minutos)/),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText(/segundos/)).not.toBeInTheDocument();
       await user.click(submit());
       await screen.findByRole("heading", { name: "Acesso autorizado" });
       expect(authenticate).toHaveBeenCalledTimes(2);
@@ -162,7 +169,7 @@ describe("Jornada de Login no Storybook", () => {
     });
     await user.click(submit());
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "Verifique sua conexão e tente novamente.",
+      "Não foi possível conectar. Tente novamente.",
     );
     expect(password()).toHaveValue(credentials.senha);
   });
@@ -183,21 +190,21 @@ describe("Jornada de Login no Storybook", () => {
       onPasswordChangeRequired,
     });
     await user.click(submit());
-    const heading = await screen.findByRole("heading", {
-      name: "Altere sua senha",
-    });
-    expect(heading).toHaveFocus();
-    expect(onPasswordChangeRequired).toHaveBeenCalledWith(firstAccess);
+    await waitFor(() =>
+      expect(onPasswordChangeRequired).toHaveBeenCalledWith(firstAccess),
+    );
     expect(onAuthenticated).not.toHaveBeenCalled();
+    expect(
+      screen.queryByRole("heading", { name: "Acesso autorizado" }),
+    ).not.toBeInTheDocument();
     expect(screen.queryByText("restricted")).not.toBeInTheDocument();
-    expect(screen.queryByLabelText(/^Senha/)).not.toBeInTheDocument();
   });
 
-  it("mantém recuperação indisponível e usa a marca oficial no tema escuro", async () => {
-    const { user } = setup({}, "dark");
+  it("mantém recuperação indisponível e usa a marca oficial", async () => {
+    const { user } = setup({});
     expect(screen.getByRole("img", { name: "PastorApp" })).toHaveAttribute(
       "src",
-      expect.stringContaining("pastorapp-on-dark.svg"),
+      expect.stringContaining("pastorapp-on-light.svg"),
     );
     const link = screen.getByRole("link", { name: /Esqueci minha senha/ });
     expect(link).toHaveAttribute("aria-disabled", "true");

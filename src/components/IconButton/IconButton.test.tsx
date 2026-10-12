@@ -1,17 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
-import { MaterialSymbol } from "../MaterialSymbol";
 import { IconButton } from "./IconButton";
+import { Icon } from "../Icon";
 
 describe("IconButton", () => {
   it("expõe uma ação nomeada", () => {
-    render(
-      <IconButton
-        icon={<MaterialSymbol name="edit" />}
-        label="Editar encontro"
-      />,
-    );
+    render(<IconButton icon={<Icon name="edit" />} label="Editar encontro" />);
 
     expect(
       screen.getByRole("button", { name: "Editar encontro" }),
@@ -19,16 +14,12 @@ describe("IconButton", () => {
   });
 
   it.each([
-    ["small", "var(--size-touch-min)"],
-    ["medium", "var(--size-touch-min)"],
-    ["large", "var(--spacing-5xl)"],
+    ["small", "var(--space-extended-44px)"],
+    ["medium", "var(--space-extended-44px)"],
+    ["large", "var(--pj-space-8)"],
   ] as const)("mapeia o tamanho %s", (size, control) => {
     render(
-      <IconButton
-        icon={<MaterialSymbol name="edit" />}
-        label="Editar"
-        size={size}
-      />,
+      <IconButton icon={<Icon name="edit" />} label="Editar" size={size} />,
     );
 
     expect(screen.getByRole("button")).toHaveStyle({
@@ -43,7 +34,7 @@ describe("IconButton", () => {
     (variant) => {
       render(
         <IconButton
-          icon={<MaterialSymbol name="edit" />}
+          icon={<Icon name="edit" />}
           label="Editar"
           variant={variant}
         />,
@@ -54,25 +45,19 @@ describe("IconButton", () => {
   );
 
   it("informa andamento e bloqueia a ação ao carregar", () => {
-    render(
-      <IconButton
-        icon={<MaterialSymbol name="edit" />}
-        label="Salvar"
-        loading
-      />,
-    );
+    render(<IconButton icon={<Icon name="edit" />} label="Salvar" loading />);
 
     const button = screen.getByRole("button", { name: "Salvar" });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
-    expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(button.querySelector(".loading-dots")).toBeInTheDocument();
   });
 
   it("respeita o estado desabilitado", () => {
     render(
       <IconButton
         disabled
-        icon={<MaterialSymbol name="delete" />}
+        icon={<Icon name="delete" />}
         label="Excluir encontro"
       />,
     );
@@ -89,7 +74,7 @@ describe("IconButton", () => {
       <IconButton
         ref={ref}
         data-testid="botao-de-edicao"
-        icon={<MaterialSymbol name="edit" />}
+        icon={<Icon name="edit" />}
         label="Editar encontro"
       />,
     );
@@ -103,21 +88,13 @@ describe("IconButton", () => {
     render(
       <>
         <IconButton
-          icon={<MaterialSymbol name="edit" />}
+          icon={<Icon name="edit" />}
           label="Editar"
           size="small"
           onClick={onClick}
         />
-        <IconButton
-          icon={<MaterialSymbol name="edit" />}
-          label="Indisponível"
-          disabled
-        />
-        <IconButton
-          icon={<MaterialSymbol name="edit" />}
-          label="Carregando"
-          loading
-        />
+        <IconButton icon={<Icon name="edit" />} label="Indisponível" disabled />
+        <IconButton icon={<Icon name="edit" />} label="Carregando" loading />
         <button type="button">Próxima ação</button>
       </>,
     );

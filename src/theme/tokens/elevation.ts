@@ -1,10 +1,17 @@
-const warmShadow = "74, 56, 32";
+/**
+ * Estilos de elevação espelhados dos effect styles do Figma.
+ * Regra do Figma: preferir borda ou mudança de superfície antes de sombra.
+ */
 
 export const elevationTokens = {
+  /** Elevation/None — superfícies planas. */
   none: "none",
-  subtle: `0 1px 2px rgba(${warmShadow}, 0.06)`,
-  card: `0 2px 10px rgba(${warmShadow}, 0.05), 0 1px 2px rgba(${warmShadow}, 0.04)`,
-  floating: `0 10px 28px rgba(${warmShadow}, 0.10), 0 2px 6px rgba(${warmShadow}, 0.05)`,
-  modal: `0 20px 48px rgba(${warmShadow}, 0.16), 0 4px 10px rgba(${warmShadow}, 0.06)`,
-  focusRing: "0 0 0 3px rgba(143, 170, 203, 0.55)",
+  /** Elevation/Small — elementos discretamente elevados. */
+  small: "0 2px 6px 0 rgba(46, 41, 37, 0.10)",
+  /** Elevation/Medium — menus e popovers. */
+  medium: "0 4px 12px 0 rgba(46, 41, 37, 0.14)",
+  /** Elevation/Large — dialogs e superfícies modais. */
+  large: "0 10px 24px 0 rgba(46, 41, 37, 0.18)",
 } as const;
+
+export type ElevationName = keyof typeof elevationTokens;

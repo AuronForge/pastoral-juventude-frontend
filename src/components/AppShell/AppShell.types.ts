@@ -1,47 +1,39 @@
 import type { ReactNode } from "react";
 
 export type AppShellNavigationItem = {
-  /** Identificador estável usado para marcar a seção ativa. */
+  /** Identificador estável usado para marcar o destino atual. */
   id: string;
-  /** Texto apresentado na barra de navegação. */
+  /** Rótulo curto, claro e orientado a destino. */
   label: string;
-  /** Ícone que representa a seção. */
-  icon: ReactNode;
-  /** Quantidade complementar exibida ao lado do item. */
-  badge?: number;
+  /** Nome do símbolo no Material Symbols Outlined. */
+  icon: string;
   /** Destino do item quando a navegação é feita por link. */
   href?: string;
   /** Ação alternativa para integrações que não usam links. */
   onClick?: () => void;
+  /** Estado Desabilitado: sem interação. */
+  disabled?: boolean;
 };
 
 export type AppShellUser = {
+  /** Identificador imutável da pessoa (define a cor do Avatar). */
+  id: string;
   name: string;
-  role: string;
-  /** Iniciais exibidas quando não há fotografia de perfil. */
-  initials?: string;
+  /** Iniciais configuradas para o Avatar (1 a 2 caracteres). */
+  initials: string;
 };
 
 export type AppShellProps = {
   children: ReactNode;
-  /** Elementos posicionados antes do avatar na barra superior. */
-  headerActions?: ReactNode;
-  /** Identificador do item de navegação selecionado. */
+  /** Identificador do destino atual (aria-current=page). */
   activeNavigationId?: string;
-  /** Itens disponíveis para a pessoa autenticada. */
+  /** Destinos da navegação completa (Sidebar e Drawer). */
   navigationItems: AppShellNavigationItem[];
-  /** Itens compactos usados na navegação inferior móvel. */
-  mobileNavigationItems?: AppShellNavigationItem[];
-  /** Conteúdo opcional no início da barra superior, como uma busca. */
-  headerContent?: ReactNode;
-  /** Pessoa autenticada exibida no cabeçalho e no rodapé da sidebar. */
+  /**
+   * Atalhos da Bottom Navigation em tablet e mobile (3 a 5). Sem valor, usa
+   * os primeiros destinos da navegação completa, até 5.
+   */
+  bottomNavigationItems?: AppShellNavigationItem[];
+  /** Pessoa autenticada exibida no Header. */
   user: AppShellUser;
-  /** Navega para o perfil da pessoa. */
-  onProfile?: () => void;
-  /** Inicia a troca voluntária de senha. */
-  onPasswordChange?: () => void;
-  /** Encerra a sessão da pessoa autenticada. */
-  onSignOut?: () => void;
-  /** É chamado após a alteração de tema. */
-  onThemeModeChange?: (mode: "light" | "dark") => void;
 };

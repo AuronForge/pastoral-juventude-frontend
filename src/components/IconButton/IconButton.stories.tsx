@@ -1,7 +1,7 @@
+import { Icon } from "../Icon";
 import { Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { MaterialSymbol } from "../MaterialSymbol";
 import { IconButton } from "./IconButton";
 
 const meta = {
@@ -12,12 +12,12 @@ const meta = {
     docs: {
       description: {
         component:
-          "Ação compacta acionada por um único ícone. Use apenas quando o símbolo for reconhecível no contexto; o rótulo acessível é obrigatório. Conforme o Figma, pequeno e médio têm alvo de 44 × 44 px e grande de 48 × 48 px. Os ícones continuam com 16, 20 e 24 px. Em linhas flexíveis, o botão não encolhe; organize as ações com quebra de linha se faltar espaço.",
+          "Ação compacta acionada por um único ícone. Use apenas quando o símbolo for reconhecível no contexto; o rótulo acessível é obrigatório. Conforme o Figma, pequeno e médio têm alvo de 44 × 44 px e grande de 48 × 48 px. Os ícones têm 16, 20 e 24 px e raio de 8 px. Em linhas flexíveis, o botão não encolhe; organize as ações com quebra de linha se faltar espaço.",
       },
     },
   },
   args: {
-    icon: <MaterialSymbol name="edit" />,
+    icon: <Icon name="edit" />,
     label: "Editar encontro",
     size: "medium",
     variant: "tertiary",
@@ -46,22 +46,22 @@ export const Hierarquias: Story = {
   render: () => (
     <Stack direction="row" spacing={2}>
       <IconButton
-        icon={<MaterialSymbol name="add" />}
+        icon={<Icon name="add" />}
         label="Adicionar encontro"
         variant="primary"
       />
       <IconButton
-        icon={<MaterialSymbol name="edit" />}
+        icon={<Icon name="edit" />}
         label="Editar encontro"
         variant="secondary"
       />
       <IconButton
-        icon={<MaterialSymbol name="refresh" />}
+        icon={<Icon name="refresh" />}
         label="Atualizar lista"
         variant="tertiary"
       />
       <IconButton
-        icon={<MaterialSymbol name="delete" />}
+        icon={<Icon name="delete" />}
         label="Excluir encontro"
         variant="danger"
       />
@@ -73,17 +73,17 @@ export const Tamanhos: Story = {
   render: () => (
     <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
       <IconButton
-        icon={<MaterialSymbol name="edit" />}
+        icon={<Icon name="edit" />}
         label="Editar (pequeno)"
         size="small"
       />
       <IconButton
-        icon={<MaterialSymbol name="edit" />}
+        icon={<Icon name="edit" />}
         label="Editar (médio)"
         size="medium"
       />
       <IconButton
-        icon={<MaterialSymbol name="edit" />}
+        icon={<Icon name="edit" />}
         label="Editar (grande)"
         size="large"
       />
@@ -95,23 +95,23 @@ export const Estados: Story = {
   render: () => (
     <Stack direction="row" spacing={2}>
       <IconButton
-        icon={<MaterialSymbol name="refresh" />}
+        icon={<Icon name="refresh" />}
         label="Atualizar"
         variant="primary"
       />
       <IconButton
-        icon={<MaterialSymbol name="refresh" />}
+        icon={<Icon name="refresh" />}
         label="Atualizando"
         loading
         variant="primary"
       />
       <IconButton
-        icon={<MaterialSymbol name="refresh" />}
+        icon={<Icon name="refresh" />}
         label="Atualização indisponível"
         disabled
       />
       <IconButton
-        icon={<MaterialSymbol name="delete" />}
+        icon={<Icon name="delete" />}
         label="Exclusão indisponível"
         disabled
         variant="danger"
@@ -122,7 +122,7 @@ export const Estados: Story = {
     docs: {
       description: {
         story:
-          "O estado de carregamento substitui o ícone, desabilita novas interações e mantém o nome acessível da ação.",
+          "Carregando: o ícone é substituído pelo indicador de três pontos do Figma, novas interações ficam bloqueadas e o nome acessível da ação é mantido.",
       },
     },
   },
@@ -145,7 +145,7 @@ function InteractionTargetsExample() {
           <Stack key={size} spacing={1} sx={{ alignItems: "center" }}>
             <Typography>{name}</Typography>
             <IconButton
-              icon={<MaterialSymbol name="edit" />}
+              icon={<Icon name="edit" />}
               label={`Editar (${name.toLowerCase()})`}
               onClick={activate}
               size={size}
@@ -158,14 +158,14 @@ function InteractionTargetsExample() {
       <Stack direction="row" useFlexGap spacing={2} sx={{ flexWrap: "wrap" }}>
         <IconButton
           disabled
-          icon={<MaterialSymbol name="edit" />}
+          icon={<Icon name="edit" />}
           label="Editar indisponível"
           onClick={activate}
           size="small"
           variant="secondary"
         />
         <IconButton
-          icon={<MaterialSymbol name="refresh" />}
+          icon={<Icon name="refresh" />}
           label="Atualizando"
           loading
           onClick={activate}

@@ -1,147 +1,139 @@
-import {
-  Alert as MuiAlert,
-  IconButton as MuiIconButton,
-  styled,
-  Typography,
-} from "@mui/material";
+import { ButtonBase, styled } from "@mui/material";
 import { forwardRef } from "react";
-import { MaterialSymbol } from "../MaterialSymbol";
-import type { AlertProps, AlertTone } from "./Alert.types";
+import { typographyStyle } from "../../theme/tokens";
+import { Icon } from "../Icon";
+import type { AlertModel, AlertProps, AlertSeverity } from "./Alert.types";
 
-type AlertStyleOwnerState = { alertTone: AlertTone };
-
-const toneDetails = {
-  info: {
-    icon: <MaterialSymbol name="info" size="medium" />,
-    severity: "info",
-  },
+/**
+ * Ícones semânticos do Figma ("✓", "i", "!" e "×") no equivalente do
+ * Material Symbols Outlined.
+ */
+const severityDetails = {
   success: {
-    icon: <MaterialSymbol name="check_circle" size="medium" />,
-    severity: "success",
+    icon: "check",
+    color: "var(--pj-color-feedback-success)",
+    soft: "var(--pj-color-feedback-success-soft)",
   },
-  warning: {
-    icon: <MaterialSymbol name="warning" size="medium" />,
-    severity: "warning",
+  information: {
+    icon: "info_i",
+    color: "var(--pj-color-feedback-information)",
+    soft: "var(--pj-color-feedback-information-soft)",
   },
-  danger: {
-    icon: <MaterialSymbol name="error" size="medium" />,
-    severity: "error",
+  attention: {
+    icon: "priority_high",
+    color: "var(--pj-color-feedback-attention)",
+    soft: "var(--pj-color-feedback-attention-soft)",
+  },
+  error: {
+    icon: "close",
+    color: "var(--pj-color-feedback-error)",
+    soft: "var(--pj-color-feedback-error-soft)",
   },
 } as const;
 
-const toneStyles = {
-  info: {
-    backgroundColor: "var(--status-info-subtle)",
-    borderColor: "var(--status-info-border)",
-    iconColor: "var(--status-info-text)",
-  },
-  success: {
-    backgroundColor: "var(--status-success-subtle)",
-    borderColor: "var(--status-success-border)",
-    iconColor: "var(--status-success-text)",
-  },
-  warning: {
-    backgroundColor: "var(--status-warning-subtle)",
-    borderColor: "var(--status-warning-border)",
-    iconColor: "var(--status-warning-text)",
-  },
-  danger: {
-    backgroundColor: "var(--status-danger-subtle)",
-    borderColor: "var(--status-danger-border)",
-    iconColor: "var(--status-danger-text)",
-  },
-} as const;
+type OwnerState = { severity: AlertSeverity; model: AlertModel };
 
-const StyledAlert = styled(MuiAlert, {
-  shouldForwardProp: (prop) => prop !== "alertTone",
-})<AlertStyleOwnerState>(({ alertTone }) => {
-  const tone = toneStyles[alertTone];
+const Root = styled("div", {
+  shouldForwardProp: (prop) => prop !== "severity" && prop !== "model",
+})<OwnerState>(({ severity, model }) => {
+  const details = severityDetails[severity];
 
   return {
+    display: "flex",
     alignItems: "flex-start",
+    gap: "var(--pj-space-3)",
     width: "100%",
-    padding: "var(--spacing-lg)",
-    gap: "var(--spacing-md)",
-    border: "var(--border-thin) solid",
-    borderColor: tone.borderColor,
-    borderRadius: "var(--radius-lg)",
-    backgroundColor: tone.backgroundColor,
-    color: "var(--text-primary)",
-    "& .MuiAlert-icon": {
-      margin: 0,
-      padding: 0,
-      color: tone.iconColor,
-      "& .MuiSvgIcon-root": {
-        width: "var(--size-icon-md)",
-        height: "var(--size-icon-md)",
-      },
-    },
-    "& .MuiAlert-message": {
+    boxSizing: "border-box",
+    padding: "var(--pj-space-4)",
+    borderRadius: "var(--pj-radius-md)",
+    backgroundColor:
+      model === "soft" ? details.soft : "var(--pj-color-bg-surface)",
+    border:
+      model === "outlined"
+        ? `var(--pj-border-width-default) solid ${details.color}`
+        : "none",
+    color: "var(--pj-color-text-primary)",
+    "& .alert-icon": { color: details.color },
+    "& .alert-content": {
+      display: "flex",
+      flexDirection: "column",
+      gap: "var(--pj-space-1)",
       flex: "1 1 auto",
       minWidth: 0,
-      padding: 0,
     },
-    "& .MuiAlert-action": {
-      margin: 0,
-      padding: 0,
+    "& .alert-title": { ...typographyStyle("labelLarge"), margin: 0 },
+    "& .alert-message": { ...typographyStyle("bodyMedium") },
+    "& .alert-action, & .alert-close": {
       flexShrink: 0,
+      color: details.color,
+      "&.Mui-focusVisible": {
+        outline:
+          "var(--pj-border-width-emphasis) solid var(--pj-color-border-focus)",
+        outlineOffset: "var(--layout-fine-2px)",
+      },
+    },
+    "& .alert-action": {
+      ...typographyStyle("labelMedium"),
+      minHeight: "var(--space-extended-44px)",
+      marginBlock:
+        "calc((var(--space-extended-44px) - var(--pj-icon-size-lg)) / -2)",
+      borderRadius: "var(--pj-radius-md)",
+    },
+    "& .alert-close": {
+      width: "var(--space-extended-44px)",
+      height: "var(--space-extended-44px)",
+      margin:
+        "calc((var(--space-extended-44px) - var(--pj-icon-size-lg)) / -2)",
+      borderRadius: "var(--pj-radius-md)",
     },
   };
 });
 
-const CloseButton = styled(MuiIconButton)({
-  width: "var(--size-touch-min)",
-  height: "var(--size-touch-min)",
-  flexShrink: 0,
-  padding: 0,
-  color: "var(--text-secondary)",
-  "& .MuiSvgIcon-root": {
-    width: "var(--size-icon-md)",
-    height: "var(--size-icon-md)",
-  },
-  "&.Mui-focusVisible": {
-    outline:
-      "3px solid color-mix(in srgb, var(--border-focus) 55%, transparent)",
-    outlineOffset: 2,
-  },
-});
-
+/**
+ * Alert do Figma: comunica uma condição persistente dentro do fluxo sem
+ * interromper a tarefa. Severidades Sucesso, Informação, Atenção e Erro;
+ * modelos Suave e Contornado; Fechável e Com ação opcionais.
+ */
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   {
+    action,
     children,
     closeLabel = "Fechar alerta",
     dismissible = false,
+    model = "soft",
+    onClose,
+    severity = "information",
     title,
-    tone = "info",
     ...props
   },
   ref,
 ) {
-  const { icon, severity } = toneDetails[tone];
-  const onClose = dismissible ? props.onClose : undefined;
-  const action = dismissible ? (
-    <CloseButton aria-label={closeLabel} onClick={onClose}>
-      <MaterialSymbol name="close" size="medium" />
-    </CloseButton>
-  ) : undefined;
-
   return (
-    <StyledAlert
-      {...props}
-      ref={ref}
-      action={action}
-      alertTone={tone}
-      icon={icon}
-      role="alert"
-      severity={severity}
-      variant="standard"
-    >
-      <Typography component="p" variant="bodyMediumStrong">
-        {title}
-      </Typography>
-      <Typography component="div" variant="bodySmall" color="text.secondary">
-        {children}
-      </Typography>
-    </StyledAlert>
+    <Root {...props} ref={ref} model={model} role="alert" severity={severity}>
+      <Icon className="alert-icon" name={severityDetails[severity].icon} />
+      <div className="alert-content">
+        <p className="alert-title">{title}</p>
+        <div className="alert-message">{children}</div>
+      </div>
+      {action ? (
+        <ButtonBase
+          className="alert-action"
+          disableRipple
+          onClick={action.onClick}
+        >
+          {action.label}
+        </ButtonBase>
+      ) : null}
+      {dismissible ? (
+        <ButtonBase
+          aria-label={closeLabel}
+          className="alert-close"
+          disableRipple
+          onClick={onClose}
+        >
+          <Icon name="close" size="md" />
+        </ButtonBase>
+      ) : null}
+    </Root>
   );
 });

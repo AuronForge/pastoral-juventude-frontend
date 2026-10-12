@@ -1,5 +1,7 @@
 import { Link as MuiLink, styled } from "@mui/material";
 import { forwardRef, type MouseEvent } from "react";
+import { typographyStyle } from "../../theme/tokens";
+import { Icon } from "../Icon";
 import type { LinkProps } from "./Link.types";
 
 type LinkStyleOwnerState = { linkDisabled: boolean };
@@ -7,39 +9,35 @@ type LinkStyleOwnerState = { linkDisabled: boolean };
 const StyledLink = styled(MuiLink, {
   shouldForwardProp: (prop) => prop !== "linkDisabled",
 })<LinkStyleOwnerState>(({ linkDisabled }) => ({
+  ...typographyStyle("bodyLarge"),
   display: "inline-flex",
   alignItems: "center",
-  gap: "var(--spacing-xs)",
-  color: linkDisabled ? "var(--text-disabled)" : "var(--primary-text)",
+  gap: "var(--pj-space-2)",
+  padding: "var(--layout-fine-2px) var(--pj-space-1)",
+  borderRadius: "var(--pj-radius-sm)",
+  color: linkDisabled
+    ? "var(--pj-color-text-disabled)"
+    : "var(--pj-color-action-primary)",
   cursor: linkDisabled ? "not-allowed" : "pointer",
-  fontSize: "var(--font-size-md)",
-  fontWeight: 600,
-  lineHeight: "var(--line-height-md)",
-  textDecorationColor: linkDisabled ? "transparent" : "currentcolor",
-  textDecorationThickness: "var(--border-thin)",
-  textUnderlineOffset: "0.16em",
-  transition: "color 120ms ease, text-decoration-color 120ms ease",
-  "&:hover": linkDisabled
+  textDecorationColor: "currentcolor",
+  "&:hover, &:active": linkDisabled
     ? undefined
-    : {
-        color: "var(--primary-text)",
-        textDecorationColor: "transparent",
-      },
+    : { color: "var(--pj-color-action-primary-hover)" },
   "&:focus-visible": {
     outline:
-      "3px solid color-mix(in srgb, var(--border-focus) 55%, transparent)",
-    outlineOffset: 2,
-    borderRadius: "var(--radius-sm)",
+      "var(--pj-border-width-emphasis) solid var(--pj-color-border-focus)",
+    outlineOffset: "calc(var(--pj-border-width-emphasis) * -1)",
   },
-  "& .MuiSvgIcon-root": {
-    width: "var(--size-icon-sm)",
-    height: "var(--size-icon-sm)",
-    fontSize: "var(--size-icon-sm)",
-  },
+  "& .material-symbols-outlined": { textDecoration: "none" },
 }));
 
+/**
+ * Link do Figma: navegação textual para destinos internos e externos, em
+ * Body/Large sublinhado, com estados Padrão, Hover, Foco, Pressionado e
+ * Desabilitado e ícone externo opcional.
+ */
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
-  { children, disabled = false, endIcon, href, onClick, startIcon, ...props },
+  { children, disabled = false, externalIcon = false, href, onClick, ...props },
   ref,
 ) {
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -63,9 +61,8 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
       tabIndex={disabled ? -1 : props.tabIndex}
       underline="always"
     >
-      {startIcon}
       {children}
-      {endIcon}
+      {externalIcon ? <Icon name="open_in_new" size="sm" /> : null}
     </StyledLink>
   );
 });

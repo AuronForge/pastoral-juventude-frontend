@@ -7,28 +7,3 @@ body,
 main {
   min-height: 100vh;
 }
-
-.material-symbols-outlined {
-  width: 24px;
-  height: 24px;
-}
-
-.material-symbol-size-small {
-  width: 16px;
-  height: 16px;
-}
-
-.material-symbol-size-medium {
-  width: 20px;
-  height: 20px;
-}
-
-.material-symbol-size-large {
-  width: 24px;
-  height: 24px;
-}
-
-.material-symbol-size-xlarge {
-  width: 32px;
-  height: 32px;
-}

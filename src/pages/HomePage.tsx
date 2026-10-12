@@ -1,20 +1,24 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { useAppSelector } from "../app/hooks";
 import { AppShell } from "../components/AppShell";
-import { MaterialSymbol } from "../components/MaterialSymbol";
 
-const navigationItems = [
-  {
-    id: "inicio",
-    icon: <MaterialSymbol name="home" />,
-    label: "Início",
-  },
-];
+const navigationItems = [{ id: "inicio", icon: "home", label: "Início" }];
+
+const anonymous = { id: "anonimo", name: "Pessoa autenticada" };
+
+/**
+ * Pendência: o Figma pede iniciais configuradas e identificador imutável da
+ * pessoa. Até a API fornecê-los, as iniciais vêm do nome e o identificador,
+ * das claims `sub` ou `email` do token.
+ */
+function initialsFrom(name: string) {
+  const parts = name.split(/\s+/).filter(Boolean);
+  const letters = [parts[0]?.[0], parts.length > 1 ? parts.at(-1)?.[0] : ""];
+  return letters.join("");
+}
 
 function authenticatedPerson(accessToken: string | null) {
-  if (!accessToken) {
-    return { name: "Pessoa autenticada", role: "Acesso autenticado" };
-  }
+  if (!accessToken) return anonymous;
 
   try {
     const payload = accessToken.split(".")[1];
@@ -30,25 +34,25 @@ function authenticatedPerson(accessToken: string | null) {
       throw new Error("Payload JWT inválido");
     }
 
-    const { email, nome, name, role } = claims as Record<string, unknown>;
-    const displayName = [nome, name, email].find(
-      (claim): claim is string => typeof claim === "string" && claim.length > 0,
-    );
-    const displayRole =
-      typeof role === "string" && role.length > 0 ? role : null;
+    const { email, nome, name, sub } = claims as Record<string, unknown>;
+    const isText = (claim: unknown): claim is string =>
+      typeof claim === "string" && claim.length > 0;
+    const displayName = [nome, name, email].find(isText);
+    const id = [sub, email].find(isText);
 
     return {
-      name: displayName ?? "Pessoa autenticada",
-      role: displayRole ?? "Acesso autenticado",
+      id: id ?? anonymous.id,
+      name: displayName ?? anonymous.name,
     };
   } catch {
-    return { name: "Pessoa autenticada", role: "Acesso autenticado" };
+    return anonymous;
   }
 }
 
 export function HomePage() {
   const accessToken = useAppSelector((state) => state.auth.accessToken);
-  const user = authenticatedPerson(accessToken);
+  const person = authenticatedPerson(accessToken);
+  const user = { ...person, initials: initialsFrom(person.name) };
 
   return (
     <AppShell
@@ -62,7 +66,7 @@ export function HomePage() {
           sx={{ maxWidth: 640, mx: "auto", p: { xs: 3, sm: 5 }, width: "100%" }}
         >
           <Stack spacing={1.5}>
-            <Typography component="p" variant="overline">
+            <Typography component="p" variant="labelLarge">
               Pastoral da Juventude
             </Typography>
             <Typography component="h1" variant="h4">

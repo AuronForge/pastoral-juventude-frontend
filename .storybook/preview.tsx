@@ -1,27 +1,17 @@
-import "@fontsource/roboto/latin-400.css";
-import "@fontsource/roboto/latin-500.css";
-import "@fontsource/roboto/latin-700.css";
-import { CssBaseline } from "@mui/material";
-import { withThemeFromJSXProvider } from "@storybook/addon-themes";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import type { Preview } from "@storybook/react-vite";
 import "../src/styles/global.css";
-import { createAppTheme } from "../src/theme/appTheme";
+import { appTheme } from "../src/theme/appTheme";
 import { pastoralStorybookTheme } from "./pastoralTheme";
-import { StorybookThemeProvider } from "./StorybookThemeProvider";
-
-const themes = {
-  Claro: createAppTheme("light"),
-  Escuro: createAppTheme("dark"),
-};
 
 const preview: Preview = {
   decorators: [
-    withThemeFromJSXProvider({
-      themes,
-      defaultTheme: "Claro",
-      Provider: StorybookThemeProvider,
-      GlobalStyles: CssBaseline,
-    }),
+    (Story) => (
+      <ThemeProvider theme={appTheme}>
+        <CssBaseline />
+        <Story />
+      </ThemeProvider>
+    ),
   ],
   parameters: {
     actions: { argTypesRegex: "^on[A-Z].*" },
@@ -40,14 +30,7 @@ const preview: Preview = {
           [
             "Introdução",
             "Fundações",
-            [
-              "Alinhamento com o Figma",
-              "Cores",
-              "Tipografia",
-              "Ícones",
-              "Layout",
-              "Elevação",
-            ],
+            ["Cores", "Tipografia", "Layout", "Elevação"],
             "Componentes",
           ],
         ],

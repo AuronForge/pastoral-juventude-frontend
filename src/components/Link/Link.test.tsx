@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { createRef } from "react";
-import { MaterialSymbol } from "../MaterialSymbol";
 import { Link } from "./Link";
 
 describe("Link", () => {
@@ -12,17 +11,17 @@ describe("Link", () => {
     ).toHaveAttribute("href", "/acesso");
   });
 
-  it("preserva ícones de apoio no conteúdo", () => {
+  it("exibe o ícone externo opcional sem alterar o nome acessível", () => {
     render(
-      <Link
-        endIcon={<MaterialSymbol data-testid="seta" name="arrow_forward" />}
-        href="/acesso"
-      >
-        Voltar ao acesso
+      <Link externalIcon href="https://exemplo.org/termo">
+        Visualizar termo
       </Link>,
     );
 
-    expect(screen.getByTestId("seta")).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: "Visualizar termo" });
+    expect(link.querySelector(".material-symbols-outlined")).toHaveTextContent(
+      "open_in_new",
+    );
   });
 
   it("impede interação e retira o destino quando desabilitado", () => {
@@ -60,12 +59,7 @@ describe("Link", () => {
     const ref = createRef<HTMLAnchorElement>();
 
     render(
-      <Link
-        ref={ref}
-        data-testid="link-ajuda"
-        endIcon={<MaterialSymbol name="open_in_new" />}
-        href="/ajuda"
-      >
+      <Link ref={ref} data-testid="link-ajuda" externalIcon href="/ajuda">
         Preciso de ajuda
       </Link>,
     );

@@ -10,27 +10,72 @@ const meta = {
     docs: {
       description: {
         component:
-          "Calendário nativo composto com TextField. A apresentação e o calendário seguem o navegador; valores, defaultValue e limites usam YYYY-MM-DD. Reutiliza os estados, tokens, foco e mensagens do Design System. Sem conversão de fuso horário.",
+          "Date Picker do Figma: seleção de data, intervalo, mês e ano ou data e hora em convenção brasileira (DD/MM/AAAA, relógio de 24 horas e semana iniciada no domingo). Permite digitação direta, navegação por setas no calendário, Enter para selecionar, Escape para fechar e Tab para continuar. Médio com 40 px e Grande com 48 px.",
       },
     },
   },
-  args: { label: "Data de nascimento", autoComplete: "bday", size: "large" },
+  args: {
+    label: "Data",
+    mode: "date",
+    size: "medium",
+    defaultValue: "2026-09-15",
+  },
+  argTypes: {
+    mode: {
+      control: "inline-radio",
+      options: ["date", "range", "monthYear", "dateTime"],
+    },
+    size: { control: "inline-radio", options: ["medium", "large"] },
+  },
 } satisfies Meta<typeof DatePicker>;
+
 export default meta;
 type Story = StoryObj<typeof meta>;
+
 export const Playground: Story = {};
+
+export const Modelos: Story = {
+  render: () => (
+    <Stack spacing={3} sx={{ maxWidth: 420 }}>
+      <DatePicker defaultValue="2026-09-15" label="Data" />
+      <DatePicker
+        defaultValue={{ start: "2026-09-15", end: "2026-09-18" }}
+        label="Intervalo"
+        mode="range"
+      />
+      <DatePicker defaultValue="2026-09" label="Mês e ano" mode="monthYear" />
+      <DatePicker
+        defaultValue="2026-09-15T14:30"
+        label="Data e hora"
+        mode="dateTime"
+      />
+    </Stack>
+  ),
+};
+
 export const Estados: Story = {
   render: () => (
-    <Stack spacing={2} sx={{ maxWidth: 420 }}>
-      <DatePicker label="Data de nascimento" required />
+    <Stack spacing={3} sx={{ maxWidth: 320 }}>
+      <DatePicker label="Vazio" size="large" />
+      <DatePicker defaultValue="2026-09-15" label="Preenchido" size="large" />
       <DatePicker
-        label="Com valor"
-        defaultValue="2000-01-01"
-        hint="Selecione no calendário."
+        defaultValue="2026-09-15"
+        errorMessage="Data inválida"
+        label="Erro"
+        size="large"
       />
-      <DatePicker label="Com erro" errorMessage="Selecione uma data válida." />
-      <DatePicker label="Somente leitura" defaultValue="2000-01-01" readOnly />
-      <DatePicker label="Desabilitado" defaultValue="2000-01-01" disabled />
+      <DatePicker
+        defaultValue="2026-09-15"
+        disabled
+        label="Desabilitado"
+        size="large"
+      />
+      <DatePicker
+        defaultValue="2026-09-15"
+        label="Somente leitura"
+        readOnly
+        size="large"
+      />
     </Stack>
   ),
 };

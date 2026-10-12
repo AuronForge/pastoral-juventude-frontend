@@ -36,7 +36,7 @@ function setup(
   const router = createMemoryRouter(appRoutes, { initialEntries: [path] });
   render(
     <Provider store={store}>
-      <ThemeProvider theme={createAppTheme("light")}>
+      <ThemeProvider theme={createAppTheme()}>
         <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,

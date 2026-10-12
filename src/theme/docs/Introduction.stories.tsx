@@ -1,4 +1,4 @@
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FoundationPage, FoundationSection, TokenCode } from "./FoundationPage";
 
@@ -10,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Visão geral das fundações visuais da aplicação Pastoral da Juventude.",
+          "Visão geral das fundações visuais, espelhadas do arquivo Figma do MVP Pastoral da Juventude.",
       },
     },
   },
@@ -19,97 +19,36 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const metrics = [
-  { value: "96", label: "variáveis publicadas no Figma" },
-  { value: "1", label: "modo de cor oficial: Light" },
-  { value: "11", label: "estilos tipográficos oficiais" },
-  { value: "4", label: "tamanhos de ícone" },
-];
-
 export const VisaoGeral: Story = {
   name: "Visão geral",
   render: () => (
     <FoundationPage
       title="Pastoral da Juventude"
-      description="Uma linguagem visual acolhedora, acessível e consistente para construir as jornadas do jovem e da coordenação."
+      description="A interface deve ser acolhedora, confiável e organizada; jovem sem infantilização. Evitar aparência burocrática, excesso de cinza, cores e ícones religiosos decorativos."
     >
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: { xs: "1fr 1fr", lg: "repeat(4, 1fr)" },
-          gap: "var(--spacing-lg)",
-        }}
-      >
-        {metrics.map((metric) => (
-          <Box
-            key={metric.label}
-            sx={{
-              bgcolor: "var(--primary-subtle)",
-              border: "var(--border-thin) solid var(--primary-border)",
-              borderRadius: "var(--radius-lg)",
-              p: 3,
-            }}
-          >
-            <Typography
-              variant="metricDisplay"
-              component="p"
-              color="primary.main"
-            >
-              {metric.value}
-            </Typography>
-            <Typography variant="bodySmall" color="text.secondary">
-              {metric.label}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
-
       <FoundationSection
-        title="Fluxo da fonte de verdade"
-        description="O Figma define a intenção visual; o código tipa e distribui os tokens; o Storybook documenta e valida seu uso."
+        title="Fonte de verdade"
+        description="O Figma define tokens, estilos e componentes. Quando uma regra não estiver definida, ela deve ser registrada como pendência — nunca inferida."
       >
-        <Stack direction={{ xs: "column", md: "row" }} spacing={1.5}>
-          {[
-            "Figma",
-            "Tokens TypeScript",
-            "Tema MUI",
-            "Storybook",
-            "Features",
-          ].map((item, index, values) => (
-            <Stack
-              key={item}
-              direction="row"
-              spacing={1.5}
-              sx={{ alignItems: "center" }}
-            >
-              <Chip label={item} color={index === 0 ? "primary" : "default"} />
-              {index < values.length - 1 ? (
-                <Typography aria-hidden color="text.secondary">
-                  →
-                </Typography>
-              ) : null}
-            </Stack>
-          ))}
-        </Stack>
-      </FoundationSection>
-
-      <FoundationSection title="Princípios de uso">
         <Stack component="ul" spacing={1.5} sx={{ m: 0, pl: 2.5 }}>
           <Typography component="li" variant="bodyMedium">
-            Componentes devem consumir tokens semânticos, como{" "}
-            <TokenCode>var(--text-primary)</TokenCode>, e não cores primitivas.
+            Primitivos guardam valores; semânticos expressam intenção;
+            componentes usam os semânticos, como{" "}
+            <TokenCode>var(--pj-color-text-primary)</TokenCode>.
           </Typography>
           <Typography component="li" variant="bodyMedium">
-            Interfaces são mobile first, com transições principais em 768 px e
-            1200 px.
+            Criar ou alterar um token no Figma antes de aplicá-lo em
+            componentes.
           </Typography>
           <Typography component="li" variant="bodyMedium">
-            Todo estado interativo precisa preservar foco visível, contraste e
-            área mínima de toque de 44 px.
+            Tipografia: Roboto, com 11 estilos. Tamanhos avulsos não devem ser
+            introduzidos.
           </Typography>
           <Typography component="li" variant="bodyMedium">
-            O modo escuro é uma extensão do produto; o modo Light é a referência
-            publicada no Figma.
+            Ícones: Material Symbols, estilo Outlined.
+          </Typography>
+          <Typography component="li" variant="bodyMedium">
+            Controles acionáveis devem oferecer pelo menos 44 × 44 px.
           </Typography>
         </Stack>
       </FoundationSection>

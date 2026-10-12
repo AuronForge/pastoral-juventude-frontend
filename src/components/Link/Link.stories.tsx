@@ -1,6 +1,5 @@
 import { Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MaterialSymbol } from "../MaterialSymbol";
 import { Link } from "./Link";
 
 const meta = {
@@ -11,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Navegação textual para destinos internos ou externos. O conteúdo do link deve descrever o destino; evite textos genéricos como ‘clique aqui’.",
+          "Link do Figma: navegação textual para destinos internos e externos. Use texto descritivo (prefira “Visualizar termo” a “Clique aqui”). O sublinhado mantém o link reconhecível sem depender somente da cor. O ícone externo é opcional, mas recomendado quando o conteúdo abrir em outra aba ou aplicativo. O estado desabilitado não é interativo nem recebe foco.",
       },
     },
   },
@@ -22,6 +21,7 @@ const meta = {
   argTypes: {
     children: { control: "text" },
     disabled: { control: "boolean" },
+    externalIcon: { control: "boolean" },
     href: { control: "text" },
   },
 } satisfies Meta<typeof Link>;
@@ -31,18 +31,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const ComIcones: Story = {
+export const Tipos: Story = {
   render: () => (
-    <Stack spacing={2}>
-      <Link endIcon={<MaterialSymbol name="arrow_forward" />} href="/acesso">
-        Voltar ao acesso
-      </Link>
-      <Link
-        endIcon={<MaterialSymbol name="open_in_new" />}
-        href="https://pj.org.br"
-        target="_blank"
-      >
-        Conhecer a Pastoral da Juventude
+    <Stack spacing={2} sx={{ alignItems: "flex-start" }}>
+      <Link href="/encontros">Voltar aos encontros</Link>
+      <Link externalIcon href="https://exemplo.org/termo" target="_blank">
+        Visualizar termo
       </Link>
     </Stack>
   ),

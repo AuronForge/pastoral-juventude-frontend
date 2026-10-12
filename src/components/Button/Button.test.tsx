@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
-import { MaterialSymbol } from "../MaterialSymbol";
 import { Button } from "./Button";
+import { Icon } from "../Icon";
 
 describe("Button", () => {
   it("expõe uma ação nomeada", () => {
@@ -12,16 +12,16 @@ describe("Button", () => {
   });
 
   it.each([
-    ["small", "var(--size-touch-min)"],
-    ["medium", "var(--size-touch-min)"],
-    ["large", "var(--spacing-5xl)"],
+    ["small", "var(--space-extended-44px)"],
+    ["medium", "var(--space-extended-44px)"],
+    ["large", "var(--pj-space-8)"],
   ] as const)("mapeia o tamanho %s para %s", (size, height) => {
     render(<Button size={size}>Continuar</Button>);
 
     expect(screen.getByRole("button")).toHaveStyle({ minHeight: height });
   });
 
-  it.each(["primary", "secondary", "discreet", "danger"] as const)(
+  it.each(["primary", "secondary", "tertiary", "danger"] as const)(
     "aceita a variante %s do catálogo",
     (variant) => {
       render(<Button variant={variant}>Continuar</Button>);
@@ -30,56 +30,28 @@ describe("Button", () => {
     },
   );
 
-  it("preserva o nome acessível, mostra três pontos e bloqueia a ação ao carregar", () => {
-    const { container } = render(
-      <Button
-        loading
-        startIcon={<MaterialSymbol data-testid="icone-inicial" name="add" />}
-        endIcon={<MaterialSymbol data-testid="icone-final" name="add" />}
-      >
-        Entrando
-      </Button>,
-    );
+  it("mantém o rótulo, informa andamento e bloqueia a ação ao carregar", () => {
+    render(<Button loading>Entrando</Button>);
 
     const button = screen.getByRole("button", { name: "Entrando" });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
-    expect(button).toHaveStyle({
-      borderRadius: "var(--radius-md)",
-      minWidth: "50px",
-    });
-    expect(
-      container.querySelector('[aria-hidden="true"]')?.children,
-    ).toHaveLength(3);
-    expect(screen.queryByTestId("icone-inicial")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("icone-final")).not.toBeInTheDocument();
-    expect(container.querySelector(".MuiButton-startIcon")).toBeNull();
-    expect(container.querySelector(".MuiButton-endIcon")).toBeNull();
-    expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(button.querySelector(".loading-dots")).toBeInTheDocument();
   });
 
-  it.each([
-    ["small", "var(--size-touch-min)"],
-    ["medium", "50px"],
-    ["large", "58px"],
-  ] as const)(
-    "mantém a largura compacta do Figma ao carregar no tamanho %s",
-    (size, minWidth) => {
-      render(
-        <Button loading size={size}>
-          Salvando alterações muito extensas
-        </Button>,
-      );
+  it("segue a geometria do Figma", () => {
+    render(<Button size="large">Continuar</Button>);
 
-      expect(screen.getByRole("button")).toHaveStyle({ minWidth });
-    },
-  );
+    expect(screen.getByRole("button")).toHaveStyle({
+      borderRadius: "var(--pj-radius-md)",
+    });
+  });
 
   it("preserva ícones posicionados nos dois lados", () => {
     render(
       <Button
-        startIcon={<MaterialSymbol data-testid="inicio" name="add" />}
-        endIcon={<MaterialSymbol data-testid="fim" name="add" />}
+        startIcon={<Icon name="add" data-testid="inicio" />}
+        endIcon={<Icon name="add" data-testid="fim" />}
       >
         Adicionar
       </Button>,

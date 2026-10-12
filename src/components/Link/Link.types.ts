@@ -1,14 +1,14 @@
 import type { LinkProps as MuiLinkProps } from "@mui/material";
-import type { ReactNode } from "react";
 
 export type LinkProps = Omit<
   MuiLinkProps,
   "color" | "underline" | "variant"
 > & {
-  /** Impede a navegação e informa indisponibilidade para tecnologias assistivas. */
+  /** Estado Desabilitado: não interativo e fora da navegação por Tab. */
   disabled?: boolean;
-  /** Ícone exibido antes do conteúdo textual. */
-  startIcon?: ReactNode;
-  /** Ícone exibido após o conteúdo textual. */
-  endIcon?: ReactNode;
+  /**
+   * Ícone externo (open_in_new): opcional, recomendado quando o conteúdo
+   * abrir em outra aba ou aplicativo.
+   */
+  externalIcon?: boolean;
 };
