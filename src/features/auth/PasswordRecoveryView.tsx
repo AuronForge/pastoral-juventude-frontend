@@ -356,43 +356,53 @@ export function PasswordRecoveryView({
                     ["nomeParoquia", "Paróquia", "Nome da sua paróquia", "off"],
                   ] as const
                 ).map(([key, label, placeholder, autoComplete]) => {
-                  const Field =
-                    key === "dataNascimento" ? DatePicker : TextField;
-                  return (
-                    <Field
+                  const common = {
+                    id: `${id}-${key}`,
+                    name: key,
+                    label,
+                    required: true,
+                    size: (tablet ? "medium" : "large") as "medium" | "large",
+                    disabled: blocked,
+                    readOnly: busy,
+                    autoComplete,
+                    errorMessage:
+                      fieldErrors[key] ??
+                      error?.erros?.find((item) => item.campo === key)
+                        ?.mensagem,
+                  };
+                  const update = (value: string) => {
+                    setValues((current) => ({ ...current, [key]: value }));
+                    setFieldErrors((current) => ({
+                      ...current,
+                      [key]: undefined,
+                    }));
+                  };
+                  return key === "dataNascimento" ? (
+                    <DatePicker
                       key={key}
-                      id={`${id}-${key}`}
-                      name={key}
-                      label={label}
-                      {...(key !== "dataNascimento" ? { placeholder } : {})}
-                      required
-                      size={tablet ? "medium" : "large"}
-                      disabled={blocked}
-                      readOnly={busy}
-                      autoComplete={autoComplete}
+                      {...common}
+                      value={values[key]}
+                      ref={(element) => {
+                        inputs.current[key] = element;
+                      }}
+                      onChange={update}
+                    />
+                  ) : (
+                    <TextField
+                      key={key}
+                      {...common}
+                      placeholder={placeholder}
                       value={values[key]}
                       ref={(element) => {
                         inputs.current[key] = element;
                       }}
                       inputProps={{
-                        ...(key !== "dataNascimento" ? { maxLength: 500 } : {}),
+                        maxLength: 500,
                         ...(key === "email"
                           ? { inputMode: "email" as const }
                           : {}),
                       }}
-                      errorMessage={
-                        fieldErrors[key] ??
-                        error?.erros?.find((item) => item.campo === key)
-                          ?.mensagem
-                      }
-                      onChange={(event) => {
-                        const value = event.target.value;
-                        setValues((current) => ({ ...current, [key]: value }));
-                        setFieldErrors((current) => ({
-                          ...current,
-                          [key]: undefined,
-                        }));
-                      }}
+                      onChange={(event) => update(event.target.value)}
                     />
                   );
                 })}

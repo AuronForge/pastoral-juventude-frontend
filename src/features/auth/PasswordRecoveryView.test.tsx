@@ -21,7 +21,7 @@ function setup(props: Partial<PasswordRecoveryViewProps> = {}) {
   );
   return { recover, onBack, ...rendered };
 }
-function fill(date = "2000-02-29") {
+function fill(date = "29/02/2000") {
   for (const [label, value] of [
     [/^Nome completo/, "  Maria Silva  "],
     [/^E-mail/, "  MARIA@EXEMPLO.TEST "],
@@ -46,10 +46,10 @@ it("foca título, valida os quatro campos e mantém foco no primeiro erro", () =
   expect(recover).not.toHaveBeenCalled();
   expect(screen.getByLabelText(/^Nome completo/)).toHaveFocus();
   expect(screen.getByLabelText(/^Data de nascimento/)).toHaveAttribute(
-    "type",
-    "date",
+    "placeholder",
+    "DD/MM/AAAA",
   );
-  fill("2001-02-29");
+  fill("29/02/2001");
   submit();
   expect(recover).not.toHaveBeenCalled();
   expect(screen.getByLabelText(/^Data de nascimento/)).toHaveFocus();
