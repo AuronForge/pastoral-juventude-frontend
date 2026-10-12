@@ -394,7 +394,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
               onKeyDown={onPanelKeyDown}
               ref={setPanelNode}
               role="dialog"
-              sx={{ width: mode === "range" ? 520 : 320 }}
+              sx={{ width: 320 }}
             >
               <div className="date-picker-header">
                 <p aria-live="polite" className="date-picker-title">

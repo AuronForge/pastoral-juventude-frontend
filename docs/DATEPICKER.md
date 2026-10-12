@@ -29,6 +29,7 @@ vazios no intervalo). O estado não usa `Date` nem converte fusos.
 - Data e hora: escolher o dia não fecha o painel; o valor só é emitido com
   horário válido em 24 h.
 - Mês e ano: grade de meses em 3 colunas.
+- Todos os modelos usam painel de 320 px com um único mês.
 - Suporta `size`, `disabled`, `readOnly`, `required`, `errorMessage` (acessível
   via `aria-describedby`) e `hint`.
 
@@ -46,7 +47,3 @@ em ISO (`YYYY-MM-DD`).
   `text/secondary`.
 - No Figma o fim do intervalo não aparece destacado; seguida a documentação,
   que destaca as duas extremidades.
-- No Figma o painel do Intervalo tem 520 px de largura com um único mês;
-  reproduzido literalmente (sobra espaço à direita).
-- O campo deixou de ser `input type="date"` nativo. Testes E2E que preenchem a
-  data no formato ISO precisam passar a digitar `DD/MM/AAAA` no campo de texto.
