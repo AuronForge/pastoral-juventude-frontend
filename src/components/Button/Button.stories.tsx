@@ -12,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Aciona uma ação. O catálogo contém as variantes primária, secundária, discreta e de perigo, nos tamanhos P, M e G. As 216 variantes publicadas no Figma definem alturas de 44 px para pequeno e médio e 48 px para grande; essas medidas prevalecem sobre os textos auxiliares antigos que ainda citam 32/40/48 px. Clique, Enter e Espaço acionam o botão. Estados desabilitado e carregando não recebem foco por Tab.",
+          "Button do Figma. Escolha a hierarquia pela intenção: Primário (uma ação principal por contexto), Secundário (ação complementar), Terciário (menor ênfase) e Perigo (ação destrutiva ou irreversível). Tamanhos Pequeno e Médio com 44 px e Grande com 48 px. O ícone complementa o rótulo; nunca é o único significado. Clique, Enter e Espaço acionam o botão; estados desabilitado e carregando não recebem foco por Tab.",
       },
     },
   },
@@ -30,7 +30,7 @@ const meta = {
     },
     variant: {
       control: "inline-radio",
-      options: ["primary", "secondary", "discreet", "danger"],
+      options: ["primary", "secondary", "tertiary", "danger"],
     },
   },
 } satisfies Meta<typeof Button>;
@@ -40,17 +40,22 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-const variants = ["primary", "secondary", "discreet", "danger"] as const;
+const variants = [
+  ["primary", "Primário"],
+  ["secondary", "Secundário"],
+  ["tertiary", "Terciário"],
+  ["danger", "Perigo"],
+] as const;
 const sizes = ["small", "medium", "large"] as const;
 
 export const VariantesETamanhos: Story = {
   name: "Variantes e tamanhos",
   render: () => (
     <Stack spacing={3}>
-      {variants.map((variant) => (
+      {variants.map(([variant, label]) => (
         <Box key={variant}>
           <Typography variant="title" component="h2" sx={{ mb: 1.5 }}>
-            {variant}
+            {label}
           </Typography>
           <Stack
             direction="row"
@@ -100,7 +105,7 @@ export const CarregandoEDesabilitado: Story = {
       <Button disabled variant="secondary">
         Salvar
       </Button>
-      <Button loading variant="discreet">
+      <Button loading variant="tertiary">
         Carregando
       </Button>
       <Button disabled variant="danger">
@@ -112,7 +117,7 @@ export const CarregandoEDesabilitado: Story = {
     docs: {
       description: {
         story:
-          "Enquanto carrega, o botão fica indisponível, preserva seu rótulo e expõe `aria-busy` para tecnologias assistivas.",
+          "Carregando: o conteúdo é substituído pelo indicador de três pontos do Figma; o rótulo permanece como nome acessível, o botão fica indisponível e expõe `aria-busy`.",
       },
     },
   },
@@ -142,7 +147,7 @@ function InteractionTargetsExample() {
             <Button onClick={activate} size={size}>
               Continuar
             </Button>
-            <Typography variant="body2">{height}</Typography>
+            <Typography variant="bodyMedium">{height}</Typography>
           </Stack>
         ))}
       </Stack>

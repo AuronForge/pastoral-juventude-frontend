@@ -1,16 +1,18 @@
 import type { ButtonProps as MuiButtonProps } from "@mui/material";
 
-export type ButtonVariant = "primary" | "secondary" | "discreet" | "danger";
+/** Hierarquias do componente Button do Figma. */
+export type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
+/** Tamanhos do Figma: Pequeno (44 px), Médio (44 px) e Grande (48 px). */
 export type ButtonSize = "small" | "medium" | "large";
 
 export type ButtonProps = Omit<
   MuiButtonProps,
   "aria-busy" | "color" | "loading" | "size" | "variant"
 > & {
-  /** Mostra o andamento da ação e evita novos acionamentos. */
+  /** Estado Carregando: substitui o conteúdo pelo indicador e bloqueia a ação. */
   loading?: boolean;
-  /** Variante visual disponível no catálogo do Design System. */
+  /** Hierarquia: Primário, Secundário, Terciário ou Perigo. */
   variant?: ButtonVariant;
-  /** Tamanho semântico disponível no catálogo do Design System. */
+  /** Tamanho: Pequeno, Médio ou Grande. */
   size?: ButtonSize;
 };

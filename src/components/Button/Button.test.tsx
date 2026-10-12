@@ -21,7 +21,7 @@ describe("Button", () => {
     expect(screen.getByRole("button")).toHaveStyle({ minHeight: height });
   });
 
-  it.each(["primary", "secondary", "discreet", "danger"] as const)(
+  it.each(["primary", "secondary", "tertiary", "danger"] as const)(
     "aceita a variante %s do catálogo",
     (variant) => {
       render(<Button variant={variant}>Continuar</Button>);
@@ -36,7 +36,15 @@ describe("Button", () => {
     const button = screen.getByRole("button", { name: "Entrando" });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
-    expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(button.querySelector(".loading-dots")).toBeInTheDocument();
+  });
+
+  it("segue a geometria do Figma", () => {
+    render(<Button size="large">Continuar</Button>);
+
+    expect(screen.getByRole("button")).toHaveStyle({
+      borderRadius: "var(--pj-radius-md)",
+    });
   });
 
   it("preserva ícones posicionados nos dois lados", () => {

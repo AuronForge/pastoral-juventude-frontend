@@ -50,7 +50,7 @@ describe("IconButton", () => {
     const button = screen.getByRole("button", { name: "Salvar" });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
-    expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(button.querySelector(".loading-dots")).toBeInTheDocument();
   });
 
   it("respeita o estado desabilitado", () => {

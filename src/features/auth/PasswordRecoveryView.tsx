@@ -298,7 +298,7 @@ export function PasswordRecoveryView({
                 Voltar para entrar
               </Button>
               <Button
-                variant="discreet"
+                variant="tertiary"
                 size="large"
                 fullWidth
                 disabled={seconds > 0}
@@ -408,7 +408,7 @@ export function PasswordRecoveryView({
                 Ver minha senha temporária
               </Button>
               <Button
-                variant="discreet"
+                variant="tertiary"
                 size="large"
                 fullWidth
                 disabled={busy}

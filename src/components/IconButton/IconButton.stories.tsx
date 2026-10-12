@@ -12,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Ação compacta acionada por um único ícone. Use apenas quando o símbolo for reconhecível no contexto; o rótulo acessível é obrigatório. Conforme o Figma, pequeno e médio têm alvo de 44 × 44 px e grande de 48 × 48 px. Os ícones continuam com 16, 20 e 24 px. Em linhas flexíveis, o botão não encolhe; organize as ações com quebra de linha se faltar espaço.",
+          "Ação compacta acionada por um único ícone. Use apenas quando o símbolo for reconhecível no contexto; o rótulo acessível é obrigatório. Conforme o Figma, pequeno e médio têm alvo de 44 × 44 px e grande de 48 × 48 px. Os ícones têm 16, 20 e 24 px e raio de 8 px. Em linhas flexíveis, o botão não encolhe; organize as ações com quebra de linha se faltar espaço.",
       },
     },
   },
@@ -122,7 +122,7 @@ export const Estados: Story = {
     docs: {
       description: {
         story:
-          "O estado de carregamento substitui o ícone, desabilita novas interações e mantém o nome acessível da ação.",
+          "Carregando: o ícone é substituído pelo indicador de três pontos do Figma, novas interações ficam bloqueadas e o nome acessível da ação é mantido.",
       },
     },
   },
