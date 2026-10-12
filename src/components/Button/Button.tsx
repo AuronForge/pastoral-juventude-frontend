@@ -15,7 +15,7 @@ const StyledButton = styled(MuiButton, {
   const size =
     buttonSize === "small"
       ? {
-          minHeight: "var(--size-control-sm)",
+          minHeight: "var(--size-touch-min)",
           paddingInline: "var(--spacing-md)",
           gap: "var(--spacing-xs)",
           fontSize: "var(--font-size-sm)",
@@ -24,7 +24,7 @@ const StyledButton = styled(MuiButton, {
         }
       : buttonSize === "medium"
         ? {
-            minHeight: "var(--size-control-md)",
+            minHeight: "var(--size-touch-min)",
             paddingInline: "var(--spacing-xl)",
             gap: "var(--spacing-sm)",
             fontSize: "var(--font-size-md)",
@@ -32,7 +32,7 @@ const StyledButton = styled(MuiButton, {
             iconSize: "var(--size-icon-md)",
           }
         : {
-            minHeight: "var(--size-control-lg)",
+            minHeight: "var(--spacing-5xl)",
             paddingInline: "var(--spacing-2xl)",
             gap: "var(--spacing-sm)",
             fontSize: "var(--font-size-md)",

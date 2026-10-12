@@ -1,5 +1,6 @@
 import { Add } from "@mui/icons-material";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
 import { Button } from "./Button";
 
@@ -11,9 +12,9 @@ describe("Button", () => {
   });
 
   it.each([
-    ["small", "var(--size-control-sm)"],
-    ["medium", "var(--size-control-md)"],
-    ["large", "var(--size-control-lg)"],
+    ["small", "var(--size-touch-min)"],
+    ["medium", "var(--size-touch-min)"],
+    ["large", "var(--spacing-5xl)"],
   ] as const)("mapeia o tamanho %s para %s", (size, height) => {
     render(<Button size={size}>Continuar</Button>);
 
@@ -62,5 +63,27 @@ describe("Button", () => {
     );
 
     expect(ref.current).toBe(screen.getByTestId("botao"));
+  });
+
+  it("aciona pelo teclado e ignora estados indisponíveis na navegação", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    render(
+      <>
+        <Button onClick={onClick} size="small">
+          Continuar
+        </Button>
+        <Button disabled>Indisponível</Button>
+        <Button loading>Carregando</Button>
+        <button type="button">Próxima ação</button>
+      </>,
+    );
+
+    await user.tab();
+    expect(screen.getByRole("button", { name: "Continuar" })).toHaveFocus();
+    await user.keyboard("{Enter} ");
+    expect(onClick).toHaveBeenCalledTimes(2);
+    await user.tab();
+    expect(screen.getByRole("button", { name: "Próxima ação" })).toHaveFocus();
   });
 });

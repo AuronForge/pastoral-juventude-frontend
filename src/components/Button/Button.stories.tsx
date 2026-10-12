@@ -1,6 +1,7 @@
 import { Add, ArrowForward, DeleteOutlined } from "@mui/icons-material";
 import { Box, Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { Button } from "./Button";
 
 const meta = {
@@ -11,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Aciona uma ação. O catálogo contém as variantes primária, secundária, discreta e de perigo, nos tamanhos P, M e G.",
+          "Aciona uma ação. O catálogo contém as variantes primária, secundária, discreta e de perigo, nos tamanhos P, M e G. As 216 variantes publicadas no Figma definem alturas de 44 px para pequeno e médio e 48 px para grande; essas medidas prevalecem sobre os textos auxiliares antigos que ainda citam 32/40/48 px. Clique, Enter e Espaço acionam o botão. Estados desabilitado e carregando não recebem foco por Tab.",
       },
     },
   },
@@ -112,6 +113,62 @@ export const CarregandoEDesabilitado: Story = {
       description: {
         story:
           "Enquanto carrega, o botão fica indisponível, preserva seu rótulo e expõe `aria-busy` para tecnologias assistivas.",
+      },
+    },
+  },
+};
+
+function InteractionTargetsExample() {
+  const [activations, setActivations] = useState(0);
+  const activate = () => setActivations((current) => current + 1);
+
+  return (
+    <Stack spacing={2} sx={{ alignItems: "flex-start" }}>
+      <Stack
+        direction="row"
+        spacing={2}
+        useFlexGap
+        sx={{ alignItems: "flex-end", flexWrap: "wrap" }}
+      >
+        {(
+          [
+            ["small", "Pequeno", "44 px"],
+            ["medium", "Médio", "44 px"],
+            ["large", "Grande", "48 px"],
+          ] as const
+        ).map(([size, label, height]) => (
+          <Stack key={size} spacing={1} sx={{ alignItems: "center" }}>
+            <Typography>{label}</Typography>
+            <Button onClick={activate} size={size}>
+              Continuar
+            </Button>
+            <Typography variant="body2">{height}</Typography>
+          </Stack>
+        ))}
+      </Stack>
+      <Stack direction="row" spacing={2} useFlexGap sx={{ flexWrap: "wrap" }}>
+        <Button disabled size="small" variant="secondary">
+          Indisponível
+        </Button>
+        <Button loading size="medium">
+          Carregando
+        </Button>
+      </Stack>
+      <Typography aria-live="polite" role="status">
+        Ações realizadas: {activations}
+      </Typography>
+    </Stack>
+  );
+}
+
+export const AlvosDeInteracao: Story = {
+  name: "Alvos de interação",
+  render: () => <InteractionTargetsExample />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Compare as alturas efetivas de 44/44/48 px. Clique próximo às bordas ou use Tab seguido de Enter ou Espaço. Os estados indisponível e carregando não incrementam o contador nem recebem foco por Tab.",
       },
     },
   },
