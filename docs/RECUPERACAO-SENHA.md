@@ -2,7 +2,7 @@
 
 A rota pública `/recuperar-senha` implementa Journey002, usando o contrato RES-003 v1.1. O link fica disponível no Login. Nome, e-mail, nascimento e paróquia são obrigatórios; a data é selecionada pelo `DatePicker` reutilizável do Design System, com calendário nativo do navegador. A apresentação segue a configuração regional do navegador; o valor é enviado como `YYYY-MM-DD`, sem conversão de fuso horário. Datas inexistentes são rejeitadas.
 
-A composição segue os estados desktop, tablet e celular da página Figma `150:1274` do arquivo `Q3XWkh0oPSxbEM5o3NnAXR`: padrão, carregamento, sucesso, dados não conferem, recuperação em andamento, conta inativa e excesso de tentativas. Reutiliza o Design System existente, Figtree/Fraunces, espaçamentos e cores de acesso. A marca PastorApp existente substitui o placeholder textual PJ do protótipo. Controles móveis preservam o alvo de toque de 44 px do Design System.
+A composição segue os estados desktop, tablet e celular da página Figma `150:1274` do arquivo `Q3XWkh0oPSxbEM5o3NnAXR`: padrão, carregamento, sucesso, dados não conferem, recuperação em andamento, conta inativa e excesso de tentativas. Reutiliza o Design System existente, Roboto, espaçamentos e cores de acesso. A marca PastorApp existente substitui o placeholder textual PJ do protótipo. Controles móveis preservam o alvo de toque de 44 px do Design System.
 
 O cliente chama `/api/v1/autenticacao/recuperar-senha` na mesma origem. A resposta fica apenas no estado local do componente: não vai para Redux, storage, URL nem telemetria. A cópia para a área de transferência exige ação explícita. Sair ou recarregar descarta a resposta. Após expirar, o valor deixa de ser exibido e o botão para pedir outra senha é liberado.
 

@@ -1,6 +1,6 @@
-import { ArrowForward, OpenInNew } from "@mui/icons-material";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { createRef } from "react";
+import { MaterialSymbol } from "../MaterialSymbol";
 import { Link } from "./Link";
 
 describe("Link", () => {
@@ -14,7 +14,10 @@ describe("Link", () => {
 
   it("preserva ícones de apoio no conteúdo", () => {
     render(
-      <Link endIcon={<ArrowForward data-testid="seta" />} href="/acesso">
+      <Link
+        endIcon={<MaterialSymbol data-testid="seta" name="arrow_forward" />}
+        href="/acesso"
+      >
         Voltar ao acesso
       </Link>,
     );
@@ -60,7 +63,7 @@ describe("Link", () => {
       <Link
         ref={ref}
         data-testid="link-ajuda"
-        endIcon={<OpenInNew />}
+        endIcon={<MaterialSymbol name="open_in_new" />}
         href="/ajuda"
       >
         Preciso de ajuda

@@ -1,8 +1,3 @@
-import {
-  CalendarMonthRounded,
-  GroupsRounded,
-  WorkspacePremiumRounded,
-} from "@mui/icons-material";
 import { Box, Typography, useTheme } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
@@ -10,6 +5,7 @@ import {
   BrandLockup,
   Button,
   Link,
+  MaterialSymbol,
   PasswordField,
   TextField,
 } from "../../components";
@@ -277,19 +273,19 @@ export function LoginView({
         </Box>
         <Box component="ul" className="login-benefits">
           <li>
-            <CalendarMonthRounded />
+            <MaterialSymbol name="calendar_month" />
             <Typography variant="bodyMedium">
               Encontros, presença e pendências no mesmo lugar
             </Typography>
           </li>
           <li>
-            <GroupsRounded />
+            <MaterialSymbol name="groups" />
             <Typography variant="bodyMedium">
               Cada pessoa da pastoral com a sua história
             </Typography>
           </li>
           <li>
-            <WorkspacePremiumRounded />
+            <MaterialSymbol name="workspace_premium" />
             <Typography variant="bodyMedium">
               Lideranças acompanhadas, não improvisadas
             </Typography>

@@ -1,26 +1,32 @@
 import {
-  CheckCircleOutlined,
-  Close,
-  ErrorOutlined,
-  InfoOutlined,
-  WarningAmberOutlined,
-} from "@mui/icons-material";
-import {
   Alert as MuiAlert,
   IconButton as MuiIconButton,
   styled,
   Typography,
 } from "@mui/material";
 import { forwardRef } from "react";
+import { MaterialSymbol } from "../MaterialSymbol";
 import type { AlertProps, AlertTone } from "./Alert.types";
 
 type AlertStyleOwnerState = { alertTone: AlertTone };
 
 const toneDetails = {
-  info: { icon: <InfoOutlined />, severity: "info" },
-  success: { icon: <CheckCircleOutlined />, severity: "success" },
-  warning: { icon: <WarningAmberOutlined />, severity: "warning" },
-  danger: { icon: <ErrorOutlined />, severity: "error" },
+  info: {
+    icon: <MaterialSymbol name="info" size="medium" />,
+    severity: "info",
+  },
+  success: {
+    icon: <MaterialSymbol name="check_circle" size="medium" />,
+    severity: "success",
+  },
+  warning: {
+    icon: <MaterialSymbol name="warning" size="medium" />,
+    severity: "warning",
+  },
+  danger: {
+    icon: <MaterialSymbol name="error" size="medium" />,
+    severity: "error",
+  },
 } as const;
 
 const toneStyles = {
@@ -115,7 +121,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   const onClose = dismissible ? props.onClose : undefined;
   const action = dismissible ? (
     <CloseButton aria-label={closeLabel} onClick={onClose}>
-      <Close />
+      <MaterialSymbol name="close" size="medium" />
     </CloseButton>
   ) : undefined;
 

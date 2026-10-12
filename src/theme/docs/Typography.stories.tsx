@@ -16,7 +16,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Escala tipográfica oficial: Fraunces para expressão e Figtree para interface.",
+          "Escala tipográfica oficial do Figma: Roboto nos pesos 400, 500 e 700.",
       },
     },
   },
@@ -26,30 +26,24 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const specimens = [
-  ["Display/XL", "displayXl", "Celebração que transforma"],
-  ["Display/L", "displayLarge", "Próximo encontro"],
-  ["Display/M", "displayMedium", "Pastoral da Juventude"],
-  ["Display/S", "displaySmall", "Detalhes do encontro"],
-  ["Heading/L", "headingLarge", "Informações principais"],
-  ["Heading/M", "headingMedium", "Participação e presença"],
-  ["Heading/S", "headingSmall", "Dados pessoais"],
+  ["Typography/Display", "displayXl", "Celebração que transforma"],
+  ["Typography/Heading/Large", "headingLarge", "Informações principais"],
+  ["Typography/Heading/Medium", "headingMedium", "Participação e presença"],
+  ["Typography/Heading/Small", "headingSmall", "Dados pessoais"],
+  ["Typography/Title", "title", "Próximo encontro"],
   ["Body/L", "bodyLarge", "Uma comunidade que acolhe e caminha junto."],
   ["Body/M", "bodyMedium", "Texto padrão para conteúdos e formulários."],
-  ["Body/M Strong", "bodyMediumStrong", "Informação em destaque"],
   ["Body/S", "bodySmall", "Texto de apoio e metadados."],
-  ["Body/S Strong", "bodySmallStrong", "Apoio em destaque"],
+  ["Label/L", "labelLarge", "Ação principal"],
   ["Label/M", "labelMedium", "Rótulo do campo"],
   ["Label/S", "labelSmall", "Cabeçalho de coluna"],
-  ["Caption", "caption", "Legenda complementar"],
-  ["Overline", "overline", "Próximo passo"],
-  ["Metric/Display", "metricDisplay", "128"],
 ] as const;
 
 export const Escala: Story = {
   render: () => (
     <FoundationPage
       title="Tipografia"
-      description="Fraunces dá personalidade aos títulos e métricas. Figtree mantém a interface clara, contemporânea e confortável para leitura."
+      description="Roboto mantém as mesmas métricas e pesos usados pelos componentes do arquivo de design."
     >
       <Box
         sx={{
@@ -58,7 +52,7 @@ export const Escala: Story = {
           gap: "var(--spacing-lg)",
         }}
       >
-        <FoundationSection title="Display · Fraunces">
+        <FoundationSection title="Família oficial">
           <Typography
             sx={{ fontFamily: fontFamilyTokens.display, fontSize: 40 }}
           >
@@ -70,13 +64,13 @@ export const Escala: Story = {
             useFlexGap
             sx={{ flexWrap: "wrap" }}
           >
-            <TokenCode>Fraunces</TokenCode>
-            <TokenCode>Semibold 600</TokenCode>
+            <TokenCode>Roboto</TokenCode>
+            <TokenCode>400 · 500 · 700</TokenCode>
           </Stack>
         </FoundationSection>
-        <FoundationSection title="Interface · Figtree">
+        <FoundationSection title="Regra de normalização">
           <Typography sx={{ fontFamily: fontFamilyTokens.body, fontSize: 24 }}>
-            Informação simples para todos.
+            Pesos, tamanhos e alturas de linha seguem os estilos locais.
           </Typography>
           <Stack
             direction="row"
@@ -84,15 +78,15 @@ export const Escala: Story = {
             useFlexGap
             sx={{ flexWrap: "wrap" }}
           >
-            <TokenCode>Figtree</TokenCode>
-            <TokenCode>400 · 500 · 600 · 700</TokenCode>
+            <TokenCode>letter-spacing 0</TokenCode>
+            <TokenCode>semibold → medium 500</TokenCode>
           </Stack>
         </FoundationSection>
       </Box>
 
       <FoundationSection
         title="Estilos"
-        description="Amostra dos 17 estilos locais definidos no Figma e disponíveis no tema MUI."
+        description="Amostra dos 11 estilos locais definidos no Figma. Variantes de compatibilidade do tema reutilizam essas métricas."
       >
         <Stack
           divider={

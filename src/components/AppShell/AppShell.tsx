@@ -1,14 +1,4 @@
 import {
-  DarkModeOutlined,
-  KeyboardArrowLeftRounded,
-  KeyboardArrowRightRounded,
-  LightModeOutlined,
-  LogoutRounded,
-  MenuRounded,
-  PasswordRounded,
-  PersonOutlineRounded,
-} from "@mui/icons-material";
-import {
   Avatar,
   Badge,
   Box,
@@ -28,6 +18,7 @@ import {
 import { useColorScheme } from "@mui/material/styles";
 import { useId, useState } from "react";
 import { BrandLockup } from "../BrandLockup/BrandLockup";
+import { MaterialSymbol } from "../MaterialSymbol";
 import type {
   AppShellNavigationItem,
   AppShellProps,
@@ -165,13 +156,13 @@ function AccountMenu({
       <Divider />
       {onProfile && (
         <MenuItem onClick={run(onProfile)}>
-          <PersonOutlineRounded fontSize="small" />
+          <MaterialSymbol name="person" size="medium" />
           Meu perfil
         </MenuItem>
       )}
       {onPasswordChange && (
         <MenuItem onClick={run(onPasswordChange)}>
-          <PasswordRounded fontSize="small" />
+          <MaterialSymbol name="password" size="medium" />
           Alterar senha
         </MenuItem>
       )}
@@ -190,11 +181,11 @@ function AccountMenu({
           value={activeMode}
         >
           <ToggleButton aria-label="Tema claro" value="light">
-            <LightModeOutlined fontSize="small" />
+            <MaterialSymbol name="light_mode" size="medium" />
             Claro
           </ToggleButton>
           <ToggleButton aria-label="Tema escuro" value="dark">
-            <DarkModeOutlined fontSize="small" />
+            <MaterialSymbol name="dark_mode" size="medium" />
             Escuro
           </ToggleButton>
         </ToggleButtonGroup>
@@ -203,7 +194,7 @@ function AccountMenu({
         <>
           <Divider />
           <MenuItem className="app-shell-sign-out" onClick={run(onSignOut)}>
-            <LogoutRounded fontSize="small" />
+            <MaterialSymbol name="logout" size="medium" />
             Sair
           </MenuItem>
         </>
@@ -279,7 +270,7 @@ export function AppShell({
                 selected={false}
                 type="button"
               >
-                <PersonOutlineRounded />
+                <MaterialSymbol name="person" />
                 {!compact && (
                   <span className="app-shell-navigation-label">Meu perfil</span>
                 )}
@@ -295,10 +286,10 @@ export function AppShell({
             type="button"
           >
             {compact ? (
-              <KeyboardArrowRightRounded />
+              <MaterialSymbol name="chevron_right" />
             ) : (
               <>
-                <KeyboardArrowLeftRounded />
+                <MaterialSymbol name="chevron_left" />
                 <span className="app-shell-navigation-label">
                   Recolher menu lateral
                 </span>
@@ -318,7 +309,7 @@ export function AppShell({
             aria-label="Abrir menu de navegação"
             onClick={() => setMobileNavigationOpen(true)}
           >
-            <MenuRounded />
+            <MaterialSymbol name="menu" />
           </MuiIconButton>
         )}
         <Box className="app-shell-header-content">{headerContent}</Box>

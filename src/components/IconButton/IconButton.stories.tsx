@@ -1,10 +1,7 @@
-import Add from "@mui/icons-material/Add";
-import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
-import EditOutlined from "@mui/icons-material/EditOutlined";
-import Refresh from "@mui/icons-material/Refresh";
 import { Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { MaterialSymbol } from "../MaterialSymbol";
 import { IconButton } from "./IconButton";
 
 const meta = {
@@ -20,7 +17,7 @@ const meta = {
     },
   },
   args: {
-    icon: <EditOutlined />,
+    icon: <MaterialSymbol name="edit" />,
     label: "Editar encontro",
     size: "medium",
     variant: "tertiary",
@@ -48,19 +45,23 @@ export const Playground: Story = {};
 export const Hierarquias: Story = {
   render: () => (
     <Stack direction="row" spacing={2}>
-      <IconButton icon={<Add />} label="Adicionar encontro" variant="primary" />
       <IconButton
-        icon={<EditOutlined />}
+        icon={<MaterialSymbol name="add" />}
+        label="Adicionar encontro"
+        variant="primary"
+      />
+      <IconButton
+        icon={<MaterialSymbol name="edit" />}
         label="Editar encontro"
         variant="secondary"
       />
       <IconButton
-        icon={<Refresh />}
+        icon={<MaterialSymbol name="refresh" />}
         label="Atualizar lista"
         variant="tertiary"
       />
       <IconButton
-        icon={<DeleteOutlined />}
+        icon={<MaterialSymbol name="delete" />}
         label="Excluir encontro"
         variant="danger"
       />
@@ -72,17 +73,17 @@ export const Tamanhos: Story = {
   render: () => (
     <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
       <IconButton
-        icon={<EditOutlined />}
+        icon={<MaterialSymbol name="edit" />}
         label="Editar (pequeno)"
         size="small"
       />
       <IconButton
-        icon={<EditOutlined />}
+        icon={<MaterialSymbol name="edit" />}
         label="Editar (médio)"
         size="medium"
       />
       <IconButton
-        icon={<EditOutlined />}
+        icon={<MaterialSymbol name="edit" />}
         label="Editar (grande)"
         size="large"
       />
@@ -93,20 +94,24 @@ export const Tamanhos: Story = {
 export const Estados: Story = {
   render: () => (
     <Stack direction="row" spacing={2}>
-      <IconButton icon={<Refresh />} label="Atualizar" variant="primary" />
       <IconButton
-        icon={<Refresh />}
+        icon={<MaterialSymbol name="refresh" />}
+        label="Atualizar"
+        variant="primary"
+      />
+      <IconButton
+        icon={<MaterialSymbol name="refresh" />}
         label="Atualizando"
         loading
         variant="primary"
       />
       <IconButton
-        icon={<Refresh />}
+        icon={<MaterialSymbol name="refresh" />}
         label="Atualização indisponível"
         disabled
       />
       <IconButton
-        icon={<DeleteOutlined />}
+        icon={<MaterialSymbol name="delete" />}
         label="Exclusão indisponível"
         disabled
         variant="danger"
@@ -140,7 +145,7 @@ function InteractionTargetsExample() {
           <Stack key={size} spacing={1} sx={{ alignItems: "center" }}>
             <Typography>{name}</Typography>
             <IconButton
-              icon={<EditOutlined />}
+              icon={<MaterialSymbol name="edit" />}
               label={`Editar (${name.toLowerCase()})`}
               onClick={activate}
               size={size}
@@ -153,14 +158,14 @@ function InteractionTargetsExample() {
       <Stack direction="row" useFlexGap spacing={2} sx={{ flexWrap: "wrap" }}>
         <IconButton
           disabled
-          icon={<EditOutlined />}
+          icon={<MaterialSymbol name="edit" />}
           label="Editar indisponível"
           onClick={activate}
           size="small"
           variant="secondary"
         />
         <IconButton
-          icon={<Refresh />}
+          icon={<MaterialSymbol name="refresh" />}
           label="Atualizando"
           loading
           onClick={activate}

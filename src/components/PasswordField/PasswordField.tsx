@@ -1,6 +1,6 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, styled } from "@mui/material";
 import { forwardRef, useState } from "react";
+import { MaterialSymbol } from "../MaterialSymbol";
 import { TextField } from "../TextField";
 import type { PasswordFieldProps } from "./PasswordField.types";
 
@@ -48,7 +48,10 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
             onMouseDown={(event) => event.preventDefault()}
             type="button"
           >
-            {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
+            <MaterialSymbol
+              name={isPasswordVisible ? "visibility_off" : "visibility"}
+              size="medium"
+            />
           </VisibilityButton>
         }
         type={isPasswordVisible ? "text" : "password"}

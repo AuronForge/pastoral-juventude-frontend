@@ -12,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Paleta primitiva e tokens semânticos usados nos modos claro e escuro.",
+          "Paleta vigente do Figma. O modo Light é oficial; o modo escuro preservado no produto é uma extensão documentada.",
       },
     },
   },
@@ -28,7 +28,7 @@ export const Paleta: Story = {
   render: () => (
     <FoundationPage
       title="Cores"
-      description="A paleta combina o azul-marinho institucional, o âmbar acolhedor e neutros quentes. Estados de sucesso e erro possuem escalas próprias."
+      description="Azul petróleo, terracota, dourado e neutros quentes formam a paleta oficial. Estados de feedback usam aliases próprios."
     >
       <FoundationSection
         title="Primitivas"
