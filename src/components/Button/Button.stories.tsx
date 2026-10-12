@@ -1,8 +1,8 @@
-import { Add, ArrowForward, DeleteOutlined } from "@mui/icons-material";
 import { Box, Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Button } from "./Button";
+import { Icon } from "../Icon";
 
 const meta = {
   title: "Design System/Componentes/Botão",
@@ -77,11 +77,11 @@ export const ComIcones: Story = {
       spacing={1.5}
       sx={{ alignItems: "center", flexWrap: "wrap" }}
     >
-      <Button startIcon={<Add />}>Adicionar pessoa</Button>
-      <Button variant="secondary" endIcon={<ArrowForward />}>
+      <Button startIcon={<Icon name="add" />}>Adicionar pessoa</Button>
+      <Button variant="secondary" endIcon={<Icon name="arrow_forward" />}>
         Avançar
       </Button>
-      <Button variant="danger" startIcon={<DeleteOutlined />}>
+      <Button variant="danger" startIcon={<Icon name="delete" />}>
         Excluir encontro
       </Button>
     </Stack>

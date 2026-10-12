@@ -62,7 +62,7 @@ export const NavigationList = styled("nav")({
   alignContent: "start",
   gap: "var(--pj-space-1)",
   width: "100%",
-  "& .MuiSvgIcon-root": {
+  "& .material-symbols-outlined": {
     width: "var(--pj-icon-size-md)",
     height: "var(--pj-icon-size-md)",
   },
@@ -193,7 +193,7 @@ export const BottomNavigationButton = styled(ButtonBase, {
   ...typographyStyle("labelSmall"),
   textDecoration: "none",
   cursor: "pointer",
-  "& .MuiSvgIcon-root": {
+  "& .material-symbols-outlined": {
     width: "var(--pj-icon-size-md)",
     height: "var(--pj-icon-size-md)",
   },

@@ -1,27 +1,21 @@
-import {
-  AccountTreeOutlined,
-  CalendarMonthOutlined,
-  HomeOutlined,
-  PeopleOutlineRounded,
-  ShieldOutlined,
-} from "@mui/icons-material";
 import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { AppShell } from "./AppShell";
 import { pendingLayoutTokens } from "../../theme/tokens";
+import { Icon } from "../Icon";
 
 const navigationItems = [
-  { id: "inicio", icon: <HomeOutlined />, label: "Início" },
-  { id: "pessoas", icon: <PeopleOutlineRounded />, label: "Pessoas", badge: 4 },
+  { id: "inicio", icon: <Icon name="home" />, label: "Início" },
+  { id: "pessoas", icon: <Icon name="group" />, label: "Pessoas", badge: 4 },
   {
     id: "encontros",
-    icon: <CalendarMonthOutlined />,
+    icon: <Icon name="calendar_month" />,
     label: "Encontros",
     badge: 3,
   },
-  { id: "lideranca", icon: <AccountTreeOutlined />, label: "Liderança" },
-  { id: "administracao", icon: <ShieldOutlined />, label: "Administração" },
+  { id: "lideranca", icon: <Icon name="account_tree" />, label: "Liderança" },
+  { id: "administracao", icon: <Icon name="shield" />, label: "Administração" },
 ];
 
 const meta = {
@@ -137,7 +131,7 @@ export const JovemNoCelular: Story = {
     mobileNavigationItems: [
       navigationItems[0],
       { ...navigationItems[2], label: "Meus encontros" },
-      { id: "perfil", icon: <PeopleOutlineRounded />, label: "Meu perfil" },
+      { id: "perfil", icon: <Icon name="group" />, label: "Meu perfil" },
     ],
     navigationItems: [
       navigationItems[0],

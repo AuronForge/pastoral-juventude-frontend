@@ -1,10 +1,3 @@
-import {
-  CalendarMonthRounded,
-  ContentCopyRounded,
-  GroupsRounded,
-  PasswordRounded,
-  WorkspacePremiumRounded,
-} from "@mui/icons-material";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
@@ -28,6 +21,7 @@ import {
   LoginForm,
   LoginPanel,
 } from "./LoginView.styles";
+import { Icon } from "../../components/Icon";
 
 export interface PasswordRecoveryViewProps {
   recover: (request: RecoveryRequest) => Promise<RecoveryResponse>;
@@ -230,7 +224,7 @@ export function PasswordRecoveryView({
                   mb: "var(--pj-space-4)",
                 }}
               >
-                <PasswordRounded aria-hidden />
+                <Icon name="password" />
               </Box>
               <Typography
                 id={`${id}-title`}
@@ -275,7 +269,7 @@ export function PasswordRecoveryView({
                 </Typography>
                 <IconButton
                   label="Copiar senha temporária"
-                  icon={<ContentCopyRounded />}
+                  icon={<Icon name="content_copy" />}
                   variant="tertiary"
                   size="large"
                   disabled={seconds === 0}
@@ -446,19 +440,19 @@ export function PasswordRecoveryView({
         </Box>
         <Box component="ul" className="login-benefits">
           <li>
-            <CalendarMonthRounded />
+            <Icon name="calendar_month" />
             <Typography variant="bodyMedium">
               Encontros, presença e pendências no mesmo lugar
             </Typography>
           </li>
           <li>
-            <GroupsRounded />
+            <Icon name="groups" />
             <Typography variant="bodyMedium">
               Cada pessoa da pastoral com a sua história
             </Typography>
           </li>
           <li>
-            <WorkspacePremiumRounded />
+            <Icon name="workspace_premium" />
             <Typography variant="bodyMedium">
               Lideranças acompanhadas, não improvisadas
             </Typography>

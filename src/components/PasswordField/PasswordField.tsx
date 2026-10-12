@@ -1,15 +1,15 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, styled } from "@mui/material";
 import { forwardRef, useState } from "react";
 import { TextField } from "../TextField";
 import type { PasswordFieldProps } from "./PasswordField.types";
+import { Icon } from "../Icon";
 
 const VisibilityButton = styled(IconButton)({
   width: "var(--pj-icon-size-md)",
   height: "var(--pj-icon-size-md)",
   padding: 0,
   color: "var(--pj-color-text-secondary)",
-  "& .MuiSvgIcon-root": {
+  "& .material-symbols-outlined": {
     width: "var(--pj-icon-size-md)",
     height: "var(--pj-icon-size-md)",
   },
@@ -48,7 +48,11 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
             onMouseDown={(event) => event.preventDefault()}
             type="button"
           >
-            {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
+            {isPasswordVisible ? (
+              <Icon name="visibility_off" />
+            ) : (
+              <Icon name="visibility" />
+            )}
           </VisibilityButton>
         }
         type={isPasswordVisible ? "text" : "password"}

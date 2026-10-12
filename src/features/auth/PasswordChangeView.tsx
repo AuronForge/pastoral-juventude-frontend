@@ -1,10 +1,3 @@
-import {
-  CalendarMonthRounded,
-  GroupsRounded,
-  WorkspacePremiumRounded,
-  CheckCircleRounded,
-  RadioButtonUncheckedRounded,
-} from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Alert, BrandLockup, Button, PasswordField } from "../../components";
@@ -21,6 +14,7 @@ import {
   LoginPanel,
 } from "./LoginView.styles";
 import { pendingLayoutTokens } from "../../theme/tokens";
+import { Icon } from "../../components/Icon";
 
 export interface PasswordChangeViewProps {
   change: (request: ChangePasswordRequest) => Promise<void>;
@@ -245,18 +239,13 @@ export function PasswordChangeView({
                       }}
                     >
                       {criteria[index] ? (
-                        <CheckCircleRounded
-                          aria-hidden
-                          sx={{
-                            fontSize: "18px",
-                            color: "var(--pj-color-feedback-success)",
-                          }}
+                        <Icon
+                          name="check_circle"
+                          size="md"
+                          style={{ color: "var(--pj-color-feedback-success)" }}
                         />
                       ) : (
-                        <RadioButtonUncheckedRounded
-                          aria-hidden
-                          sx={{ fontSize: "18px" }}
-                        />
+                        <Icon name="radio_button_unchecked" size="md" />
                       )}
                       <Typography variant="bodySmall">
                         {label}
@@ -310,19 +299,19 @@ export function PasswordChangeView({
         </Box>
         <Box component="ul" className="login-benefits">
           <li>
-            <CalendarMonthRounded />
+            <Icon name="calendar_month" />
             <Typography variant="bodyMedium">
               Encontros, presença e pendências no mesmo lugar
             </Typography>
           </li>
           <li>
-            <GroupsRounded />
+            <Icon name="groups" />
             <Typography variant="bodyMedium">
               Cada pessoa da pastoral com a sua história
             </Typography>
           </li>
           <li>
-            <WorkspacePremiumRounded />
+            <Icon name="workspace_premium" />
             <Typography variant="bodyMedium">
               Lideranças acompanhadas, não improvisadas
             </Typography>

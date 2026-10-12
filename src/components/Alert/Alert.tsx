@@ -1,11 +1,4 @@
 import {
-  CheckCircleOutlined,
-  Close,
-  ErrorOutlined,
-  InfoOutlined,
-  WarningAmberOutlined,
-} from "@mui/icons-material";
-import {
   Alert as MuiAlert,
   IconButton as MuiIconButton,
   styled,
@@ -13,14 +6,15 @@ import {
 } from "@mui/material";
 import { forwardRef } from "react";
 import type { AlertProps, AlertTone } from "./Alert.types";
+import { Icon } from "../Icon";
 
 type AlertStyleOwnerState = { alertTone: AlertTone };
 
 const toneDetails = {
-  info: { icon: <InfoOutlined />, severity: "info" },
-  success: { icon: <CheckCircleOutlined />, severity: "success" },
-  warning: { icon: <WarningAmberOutlined />, severity: "warning" },
-  danger: { icon: <ErrorOutlined />, severity: "error" },
+  info: { icon: <Icon name="info" />, severity: "info" },
+  success: { icon: <Icon name="check_circle" />, severity: "success" },
+  warning: { icon: <Icon name="warning" />, severity: "warning" },
+  danger: { icon: <Icon name="error" />, severity: "error" },
 } as const;
 
 const toneStyles = {
@@ -65,7 +59,7 @@ const StyledAlert = styled(MuiAlert, {
       margin: 0,
       padding: 0,
       color: tone.iconColor,
-      "& .MuiSvgIcon-root": {
+      "& .material-symbols-outlined": {
         width: "var(--pj-icon-size-md)",
         height: "var(--pj-icon-size-md)",
       },
@@ -89,7 +83,7 @@ const CloseButton = styled(MuiIconButton)({
   flexShrink: 0,
   padding: 0,
   color: "var(--pj-color-text-secondary)",
-  "& .MuiSvgIcon-root": {
+  "& .material-symbols-outlined": {
     width: "var(--pj-icon-size-md)",
     height: "var(--pj-icon-size-md)",
   },
@@ -115,7 +109,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   const onClose = dismissible ? props.onClose : undefined;
   const action = dismissible ? (
     <CloseButton aria-label={closeLabel} onClick={onClose}>
-      <Close />
+      <Icon name="close" />
     </CloseButton>
   ) : undefined;
 

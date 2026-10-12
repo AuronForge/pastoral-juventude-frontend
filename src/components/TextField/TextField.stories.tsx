@@ -1,7 +1,7 @@
-import { AlternateEmail, Search, VisibilityOff } from "@mui/icons-material";
 import { Box, Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TextField } from "./TextField";
+import { Icon } from "../Icon";
 
 const meta = {
   title: "Design System/Componentes/Campo de texto",
@@ -80,18 +80,18 @@ export const IconesEAdornos: Story = {
       <TextField
         label="Buscar pessoa"
         placeholder="Nome ou e-mail"
-        leadingIcon={<Search />}
+        leadingIcon={<Icon name="search" />}
       />
       <TextField
         label="E-mail"
         placeholder="nome"
         suffix="@pastoral.org"
-        trailingIcon={<AlternateEmail />}
+        trailingIcon={<Icon name="alternate_email" />}
       />
       <TextField
         label="Senha"
         value="segredo"
-        trailingIcon={<VisibilityOff />}
+        trailingIcon={<Icon name="visibility_off" />}
         readOnly
       />
       <TextField

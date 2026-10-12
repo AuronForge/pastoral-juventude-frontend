@@ -75,7 +75,7 @@ describe("Alert", () => {
       height: "var(--space-extended-44px)",
       flexShrink: "0",
     });
-    expect(button.querySelector("svg")).toHaveStyle({
+    expect(button.querySelector(".material-symbols-outlined")).toHaveStyle({
       width: "var(--pj-icon-size-md)",
       height: "var(--pj-icon-size-md)",
     });

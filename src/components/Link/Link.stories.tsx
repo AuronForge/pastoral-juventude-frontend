@@ -1,7 +1,7 @@
-import { ArrowForward, OpenInNew } from "@mui/icons-material";
 import { Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Link } from "./Link";
+import { Icon } from "../Icon";
 
 const meta = {
   title: "Design System/Componentes/Link",
@@ -34,10 +34,14 @@ export const Playground: Story = {};
 export const ComIcones: Story = {
   render: () => (
     <Stack spacing={2}>
-      <Link endIcon={<ArrowForward />} href="/acesso">
+      <Link endIcon={<Icon name="arrow_forward" />} href="/acesso">
         Voltar ao acesso
       </Link>
-      <Link endIcon={<OpenInNew />} href="https://pj.org.br" target="_blank">
+      <Link
+        endIcon={<Icon name="open_in_new" />}
+        href="https://pj.org.br"
+        target="_blank"
+      >
         Conhecer a Pastoral da Juventude
       </Link>
     </Stack>

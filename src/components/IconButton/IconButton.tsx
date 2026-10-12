@@ -104,7 +104,7 @@ const StyledIconButton = styled(MuiIconButton, {
         "3px solid color-mix(in srgb, var(--pj-color-border-focus) 55%, transparent)",
       outlineOffset: 2,
     },
-    "& .MuiSvgIcon-root": {
+    "& .material-symbols-outlined": {
       width: size.icon,
       height: size.icon,
       fontSize: size.icon,

@@ -1,12 +1,4 @@
 import {
-  KeyboardArrowLeftRounded,
-  KeyboardArrowRightRounded,
-  LogoutRounded,
-  MenuRounded,
-  PasswordRounded,
-  PersonOutlineRounded,
-} from "@mui/icons-material";
-import {
   Avatar,
   Badge,
   Box,
@@ -40,6 +32,7 @@ import {
   SidebarFooter,
   Topbar,
 } from "./AppShell.styles";
+import { Icon } from "../Icon";
 
 function initialsFor(user: AppShellUser) {
   if (user.initials) return user.initials;
@@ -151,13 +144,13 @@ function AccountMenu({
       <Divider />
       {onProfile && (
         <MenuItem onClick={run(onProfile)}>
-          <PersonOutlineRounded fontSize="small" />
+          <Icon name="person" size="md" />
           Meu perfil
         </MenuItem>
       )}
       {onPasswordChange && (
         <MenuItem onClick={run(onPasswordChange)}>
-          <PasswordRounded fontSize="small" />
+          <Icon name="password" size="md" />
           Alterar senha
         </MenuItem>
       )}
@@ -165,7 +158,7 @@ function AccountMenu({
         <>
           <Divider />
           <MenuItem className="app-shell-sign-out" onClick={run(onSignOut)}>
-            <LogoutRounded fontSize="small" />
+            <Icon name="logout" size="md" />
             Sair
           </MenuItem>
         </>
@@ -240,7 +233,7 @@ export function AppShell({
                 selected={false}
                 type="button"
               >
-                <PersonOutlineRounded />
+                <Icon name="person" />
                 {!compact && (
                   <span className="app-shell-navigation-label">Meu perfil</span>
                 )}
@@ -256,10 +249,10 @@ export function AppShell({
             type="button"
           >
             {compact ? (
-              <KeyboardArrowRightRounded />
+              <Icon name="keyboard_arrow_right" />
             ) : (
               <>
-                <KeyboardArrowLeftRounded />
+                <Icon name="keyboard_arrow_left" />
                 <span className="app-shell-navigation-label">
                   Recolher menu lateral
                 </span>
@@ -279,7 +272,7 @@ export function AppShell({
             aria-label="Abrir menu de navegação"
             onClick={() => setMobileNavigationOpen(true)}
           >
-            <MenuRounded />
+            <Icon name="menu" />
           </MuiIconButton>
         )}
         <Box className="app-shell-header-content">{headerContent}</Box>

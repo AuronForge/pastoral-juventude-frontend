@@ -1,9 +1,9 @@
-import { LockOutlined } from "@mui/icons-material";
 import { Stack } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Button } from "../Button";
 import { PasswordField } from "./PasswordField";
+import { Icon } from "../Icon";
 
 const meta = {
   title: "Design System/Componentes/Campo de senha",
@@ -79,7 +79,7 @@ export const Icones: Story = {
     <Stack spacing={2.5} sx={{ maxWidth: 420 }}>
       <PasswordField
         label="Senha"
-        leadingIcon={<LockOutlined />}
+        leadingIcon={<Icon name="lock" />}
         placeholder="Digite sua senha"
         size="medium"
       />

@@ -1,8 +1,3 @@
-import {
-  CalendarMonthRounded,
-  GroupsRounded,
-  WorkspacePremiumRounded,
-} from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
@@ -26,6 +21,7 @@ import {
 } from "./LoginView.styles";
 
 import { loginFeedback } from "./loginFeedback";
+import { Icon } from "../../components/Icon";
 
 /** Composição da Jornada de Login, compartilhada com as histórias. */
 export function LoginView({
@@ -276,19 +272,19 @@ export function LoginView({
         </Box>
         <Box component="ul" className="login-benefits">
           <li>
-            <CalendarMonthRounded />
+            <Icon name="calendar_month" />
             <Typography variant="bodyMedium">
               Encontros, presença e pendências no mesmo lugar
             </Typography>
           </li>
           <li>
-            <GroupsRounded />
+            <Icon name="groups" />
             <Typography variant="bodyMedium">
               Cada pessoa da pastoral com a sua história
             </Typography>
           </li>
           <li>
-            <WorkspacePremiumRounded />
+            <Icon name="workspace_premium" />
             <Typography variant="bodyMedium">
               Lideranças acompanhadas, não improvisadas
             </Typography>

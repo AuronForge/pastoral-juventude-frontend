@@ -1,10 +1,10 @@
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import { Icon } from "../components/Icon";
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { useAppSelector } from "../app/hooks";
 import { AppShell } from "../components/AppShell";
 
 const navigationItems = [
-  { id: "inicio", icon: <HomeOutlinedIcon />, label: "Início" },
+  { id: "inicio", icon: <Icon name="home" />, label: "Início" },
 ];
 
 function authenticatedPerson(accessToken: string | null) {

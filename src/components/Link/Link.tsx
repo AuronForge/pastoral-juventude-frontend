@@ -32,7 +32,7 @@ const StyledLink = styled(MuiLink, {
     outlineOffset: 2,
     borderRadius: "var(--pj-radius-md)",
   },
-  "& .MuiSvgIcon-root": {
+  "& .material-symbols-outlined": {
     width: "var(--pj-icon-size-sm)",
     height: "var(--pj-icon-size-sm)",
     fontSize: "var(--pj-icon-size-sm)",

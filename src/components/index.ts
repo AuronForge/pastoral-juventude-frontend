@@ -4,6 +4,7 @@ export * from "./Button";
 export * from "./BrandLockup";
 export * from "./Checkbox";
 export * from "./DatePicker";
+export * from "./Icon";
 export * from "./IconButton";
 export * from "./Link";
 export * from "./LoadingIndicator";

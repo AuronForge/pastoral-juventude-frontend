@@ -1,12 +1,12 @@
-import { DeleteOutlined, EditOutlined } from "@mui/icons-material";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
 import { IconButton } from "./IconButton";
+import { Icon } from "../Icon";
 
 describe("IconButton", () => {
   it("expõe uma ação nomeada", () => {
-    render(<IconButton icon={<EditOutlined />} label="Editar encontro" />);
+    render(<IconButton icon={<Icon name="edit" />} label="Editar encontro" />);
 
     expect(
       screen.getByRole("button", { name: "Editar encontro" }),
@@ -18,7 +18,9 @@ describe("IconButton", () => {
     ["medium", "var(--space-extended-44px)"],
     ["large", "var(--pj-space-8)"],
   ] as const)("mapeia o tamanho %s", (size, control) => {
-    render(<IconButton icon={<EditOutlined />} label="Editar" size={size} />);
+    render(
+      <IconButton icon={<Icon name="edit" />} label="Editar" size={size} />,
+    );
 
     expect(screen.getByRole("button")).toHaveStyle({
       width: control,
@@ -31,7 +33,11 @@ describe("IconButton", () => {
     "aceita a variante %s do catálogo",
     (variant) => {
       render(
-        <IconButton icon={<EditOutlined />} label="Editar" variant={variant} />,
+        <IconButton
+          icon={<Icon name="edit" />}
+          label="Editar"
+          variant={variant}
+        />,
       );
 
       expect(screen.getByRole("button")).toBeInTheDocument();
@@ -39,7 +45,7 @@ describe("IconButton", () => {
   );
 
   it("informa andamento e bloqueia a ação ao carregar", () => {
-    render(<IconButton icon={<EditOutlined />} label="Salvar" loading />);
+    render(<IconButton icon={<Icon name="edit" />} label="Salvar" loading />);
 
     const button = screen.getByRole("button", { name: "Salvar" });
     expect(button).toBeDisabled();
@@ -51,7 +57,7 @@ describe("IconButton", () => {
     render(
       <IconButton
         disabled
-        icon={<DeleteOutlined />}
+        icon={<Icon name="delete" />}
         label="Excluir encontro"
       />,
     );
@@ -68,7 +74,7 @@ describe("IconButton", () => {
       <IconButton
         ref={ref}
         data-testid="botao-de-edicao"
-        icon={<EditOutlined />}
+        icon={<Icon name="edit" />}
         label="Editar encontro"
       />,
     );
@@ -82,13 +88,13 @@ describe("IconButton", () => {
     render(
       <>
         <IconButton
-          icon={<EditOutlined />}
+          icon={<Icon name="edit" />}
           label="Editar"
           size="small"
           onClick={onClick}
         />
-        <IconButton icon={<EditOutlined />} label="Indisponível" disabled />
-        <IconButton icon={<EditOutlined />} label="Carregando" loading />
+        <IconButton icon={<Icon name="edit" />} label="Indisponível" disabled />
+        <IconButton icon={<Icon name="edit" />} label="Carregando" loading />
         <button type="button">Próxima ação</button>
       </>,
     );
