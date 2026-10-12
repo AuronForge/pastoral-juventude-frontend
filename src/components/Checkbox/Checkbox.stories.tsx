@@ -6,6 +6,14 @@ const meta = {
   title: "Design System/Componentes/Caixa de seleção",
   component: Checkbox,
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Checkbox do Figma: controle para selecionar múltiplas opções, confirmar uma condição ou representar seleção parcial. Caixa visual de 20 px e área de interação de 44 px. Indeterminado representa somente seleção parcial de um grupo. O label deve explicar a opção; Sem label é reservado a contextos com significado já explícito.",
+      },
+    },
+  },
   args: { label: "Registrar presença" },
   argTypes: {
     checked: { control: "boolean" },
@@ -36,6 +44,16 @@ export const Estados: Story = {
         disabled
         label="Parcial, sem permissão para editar"
       />
+      <Checkbox
+        label="Aceito participar do encontro"
+        errorMessage="Confirme a participação para continuar."
+      />
+      <Checkbox
+        checked
+        label="Receber lembretes"
+        hint="Enviados um dia antes do encontro."
+      />
+      <Checkbox aria-label="Selecionar todos" />
     </Stack>
   ),
 };
@@ -45,8 +63,7 @@ export const RotuloLongo: Story = {
   render: () => (
     <Stack spacing={1} sx={{ maxWidth: 420 }}>
       <Typography variant="bodySmall" color="text.secondary">
-        O rótulo inteiro é clicável; quando quebra, o componente mantém o
-        respiro vertical do alvo de toque.
+        O rótulo inteiro é clicável e pode quebrar em várias linhas.
       </Typography>
       <Checkbox label="Confirmo que li e aceito os termos de participação na Pastoral da Juventude." />
     </Stack>
