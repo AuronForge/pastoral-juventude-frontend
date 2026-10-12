@@ -5,7 +5,7 @@ import {
   PasswordRounded,
   WorkspacePremiumRounded,
 } from "@mui/icons-material";
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
   Alert,
@@ -20,7 +20,7 @@ import {
   createCommunicationError,
   type ApiErrorDetails,
 } from "../../shared/api/apiError";
-import { breakpointTokens } from "../../theme/tokens";
+import { pendingLayoutTokens } from "../../theme/tokens";
 import type { RecoveryRequest, RecoveryResponse } from "./authenticationApi";
 import {
   JourneyAside,
@@ -85,8 +85,9 @@ export function PasswordRecoveryView({
   initialError,
 }: PasswordRecoveryViewProps) {
   const id = useId();
-  const theme = useTheme();
-  const tablet = useMediaQuery(`(min-width: ${breakpointTokens.tablet}px)`);
+  const tablet = useMediaQuery(
+    `(min-width: ${pendingLayoutTokens.breakpoints.tablet}px)`,
+  );
   const [values, setValues] = useState({
     nome: "",
     email: "",
@@ -191,17 +192,14 @@ export function PasswordRecoveryView({
   return (
     <JourneyCanvas
       sx={{
-        [`@media (min-width: ${breakpointTokens.desktop}px)`]: {
+        [`@media (min-width: ${pendingLayoutTokens.breakpoints.desktop}px)`]: {
           minHeight: "max(1060px, 100svh)",
         },
       }}
     >
       <LoginPanel aria-labelledby={`${id}-title`}>
         <Box sx={{ alignSelf: "flex-start" }}>
-          <BrandLockup
-            size="compact"
-            tone={theme.palette.mode === "dark" ? "on-dark" : "on-light"}
-          />
+          <BrandLockup size="compact" tone="on-light" />
         </Box>
         <LoginForm
           noValidate
@@ -215,7 +213,7 @@ export function PasswordRecoveryView({
               mt: "28px",
               "& .MuiFormHelperText-root": { marginTop: 0 },
             },
-            "& .login-submit": { mt: "var(--spacing-2xl)" },
+            "& .login-submit": { mt: "var(--pj-space-5)" },
           }}
         >
           {result ? (
@@ -224,12 +222,12 @@ export function PasswordRecoveryView({
                 sx={{
                   width: 48,
                   height: 48,
-                  borderRadius: "var(--radius-pill)",
-                  bgcolor: "var(--status-success-subtle)",
-                  color: "var(--status-success-text)",
+                  borderRadius: "var(--pj-radius-full)",
+                  bgcolor: "var(--pj-color-feedback-success-soft)",
+                  color: "var(--pj-color-feedback-success)",
                   display: "grid",
                   placeItems: "center",
-                  mb: "var(--spacing-lg)",
+                  mb: "var(--pj-space-4)",
                 }}
               >
                 <PasswordRounded aria-hidden />
@@ -237,7 +235,7 @@ export function PasswordRecoveryView({
               <Typography
                 id={`${id}-title`}
                 component="h1"
-                variant="displayLarge"
+                variant="headingLarge"
                 ref={heading}
                 tabIndex={-1}
               >
@@ -245,30 +243,28 @@ export function PasswordRecoveryView({
               </Typography>
               <Typography
                 variant="bodyMedium"
-                sx={{ color: "var(--text-secondary)" }}
+                sx={{ color: "var(--pj-color-text-secondary)" }}
               >
                 Ela vale por 15 minutos e só serve para iniciar a troca
                 obrigatória de senha — guarde-a agora.
               </Typography>
               <Box
                 sx={{
-                  mt: "var(--spacing-lg)",
-                  p: "var(--spacing-lg)",
-                  bgcolor: "var(--bg-surface-alt)",
-                  border: "1px solid var(--border-default)",
-                  borderRadius: "var(--radius-md)",
+                  mt: "var(--pj-space-4)",
+                  p: "var(--pj-space-4)",
+                  bgcolor: "var(--pj-color-bg-canvas)",
+                  border: "1px solid var(--pj-color-border-default)",
+                  borderRadius: "var(--pj-radius-lg)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  gap: "var(--spacing-sm)",
+                  gap: "var(--pj-space-2)",
                 }}
               >
                 <Typography
                   component="code"
-                  variant="bodyMedium"
+                  variant="title"
                   sx={{
-                    fontSize: "var(--font-size-xl)",
-                    fontWeight: 600,
                     letterSpacing: "2px",
                     overflowWrap: "anywhere",
                   }}
@@ -287,16 +283,16 @@ export function PasswordRecoveryView({
                 />
               </Box>
               <Typography
-                variant="caption"
+                variant="bodySmall"
                 sx={{
                   display: "block",
-                  mt: "var(--spacing-sm)",
-                  color: "var(--text-secondary)",
+                  mt: "var(--pj-space-2)",
+                  color: "var(--pj-color-text-secondary)",
                 }}
               >
                 Copie agora — ela some ao sair desta tela.
               </Typography>
-              <Typography role="status" variant="caption">
+              <Typography role="status" variant="bodySmall">
                 {copyFeedback}
               </Typography>
               <Button
@@ -312,7 +308,7 @@ export function PasswordRecoveryView({
                 size="large"
                 fullWidth
                 disabled={seconds > 0}
-                sx={{ mt: "var(--spacing-md)" }}
+                sx={{ mt: "var(--pj-space-3)" }}
                 onClick={() => {
                   setResult(undefined);
                   setCopyFeedback("");
@@ -329,7 +325,7 @@ export function PasswordRecoveryView({
               <Typography
                 id={`${id}-title`}
                 component="h1"
-                variant="displayLarge"
+                variant="headingLarge"
                 ref={heading}
                 tabIndex={-1}
               >
@@ -337,7 +333,7 @@ export function PasswordRecoveryView({
               </Typography>
               <Typography
                 variant="bodyMedium"
-                sx={{ color: "var(--text-secondary)" }}
+                sx={{ color: "var(--pj-color-text-secondary)" }}
               >
                 Para confirmar que é você, informe os quatro dados do seu
                 cadastro. Sua senha temporária aparece na tela, se os dados
@@ -423,19 +419,22 @@ export function PasswordRecoveryView({
                 fullWidth
                 disabled={busy}
                 onClick={onBack}
-                sx={{ mt: "var(--spacing-md)" }}
+                sx={{ mt: "var(--pj-space-3)" }}
               >
                 Voltar para entrar
               </Button>
             </>
           )}
         </LoginForm>
-        <Typography variant="caption" sx={{ color: "var(--text-secondary)" }}>
+        <Typography
+          variant="bodySmall"
+          sx={{ color: "var(--pj-color-text-secondary)" }}
+        >
           Problemas para entrar? Fale com o coordenador da sua pastoral.
         </Typography>
       </LoginPanel>
       <JourneyAside aria-label="Sobre a Pastoral da Juventude">
-        <Typography className="login-overline" variant="overline">
+        <Typography className="login-overline" variant="labelLarge">
           Pastoral da Juventude
         </Typography>
         <Box>

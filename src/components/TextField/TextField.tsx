@@ -4,6 +4,7 @@ import {
   styled,
 } from "@mui/material";
 import { forwardRef } from "react";
+import { typographyStyle } from "../../theme/tokens";
 import type { TextFieldProps, TextFieldSize } from "./TextField.types";
 
 type OwnerState = { fieldSize: TextFieldSize; readOnly: boolean };
@@ -13,59 +14,69 @@ const StyledTextField = styled(MuiTextField, {
 })<OwnerState>(({ fieldSize, readOnly }) => ({
   width: "100%",
   "& .MuiInputLabel-root": {
-    color: "var(--text-secondary)",
-    fontSize: "var(--font-size-sm)",
-    fontWeight: 500,
-    lineHeight: "var(--line-height-sm)",
+    color: "var(--pj-color-text-secondary)",
+    ...typographyStyle("labelMedium"),
     position: "static",
     transform: "none",
-    marginBottom: "var(--spacing-xs)",
+    marginBottom: "var(--pj-space-1)",
   },
-  "& .MuiInputLabel-root.Mui-disabled": { color: "var(--text-disabled)" },
+  "& .MuiInputLabel-root.Mui-disabled": {
+    color: "var(--pj-color-text-disabled)",
+  },
   "& .MuiFormHelperText-root": {
-    color: "var(--text-secondary)",
-    fontSize: "var(--font-size-xs)",
-    lineHeight: "var(--line-height-xs)",
-    margin: "var(--spacing-xs) 0 0",
-    minHeight: "var(--line-height-xs)",
+    color: "var(--pj-color-text-secondary)",
+    ...typographyStyle("bodySmall"),
+    margin: "var(--pj-space-1) 0 0",
+    minHeight: typographyStyle("bodySmall").lineHeight,
   },
-  "& .MuiFormHelperText-root.Mui-error": { color: "var(--status-danger-text)" },
+  "& .MuiFormHelperText-root.Mui-error": {
+    color: "var(--pj-color-text-danger)",
+  },
   "& .MuiOutlinedInput-root": {
     minHeight:
       fieldSize === "large"
-        ? "var(--size-control-lg)"
-        : "var(--size-control-md)",
-    borderRadius: "var(--radius-md)",
-    backgroundColor: readOnly ? "var(--bg-surface-alt)" : "var(--bg-surface)",
-    color: "var(--text-primary)",
-    fontSize: "var(--font-size-md)",
-    lineHeight: "var(--line-height-md)",
+        ? "var(--space-extended-44px)"
+        : "var(--space-extended-40px)",
+    borderRadius: "var(--pj-radius-lg)",
+    backgroundColor: readOnly
+      ? "var(--pj-color-bg-canvas)"
+      : "var(--pj-color-bg-surface)",
+    color: "var(--pj-color-text-primary)",
+    ...typographyStyle("bodyMedium"),
     "& fieldset": {
-      borderColor: readOnly ? "var(--border-subtle)" : "var(--border-strong)",
+      borderColor: readOnly
+        ? "var(--pj-color-border-default)"
+        : "var(--pj-color-border-default)",
     },
     "&:hover fieldset": {
-      borderColor: readOnly ? "var(--border-subtle)" : "var(--border-strong)",
+      borderColor: readOnly
+        ? "var(--pj-color-border-default)"
+        : "var(--pj-color-border-default)",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "var(--border-focus)",
-      borderWidth: "var(--border-thick)",
+      borderColor: "var(--pj-color-border-focus)",
+      borderWidth: "var(--pj-border-width-emphasis)",
     },
     "&.Mui-error fieldset": {
-      borderColor: "var(--status-danger-text)",
-      borderWidth: "var(--border-thick)",
+      borderColor: "var(--pj-color-text-danger)",
+      borderWidth: "var(--pj-border-width-emphasis)",
     },
-    "&.Mui-disabled": { backgroundColor: "var(--bg-surface-alt)" },
-    "&.Mui-disabled fieldset": { borderColor: "var(--border-default)" },
-    "&.Mui-disabled input": { WebkitTextFillColor: "var(--text-disabled)" },
+    "&.Mui-disabled": { backgroundColor: "var(--pj-color-bg-canvas)" },
+    "&.Mui-disabled fieldset": {
+      borderColor: "var(--pj-color-border-default)",
+    },
+    "&.Mui-disabled input": {
+      WebkitTextFillColor: "var(--pj-color-text-disabled)",
+    },
   },
-  "& .MuiOutlinedInput-input": { padding: "0 var(--spacing-md)" },
+  "& .MuiOutlinedInput-input": { padding: "0 var(--pj-space-3)" },
   "& .MuiOutlinedInput-input::placeholder": {
-    color: "var(--text-placeholder)",
+    color: "var(--pj-color-text-secondary)",
     opacity: 1,
   },
   "& .MuiInputAdornment-root": {
     color: "inherit",
-    marginLeft: "var(--spacing-md)",
+    marginLeft: "var(--pj-space-3)",
   },
 }));
 

@@ -18,59 +18,74 @@ const StyledIconButton = styled(MuiIconButton, {
 })<IconButtonStyleOwnerState>(({ buttonSize, buttonVariant }) => {
   const size =
     buttonSize === "small"
-      ? { control: "var(--size-touch-min)", icon: "var(--size-icon-sm)" }
+      ? {
+          control: "var(--space-extended-44px)",
+          icon: "var(--pj-icon-size-sm)",
+        }
       : buttonSize === "medium"
-        ? { control: "var(--size-touch-min)", icon: "var(--size-icon-md)" }
-        : { control: "var(--spacing-5xl)", icon: "var(--size-icon-lg)" };
+        ? {
+            control: "var(--space-extended-44px)",
+            icon: "var(--pj-icon-size-md)",
+          }
+        : { control: "var(--pj-space-8)", icon: "var(--pj-icon-size-lg)" };
 
   const variant =
     buttonVariant === "primary"
       ? {
-          backgroundColor: "var(--primary-solid)",
-          color: "var(--text-on-primary)",
-          "&:hover": { backgroundColor: "var(--primary-solid-hover)" },
-          "&:active": { backgroundColor: "var(--primary-solid-pressed)" },
+          backgroundColor: "var(--pj-color-action-primary)",
+          color: "var(--pj-color-text-inverse)",
+          "&:hover": {
+            backgroundColor: "var(--pj-color-action-primary-hover)",
+          },
+          "&:active": {
+            backgroundColor: "var(--pj-color-action-primary-hover)",
+          },
           "&.Mui-disabled": {
-            backgroundColor: "var(--status-neutral-subtle)",
-            color: "var(--text-disabled)",
+            backgroundColor: "var(--pj-color-feedback-neutral-soft)",
+            color: "var(--pj-color-text-disabled)",
           },
         }
       : buttonVariant === "secondary"
         ? {
-            backgroundColor: "var(--bg-surface)",
-            border: "var(--border-thin) solid var(--border-strong)",
-            color: "var(--primary-text)",
-            "&:hover": { backgroundColor: "var(--bg-surface-alt)" },
-            "&:active": { backgroundColor: "var(--bg-surface-sunken)" },
+            backgroundColor: "var(--pj-color-bg-surface)",
+            border:
+              "var(--pj-border-width-default) solid var(--pj-color-border-default)",
+            color: "var(--pj-color-action-primary)",
+            "&:hover": { backgroundColor: "var(--pj-color-bg-canvas)" },
+            "&:active": { backgroundColor: "var(--pj-color-bg-canvas)" },
             "&.Mui-disabled": {
-              backgroundColor: "var(--bg-surface)",
-              borderColor: "var(--border-default)",
-              color: "var(--text-disabled)",
+              backgroundColor: "var(--pj-color-bg-surface)",
+              borderColor: "var(--pj-color-border-default)",
+              color: "var(--pj-color-text-disabled)",
             },
           }
         : buttonVariant === "tertiary"
           ? {
               backgroundColor: "transparent",
-              color: "var(--primary-text)",
-              "&:hover": { backgroundColor: "var(--primary-subtle)" },
-              "&:active": { backgroundColor: "var(--primary-border)" },
+              color: "var(--pj-color-action-primary)",
+              "&:hover": {
+                backgroundColor: "var(--pj-color-feedback-information-soft)",
+              },
+              "&:active": {
+                backgroundColor: "var(--pj-color-feedback-information-soft)",
+              },
               "&.Mui-disabled": {
                 backgroundColor: "transparent",
-                color: "var(--text-disabled)",
+                color: "var(--pj-color-text-disabled)",
               },
             }
           : {
-              backgroundColor: "var(--status-danger-solid)",
-              color: "var(--text-on-primary)",
+              backgroundColor: "var(--pj-color-action-danger)",
+              color: "var(--pj-color-text-inverse)",
               "&:hover": {
-                backgroundColor: "var(--status-danger-solid-hover)",
+                backgroundColor: "var(--pj-color-action-danger-hover)",
               },
               "&:active": {
-                backgroundColor: "var(--status-danger-solid-hover)",
+                backgroundColor: "var(--pj-color-action-danger-hover)",
               },
               "&.Mui-disabled": {
-                backgroundColor: "var(--status-neutral-subtle)",
-                color: "var(--text-disabled)",
+                backgroundColor: "var(--pj-color-feedback-neutral-soft)",
+                color: "var(--pj-color-text-disabled)",
               },
             };
 
@@ -79,14 +94,14 @@ const StyledIconButton = styled(MuiIconButton, {
     height: size.control,
     flexShrink: 0,
     padding: 0,
-    borderRadius: "var(--radius-md)",
+    borderRadius: "var(--pj-radius-lg)",
     transition: "background-color 120ms ease",
     ...variant,
     "&:hover": { ...variant["&:hover"] },
     "&:active": { ...variant["&:active"] },
     "&.Mui-focusVisible": {
       outline:
-        "3px solid color-mix(in srgb, var(--border-focus) 55%, transparent)",
+        "3px solid color-mix(in srgb, var(--pj-color-border-focus) 55%, transparent)",
       outlineOffset: 2,
     },
     "& .MuiSvgIcon-root": {

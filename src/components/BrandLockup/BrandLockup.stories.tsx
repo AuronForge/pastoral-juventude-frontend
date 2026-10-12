@@ -40,7 +40,9 @@ export const Playground: Story = {
       sx={{
         display: "inline-flex",
         bgcolor:
-          args.tone === "on-dark" ? "var(--bg-inverse)" : "var(--bg-canvas)",
+          args.tone === "on-dark"
+            ? "var(--color-bg-access)"
+            : "var(--pj-color-bg-canvas)",
         p: 4,
       }}
     >
@@ -52,10 +54,10 @@ export const Playground: Story = {
 export const Fundos: Story = {
   render: () => (
     <Stack direction="row" sx={{ flexWrap: "wrap", gap: 3 }}>
-      <Box sx={{ bgcolor: "var(--bg-canvas)", p: 4 }}>
+      <Box sx={{ bgcolor: "var(--pj-color-bg-canvas)", p: 4 }}>
         <BrandLockup tone="on-light" />
       </Box>
-      <Box sx={{ bgcolor: "var(--bg-inverse)", p: 4 }}>
+      <Box sx={{ bgcolor: "var(--color-bg-access)", p: 4 }}>
         <BrandLockup tone="on-dark" />
       </Box>
     </Stack>

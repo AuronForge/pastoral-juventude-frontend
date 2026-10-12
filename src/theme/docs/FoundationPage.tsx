@@ -1,5 +1,6 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
+import { pendingLayoutTokens } from "../tokens";
 
 interface FoundationPageProps extends PropsWithChildren {
   description: string;
@@ -18,20 +19,20 @@ export function FoundationPage({
       component="main"
       sx={{
         minHeight: "100vh",
-        bgcolor: "var(--bg-canvas)",
-        color: "var(--text-primary)",
+        bgcolor: "var(--pj-color-bg-canvas)",
+        color: "var(--pj-color-text-primary)",
         p: { xs: 3, md: 5 },
       }}
     >
       <Stack
         spacing={5}
-        sx={{ maxWidth: "var(--size-content-max)", mx: "auto" }}
+        sx={{ maxWidth: pendingLayoutTokens.contentMax, mx: "auto" }}
       >
         <Stack spacing={1.5} component="header" sx={{ maxWidth: 760 }}>
-          <Typography variant="overline" color="primary.main">
+          <Typography variant="labelLarge" color="primary.main">
             {eyebrow}
           </Typography>
-          <Typography variant="displayLarge" component="h1">
+          <Typography variant="headingLarge" component="h1">
             {title}
           </Typography>
           <Typography variant="bodyLarge" color="text.secondary">
@@ -59,10 +60,11 @@ export function FoundationSection({
   return (
     <Paper
       component="section"
-      elevation={2}
+      elevation={0}
       sx={{
-        border: "var(--border-thin) solid var(--border-default)",
-        borderRadius: "var(--radius-lg)",
+        border:
+          "var(--pj-border-width-default) solid var(--pj-color-border-default)",
+        borderRadius: "var(--pj-radius-lg)",
         p: { xs: 3, md: 4 },
       }}
     >
@@ -76,7 +78,7 @@ export function FoundationSection({
           }}
         >
           <Box>
-            <Typography variant="headingLarge" component="h2">
+            <Typography variant="headingSmall" component="h2">
               {title}
             </Typography>
             {description ? (
@@ -103,9 +105,9 @@ export function TokenCode({ children }: PropsWithChildren) {
       component="code"
       sx={{
         display: "inline-block",
-        borderRadius: "var(--radius-xs)",
-        bgcolor: "var(--bg-surface-sunken)",
-        color: "var(--text-primary)",
+        borderRadius: "var(--pj-radius-sm)",
+        bgcolor: "var(--pj-color-bg-canvas)",
+        color: "var(--pj-color-text-primary)",
         fontFamily: "ui-monospace, SFMono-Regular, Consolas, monospace",
         fontSize: 12,
         lineHeight: "16px",

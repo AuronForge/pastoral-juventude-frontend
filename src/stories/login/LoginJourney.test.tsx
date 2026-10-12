@@ -27,13 +27,10 @@ const problem = (status: number) =>
     mensagem: "Usuário inexistente",
     endpoint: "/api/v1/autenticacao/login",
   });
-function setup(
-  props: Partial<LoginJourneyProps> = {},
-  mode: "light" | "dark" = "light",
-) {
+function setup(props: Partial<LoginJourneyProps> = {}) {
   const authenticate = vi.fn().mockResolvedValue(success);
   render(
-    <ThemeProvider theme={createAppTheme(mode)}>
+    <ThemeProvider theme={createAppTheme()}>
       <LoginJourney authenticate={authenticate} {...props} />
     </ThemeProvider>,
   );
@@ -193,11 +190,11 @@ describe("Jornada de Login no Storybook", () => {
     expect(screen.queryByLabelText(/^Senha/)).not.toBeInTheDocument();
   });
 
-  it("mantém recuperação indisponível e usa a marca oficial no tema escuro", async () => {
-    const { user } = setup({}, "dark");
+  it("mantém recuperação indisponível e usa a marca oficial", async () => {
+    const { user } = setup({});
     expect(screen.getByRole("img", { name: "PastorApp" })).toHaveAttribute(
       "src",
-      expect.stringContaining("pastorapp-on-dark.svg"),
+      expect.stringContaining("pastorapp-on-light.svg"),
     );
     const link = screen.getByRole("link", { name: /Esqueci minha senha/ });
     expect(link).toHaveAttribute("aria-disabled", "true");

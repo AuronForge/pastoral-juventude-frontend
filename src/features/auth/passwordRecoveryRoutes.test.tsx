@@ -31,7 +31,7 @@ it("recuperação é pública, limpa estado sem guardar segredo e volta ao login
   });
   render(
     <Provider store={store}>
-      <ThemeProvider theme={createAppTheme("light")}>
+      <ThemeProvider theme={createAppTheme()}>
         <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,

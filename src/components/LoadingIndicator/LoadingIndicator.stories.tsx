@@ -44,7 +44,7 @@ export const TamanhosETons: Story = {
   render: () => (
     <Stack spacing={3}>
       <Box>
-        <Typography variant="headingSmall" component="h2" sx={{ mb: 2 }}>
+        <Typography variant="title" component="h2" sx={{ mb: 2 }}>
           Padrão
         </Typography>
         <Stack direction="row" spacing={3} sx={{ alignItems: "center" }}>
@@ -54,7 +54,7 @@ export const TamanhosETons: Story = {
                 label={`Carregando no tamanho ${size}`}
                 size={size}
               />
-              <Typography variant="caption">{size}</Typography>
+              <Typography variant="bodySmall">{size}</Typography>
             </Stack>
           ))}
         </Stack>
@@ -62,13 +62,13 @@ export const TamanhosETons: Story = {
 
       <Box
         sx={{
-          bgcolor: "var(--primary-solid)",
-          color: "var(--text-on-primary)",
-          borderRadius: "var(--radius-md)",
+          bgcolor: "var(--pj-color-action-primary)",
+          color: "var(--pj-color-text-inverse)",
+          borderRadius: "var(--pj-radius-lg)",
           p: 3,
         }}
       >
-        <Typography variant="headingSmall" component="h2" sx={{ mb: 2 }}>
+        <Typography variant="title" component="h2" sx={{ mb: 2 }}>
           Sobre sólido
         </Typography>
         <Stack direction="row" spacing={3} sx={{ alignItems: "center" }}>
@@ -79,7 +79,7 @@ export const TamanhosETons: Story = {
                 size={size}
                 tone="on-solid"
               />
-              <Typography variant="caption">{size}</Typography>
+              <Typography variant="bodySmall">{size}</Typography>
             </Stack>
           ))}
         </Stack>

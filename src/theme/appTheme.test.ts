@@ -2,7 +2,13 @@ import { appTheme } from "./appTheme";
 import {
   designSystemCssVariables,
   elevationTokens,
-  semanticColors,
+  geometryTokens,
+  iconTokens,
+  layoutTokens,
+  primitiveColorTokens,
+  resolveColor,
+  semanticColorTokens,
+  spacingTokens,
   typographyTokens,
 } from "./tokens";
 
@@ -32,72 +38,86 @@ function contrastRatio(foreground: string, background: string) {
 }
 
 describe("design system", () => {
-  it("espelha os 179 tokens do Figma em variáveis CSS", () => {
-    expect(Object.keys(designSystemCssVariables.light)).toHaveLength(179);
-    expect(Object.keys(designSystemCssVariables.dark)).toHaveLength(179);
-    expect(designSystemCssVariables.light["--primary-solid"]).toBe("#274c77");
-    expect(designSystemCssVariables.dark["--primary-solid"]).toBe("#3a6394");
-    expect(designSystemCssVariables.light["--font-family-display"]).toContain(
-      "Fraunces",
+  it("publica as variáveis do Figma com o code syntax definido", () => {
+    const expected =
+      primitiveColorTokens.length +
+      semanticColorTokens.length +
+      spacingTokens.length +
+      geometryTokens.length +
+      iconTokens.length +
+      layoutTokens.length;
+
+    expect(Object.keys(designSystemCssVariables)).toHaveLength(expected);
+    expect(designSystemCssVariables["--pj-color-blue-600"]).toBe("#1f4e5f");
+    expect(designSystemCssVariables["--pj-color-action-primary"]).toBe(
+      "var(--pj-color-blue-600)",
+    );
+    expect(designSystemCssVariables["--color-tooltip-text"]).toBe(
+      "var(--pj-color-text-inverse)",
+    );
+    expect(designSystemCssVariables["--pj-space-4"]).toBe("16px");
+    expect(designSystemCssVariables["--pj-radius-md"]).toBe("8px");
+    expect(designSystemCssVariables["--pj-layout-sidebar-expanded"]).toBe(
+      "280px",
     );
   });
 
-  it("configura os modos claro e escuro no MUI", () => {
-    expect(appTheme.defaultColorScheme).toBe("light");
-    expect(appTheme.colorSchemes.light?.palette.primary.main).toBe("#274c77");
-    expect(appTheme.colorSchemes.dark?.palette.primary.main).toBe("#3a6394");
-    expect(appTheme.colorSchemes.light?.palette.secondary.contrastText).toBe(
-      "#2b2724",
+  it("resolve os aliases semânticos até o primitivo", () => {
+    expect(resolveColor("color/action/primary")).toBe("#1f4e5f");
+    expect(resolveColor("color/tooltip/text")).toBe("#fffdf9");
+    expect(resolveColor("color/feedback/attention-soft")).toBe(
+      "rgba(244, 180, 0, 0.12)",
     );
   });
 
-  it("configura tipografia, breakpoints, raios e elevações do Figma", () => {
-    expect(appTheme.breakpoints.values).toEqual({
-      xs: 0,
-      sm: 360,
-      md: 768,
-      lg: 1200,
-      xl: 1440,
+  it("configura somente o modo claro no MUI", () => {
+    expect(appTheme.palette.mode).toBe("light");
+    expect(appTheme.colorSchemes.dark).toBeUndefined();
+    expect(appTheme.palette.primary.main).toBe("#1f4e5f");
+    expect(appTheme.palette.error.main).toBe("#b3261e");
+    expect(appTheme.palette.background.default).toBe("#f7f1e8");
+  });
+
+  it("configura Roboto, os 11 estilos, raio e elevações do Figma", () => {
+    expect(appTheme.typography.fontFamily).toContain("Roboto");
+    expect(Object.keys(typographyTokens)).toHaveLength(11);
+    expect(appTheme.typography.labelMedium).toMatchObject({
+      fontSize: 12,
+      lineHeight: "16px",
+      fontWeight: 500,
     });
-    expect(appTheme.shape.borderRadius).toBe(12);
-    expect(appTheme.motion.reducedMotion).toBe("system");
-    expect(appTheme.typography.displayMedium).toEqual(
-      typographyTokens.displayMedium,
-    );
-    expect(appTheme.shadows[2]).toBe(elevationTokens.card);
-    expect(appTheme.shadows[4]).toBe(elevationTokens.modal);
+    expect(appTheme.typography.display).toMatchObject({
+      fontSize: 40,
+      lineHeight: "48px",
+      fontWeight: 700,
+    });
+    expect(appTheme.shape.borderRadius).toBe(8);
+    expect(appTheme.shadows[1]).toBe(elevationTokens.small);
+    expect(appTheme.shadows[2]).toBe(elevationTokens.medium);
+    expect(appTheme.shadows[3]).toBe(elevationTokens.large);
+    expect(appTheme.shadows[24]).toBe(elevationTokens.large);
   });
 
-  it.each(Object.entries(semanticColors))(
-    "mantém contraste AA nas combinações textuais críticas do modo %s",
-    (_mode, colors) => {
-      const pairs = [
-        [colors.text.primary, colors.bg.canvas],
-        [colors.text.secondary, colors.bg.canvas],
-        [colors.text.placeholder, colors.bg.surface],
-        [colors.text.link, colors.bg.canvas],
-        [colors.text.onPrimary, colors.primary.solid],
-        [colors.accent.text, colors.accent.subtle],
-        [colors.status.success.text, colors.status.success.subtle],
-        [colors.status.warning.text, colors.status.warning.subtle],
-        [colors.status.danger.text, colors.status.danger.subtle],
-        [colors.status.neutral.text, colors.status.neutral.subtle],
-        [colors.status.info.text, colors.status.info.subtle],
-        [colors.status.success.onSolid, colors.status.success.solid],
-        [colors.status.warning.onSolid, colors.status.warning.solid],
-        [colors.status.danger.onSolid, colors.status.danger.solid],
-        [colors.status.neutral.onSolid, colors.status.neutral.solid],
-        [colors.status.info.onSolid, colors.status.info.solid],
-        [colors.sidebar.text, colors.sidebar.bg],
-        [colors.sidebar.textMuted, colors.sidebar.bg],
-        [colors.sidebar.textActive, colors.sidebar.itemActiveBg],
-      ] as const;
+  it("mantém contraste AA nas combinações textuais usadas pelos componentes do Figma", () => {
+    const pairs = [
+      ["color/text/primary", "color/bg/canvas"],
+      ["color/text/secondary", "color/bg/canvas"],
+      ["color/text/secondary", "color/bg/surface"],
+      ["color/action/primary", "color/bg/surface"],
+      ["color/text/inverse", "color/action/primary"],
+      ["color/text/inverse", "color/action/primary-hover"],
+      ["color/text/inverse", "color/action/danger"],
+      ["color/text/inverse", "color/action/danger-hover"],
+      ["color/text/danger", "color/bg/surface"],
+      ["color/feedback/success", "color/bg/surface"],
+      ["color/feedback/attention", "color/bg/surface"],
+      ["color/text/inverse", "color/bg/access"],
+    ] as const;
 
-      for (const [foreground, background] of pairs) {
-        expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(
-          4.5,
-        );
-      }
-    },
-  );
+    for (const [foreground, background] of pairs) {
+      expect(
+        contrastRatio(resolveColor(foreground), resolveColor(background)),
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
 });

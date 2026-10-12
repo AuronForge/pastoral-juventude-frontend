@@ -3,7 +3,7 @@ import {
   GroupsRounded,
   WorkspacePremiumRounded,
 } from "@mui/icons-material";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
   Alert,
@@ -39,7 +39,6 @@ export function LoginView({
   onPasswordChangeRequired,
 }: LoginViewProps) {
   const id = useId();
-  const theme = useTheme();
   const [email, setEmail] = useState(initialCredentials.email);
   const [password, setPassword] = useState(
     initialError?.status === 401 ? "" : initialCredentials.senha,
@@ -117,10 +116,7 @@ export function LoginView({
     <JourneyCanvas>
       <LoginPanel aria-labelledby={`${id}-title`}>
         <Box sx={{ alignSelf: "flex-start" }}>
-          <BrandLockup
-            size="compact"
-            tone={theme.palette.mode === "dark" ? "on-dark" : "on-light"}
-          />
+          <BrandLockup size="compact" tone="on-light" />
         </Box>
         {destination ? (
           <Box>
@@ -129,7 +125,7 @@ export function LoginView({
               tabIndex={-1}
               id={`${id}-title`}
               component="h1"
-              variant="displayLarge"
+              variant="headingLarge"
             >
               {destination === "passwordChangeRequired"
                 ? "Altere sua senha"
@@ -138,7 +134,7 @@ export function LoginView({
             <Typography
               role="status"
               variant="bodyMedium"
-              sx={{ mt: "var(--spacing-lg)" }}
+              sx={{ mt: "var(--pj-space-4)" }}
             >
               {destination === "passwordChangeRequired"
                 ? "Para continuar seu primeiro acesso, é necessário alterar a senha."
@@ -154,13 +150,13 @@ export function LoginView({
             <Typography
               component="h1"
               id={`${id}-title`}
-              variant="displayLarge"
+              variant="headingLarge"
             >
               Entrar
             </Typography>
             <Typography
               variant="bodyMedium"
-              sx={{ color: "var(--text-secondary)" }}
+              sx={{ color: "var(--pj-color-text-secondary)" }}
             >
               Use o e-mail cadastrado na sua pastoral.
             </Typography>
@@ -260,12 +256,15 @@ export function LoginView({
             </Button>
           </LoginForm>
         )}
-        <Typography variant="caption" sx={{ color: "var(--text-secondary)" }}>
+        <Typography
+          variant="bodySmall"
+          sx={{ color: "var(--pj-color-text-secondary)" }}
+        >
           Problemas para entrar? Fale com o coordenador da sua pastoral.
         </Typography>
       </LoginPanel>
       <JourneyAside aria-label="Sobre a Pastoral da Juventude">
-        <Typography className="login-overline" variant="overline">
+        <Typography className="login-overline" variant="labelLarge">
           Pastoral da Juventude
         </Typography>
         <Box>

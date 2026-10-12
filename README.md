@@ -21,7 +21,7 @@ npm run dev
 
 ## Design system e Storybook
 
-O Storybook documenta as fundações visuais consumindo os mesmos tokens da aplicação: cores primitivas e semânticas, tipografia, espaçamento, grids, breakpoints, raios, elevação e foco. A barra de ferramentas permite validar os modos claro e escuro, e as histórias executam verificações de acessibilidade.
+O Storybook documenta as fundações visuais consumindo os mesmos tokens da aplicação, espelhados das variáveis e estilos do Figma do MVP: cores primitivas e semânticas, tipografia Roboto, espaçamento, geometria, ícones, medidas estruturais e elevação. O Figma define somente o modo claro. As histórias executam verificações de acessibilidade.
 
 ```bash
 npm run storybook

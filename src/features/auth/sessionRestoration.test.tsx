@@ -30,7 +30,7 @@ function setup(path = "/") {
   render(
     <StrictMode>
       <Provider store={store}>
-        <ThemeProvider theme={createAppTheme("light")}>
+        <ThemeProvider theme={createAppTheme()}>
           <RouterProvider router={router} />
         </ThemeProvider>
       </Provider>

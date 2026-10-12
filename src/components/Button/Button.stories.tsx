@@ -49,7 +49,7 @@ export const VariantesETamanhos: Story = {
     <Stack spacing={3}>
       {variants.map((variant) => (
         <Box key={variant}>
-          <Typography variant="headingSmall" component="h2" sx={{ mb: 1.5 }}>
+          <Typography variant="title" component="h2" sx={{ mb: 1.5 }}>
             {variant}
           </Typography>
           <Stack

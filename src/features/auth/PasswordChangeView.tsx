@@ -5,7 +5,7 @@ import {
   CheckCircleRounded,
   RadioButtonUncheckedRounded,
 } from "@mui/icons-material";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Alert, BrandLockup, Button, PasswordField } from "../../components";
 import {
@@ -20,7 +20,7 @@ import {
   LoginForm,
   LoginPanel,
 } from "./LoginView.styles";
-import { breakpointTokens } from "../../theme/tokens";
+import { pendingLayoutTokens } from "../../theme/tokens";
 
 export interface PasswordChangeViewProps {
   change: (request: ChangePasswordRequest) => Promise<void>;
@@ -38,7 +38,6 @@ export function PasswordChangeView({
   initialError,
 }: PasswordChangeViewProps) {
   const id = useId();
-  const theme = useTheme();
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const [pending, setPending] = useState(false);
@@ -96,17 +95,14 @@ export function PasswordChangeView({
   return (
     <JourneyCanvas
       sx={{
-        [`@media (min-width: ${breakpointTokens.desktop}px)`]: {
+        [`@media (min-width: ${pendingLayoutTokens.breakpoints.desktop}px)`]: {
           minHeight: "max(1020px, 100svh)",
         },
       }}
     >
       <LoginPanel aria-labelledby={`${id}-title`}>
         <Box sx={{ alignSelf: "flex-start" }}>
-          <BrandLockup
-            size="compact"
-            tone={theme.palette.mode === "dark" ? "on-dark" : "on-light"}
-          />
+          <BrandLockup size="compact" tone="on-light" />
         </Box>
         <LoginForm
           aria-labelledby={`${id}-title`}
@@ -118,13 +114,13 @@ export function PasswordChangeView({
             tabIndex={-1}
             id={`${id}-title`}
             component="h1"
-            variant="displayLarge"
+            variant="headingLarge"
           >
             Crie sua senha
           </Typography>
           <Typography
             variant="bodyMedium"
-            sx={{ color: "var(--text-secondary)" }}
+            sx={{ color: "var(--pj-color-text-secondary)" }}
           >
             Defina sua senha definitiva. A senha temporária deixa de valer assim
             que você salvar a nova.
@@ -215,23 +211,23 @@ export function PasswordChangeView({
               <Box
                 id={`${id}-criteria`}
                 sx={{
-                  background: "var(--bg-surface-alt)",
-                  borderRadius: "var(--radius-md)",
-                  p: "var(--spacing-md)",
-                  color: "var(--text-secondary)",
+                  background: "var(--pj-color-bg-canvas)",
+                  borderRadius: "var(--pj-radius-lg)",
+                  p: "var(--pj-space-3)",
+                  color: "var(--pj-color-text-secondary)",
                 }}
               >
-                <Typography variant="caption">A senha precisa ter</Typography>
+                <Typography variant="bodySmall">A senha precisa ter</Typography>
                 <Box
                   component="ul"
                   sx={{
                     listStyle: "none",
                     p: 0,
                     mb: 0,
-                    mt: "var(--spacing-sm)",
+                    mt: "var(--pj-space-2)",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "var(--spacing-sm)",
+                    gap: "var(--pj-space-2)",
                   }}
                 >
                   {[
@@ -245,7 +241,7 @@ export function PasswordChangeView({
                       sx={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "var(--spacing-sm)",
+                        gap: "var(--pj-space-2)",
                       }}
                     >
                       {criteria[index] ? (
@@ -253,7 +249,7 @@ export function PasswordChangeView({
                           aria-hidden
                           sx={{
                             fontSize: "18px",
-                            color: "var(--status-success-text)",
+                            color: "var(--pj-color-feedback-success)",
                           }}
                         />
                       ) : (
@@ -294,12 +290,15 @@ export function PasswordChangeView({
             </>
           )}
         </LoginForm>
-        <Typography variant="caption" sx={{ color: "var(--text-secondary)" }}>
+        <Typography
+          variant="bodySmall"
+          sx={{ color: "var(--pj-color-text-secondary)" }}
+        >
           Problemas para entrar? Fale com o coordenador da sua pastoral.
         </Typography>
       </LoginPanel>
       <JourneyAside aria-label="Sobre a Pastoral da Juventude">
-        <Typography className="login-overline" variant="overline">
+        <Typography className="login-overline" variant="labelLarge">
           Pastoral da Juventude
         </Typography>
         <Box>

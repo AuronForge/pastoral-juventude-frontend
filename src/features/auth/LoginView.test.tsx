@@ -16,7 +16,7 @@ afterEach(() => vi.useRealTimers());
 function setup(error = details) {
   const authenticate = vi.fn();
   render(
-    <ThemeProvider theme={createAppTheme("light")}>
+    <ThemeProvider theme={createAppTheme()}>
       <LoginView
         authenticate={authenticate}
         initialCredentials={credentials}
@@ -61,7 +61,7 @@ it.each(["passwordChanged", "expired"] as const)(
   "mostra feedback de %s",
   (notice) => {
     render(
-      <ThemeProvider theme={createAppTheme("light")}>
+      <ThemeProvider theme={createAppTheme()}>
         <LoginView authenticate={vi.fn()} notice={notice} />
       </ThemeProvider>,
     );

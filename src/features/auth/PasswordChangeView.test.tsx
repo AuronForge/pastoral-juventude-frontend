@@ -14,14 +14,11 @@ import {
 } from "./PasswordChangeView";
 import { ApiRequestError } from "../../shared/api/apiError";
 
-function setup(
-  props: Partial<PasswordChangeViewProps> = {},
-  mode: "light" | "dark" = "light",
-) {
+function setup(props: Partial<PasswordChangeViewProps> = {}) {
   const change = vi.fn().mockResolvedValue(undefined);
   const onRestart = vi.fn();
   render(
-    <ThemeProvider theme={createAppTheme(mode)}>
+    <ThemeProvider theme={createAppTheme()}>
       <PasswordChangeView change={change} onRestart={onRestart} {...props} />
     </ThemeProvider>,
   );
@@ -82,7 +79,7 @@ it("valida confirmação e devolve foco ao campo correto", () => {
 });
 it("salva sem senha atual e conclui o fluxo", async () => {
   const onCompleted = vi.fn();
-  const { change, user } = setup({ onCompleted }, "dark");
+  const { change, user } = setup({ onCompleted });
   fill();
   await user.click(submit());
   await waitFor(() => expect(onCompleted).toHaveBeenCalledOnce());

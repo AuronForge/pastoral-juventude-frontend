@@ -1,43 +1,49 @@
 import { styled } from "@mui/material";
-import { breakpointTokens, elevationTokens } from "../../theme/tokens";
+import {
+  elevationTokens,
+  pendingLayoutTokens,
+  typographyStyle,
+} from "../../theme/tokens";
+
+const breakpointTokens = pendingLayoutTokens.breakpoints;
 
 const tablet = `@media (min-width: ${breakpointTokens.tablet}px)`;
 const desktop = `@media (min-width: ${breakpointTokens.desktop}px)`;
 
 export const JourneyCanvas = styled("main")({
-  background: "var(--sidebar-bg)",
+  background: "var(--pj-color-bg-canvas)",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
   gap: "28px",
-  padding: "var(--spacing-3xl) var(--spacing-lg)",
+  padding: "var(--pj-space-6) var(--pj-space-4)",
   minHeight: "100svh",
   boxSizing: "border-box",
   [tablet]: { paddingInline: "60px" },
   [desktop]: {
     flexDirection: "row",
     alignItems: "stretch",
-    gap: "var(--spacing-5xl)",
-    padding: "var(--spacing-5xl)",
+    gap: "var(--pj-space-8)",
+    padding: "var(--pj-space-8)",
     minHeight: "max(880px, 100svh)",
   },
 });
 
 export const LoginPanel = styled("section")({
-  background: "var(--bg-surface)",
-  borderRadius: "var(--radius-2xl)",
-  boxShadow: elevationTokens.modal,
+  background: "var(--pj-color-bg-surface)",
+  borderRadius: "var(--pj-radius-xl)",
+  boxShadow: elevationTokens.large,
   width: "100%",
   minWidth: 0,
-  padding: "var(--spacing-2xl)",
+  padding: "var(--pj-space-5)",
   display: "flex",
   flexDirection: "column",
-  gap: "var(--spacing-2xl)",
+  gap: "var(--pj-space-5)",
   boxSizing: "border-box",
-  [tablet]: { padding: "var(--spacing-4xl)", maxWidth: "648px" },
+  [tablet]: { padding: "var(--space-extended-40px)", maxWidth: "648px" },
   [desktop]: {
-    padding: "var(--spacing-5xl)",
+    padding: "var(--pj-space-8)",
     width: "520px",
     flexShrink: 0,
     justifyContent: "space-between",
@@ -52,15 +58,17 @@ export const LoginForm = styled("form")({
     gap: "0px",
     marginTop: "28px",
   },
-  "& .login-feedback": { marginTop: "var(--spacing-xl)" },
-  "& .login-feedback + .login-fields": { marginTop: "var(--spacing-xl)" },
+  "& .login-feedback": { marginTop: "var(--space-extended-20px)" },
+  "& .login-feedback + .login-fields": {
+    marginTop: "var(--space-extended-20px)",
+  },
   "& .login-options": {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: "var(--spacing-md)",
-    marginTop: "var(--spacing-2xs)",
-    [tablet]: { flexDirection: "row", gap: "var(--spacing-2xl)" },
+    gap: "var(--pj-space-3)",
+    marginTop: "var(--layout-fine-2px)",
+    [tablet]: { flexDirection: "row", gap: "var(--pj-space-5)" },
   },
   "& .login-submit": { marginTop: "28px" },
 });
@@ -72,44 +80,36 @@ export const JourneyAside = styled("aside")({
   "& .login-overline, & .login-benefits": { display: "none" },
   "& blockquote": {
     margin: 0,
-    color: "var(--sidebar-text-active)",
-    fontSize: "var(--font-size-sm)",
-    lineHeight: "var(--line-height-sm)",
+    color: "var(--pj-color-action-primary)",
+    ...typographyStyle("bodyMedium"),
   },
   "& cite": {
     display: "block",
-    marginTop: "var(--spacing-sm)",
-    color: "var(--accent-solid)",
-    fontSize: "var(--font-size-sm)",
-    fontWeight: "var(--font-weight-semibold)",
+    marginTop: "var(--pj-space-2)",
+    color: "var(--pj-color-action-accent)",
+    ...typographyStyle("labelLarge"),
     fontStyle: "normal",
   },
   [tablet]: {
     maxWidth: "648px",
-    "& blockquote": {
-      fontSize: "var(--font-size-xl)",
-      lineHeight: "var(--line-height-xl)",
-      fontWeight: "var(--font-weight-semibold)",
-    },
+    "& blockquote": typographyStyle("title"),
   },
   [desktop]: {
     maxWidth: "none",
     flex: 1,
-    padding: "var(--spacing-5xl) var(--spacing-2xl)",
+    padding: "var(--pj-space-8) var(--pj-space-5)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     textAlign: "left",
-    "& .login-overline": { display: "block", color: "var(--accent-solid)" },
-    "& blockquote": {
-      fontFamily: "var(--font-family-display)",
-      fontSize: "var(--font-size-4xl)",
-      lineHeight: "var(--line-height-4xl)",
-      letterSpacing: "-0.2px",
+    "& .login-overline": {
+      display: "block",
+      color: "var(--pj-color-action-accent)",
     },
+    "& blockquote": typographyStyle("headingLarge"),
     "& cite": {
-      marginTop: "var(--spacing-lg)",
-      fontSize: "var(--font-size-md)",
+      marginTop: "var(--pj-space-4)",
+      ...typographyStyle("labelLarge"),
     },
     "& .login-benefits": {
       display: "flex",
@@ -118,14 +118,14 @@ export const JourneyAside = styled("aside")({
       listStyle: "none",
       margin: 0,
       padding: 0,
-      color: "var(--sidebar-text)",
+      color: "var(--pj-color-text-primary)",
       "& li": {
         display: "flex",
         alignItems: "center",
-        gap: "var(--spacing-md)",
+        gap: "var(--pj-space-3)",
       },
       "& svg": {
-        color: "var(--accent-solid)",
+        color: "var(--pj-color-action-accent)",
         width: "22px",
         height: "22px",
         flexShrink: 0,

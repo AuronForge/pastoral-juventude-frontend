@@ -14,9 +14,9 @@ describe("IconButton", () => {
   });
 
   it.each([
-    ["small", "var(--size-touch-min)"],
-    ["medium", "var(--size-touch-min)"],
-    ["large", "var(--spacing-5xl)"],
+    ["small", "var(--space-extended-44px)"],
+    ["medium", "var(--space-extended-44px)"],
+    ["large", "var(--pj-space-8)"],
   ] as const)("mapeia o tamanho %s", (size, control) => {
     render(<IconButton icon={<EditOutlined />} label="Editar" size={size} />);
 

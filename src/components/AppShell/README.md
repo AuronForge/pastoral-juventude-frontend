@@ -25,5 +25,4 @@ fornece somente as opções que a pessoa pode acessar, evitando renderizar
 destinos não autorizados.
 
 O menu da conta disponibiliza perfil, alteração de senha e saída quando as
-respectivas ações são informadas. A escolha claro/escuro atualiza o tema do MUI
-e também é exposta por `onThemeModeChange`.
+respectivas ações são informadas.

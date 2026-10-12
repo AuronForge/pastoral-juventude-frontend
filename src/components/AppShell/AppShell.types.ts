@@ -42,6 +42,4 @@ export type AppShellProps = {
   onPasswordChange?: () => void;
   /** Encerra a sessão da pessoa autenticada. */
   onSignOut?: () => void;
-  /** É chamado após a alteração de tema. */
-  onThemeModeChange?: (mode: "light" | "dark") => void;
 };

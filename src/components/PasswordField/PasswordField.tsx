@@ -5,17 +5,17 @@ import { TextField } from "../TextField";
 import type { PasswordFieldProps } from "./PasswordField.types";
 
 const VisibilityButton = styled(IconButton)({
-  width: "var(--size-icon-md)",
-  height: "var(--size-icon-md)",
+  width: "var(--pj-icon-size-md)",
+  height: "var(--pj-icon-size-md)",
   padding: 0,
-  color: "var(--text-secondary)",
+  color: "var(--pj-color-text-secondary)",
   "& .MuiSvgIcon-root": {
-    width: "var(--size-icon-md)",
-    height: "var(--size-icon-md)",
+    width: "var(--pj-icon-size-md)",
+    height: "var(--pj-icon-size-md)",
   },
   "&.Mui-focusVisible": {
     outline:
-      "3px solid color-mix(in srgb, var(--border-focus) 55%, transparent)",
+      "3px solid color-mix(in srgb, var(--pj-color-border-focus) 55%, transparent)",
     outlineOffset: 2,
   },
 });

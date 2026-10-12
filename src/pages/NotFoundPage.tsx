@@ -5,7 +5,7 @@ export function NotFoundPage() {
   return (
     <Container component="main" maxWidth="sm" className="py-5">
       <Stack spacing={2} sx={{ alignItems: "flex-start" }}>
-        <Typography variant="overline">Erro 404</Typography>
+        <Typography variant="labelLarge">Erro 404</Typography>
         <Typography variant="h3" component="h1">
           Página não encontrada
         </Typography>

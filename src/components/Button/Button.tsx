@@ -1,5 +1,6 @@
 import { Button as MuiButton, styled } from "@mui/material";
 import { forwardRef } from "react";
+import { typographyStyle } from "../../theme/tokens";
 import { LoadingIndicator } from "../LoadingIndicator";
 import type { ButtonProps, ButtonSize, ButtonVariant } from "./Button.types";
 
@@ -15,76 +16,79 @@ const StyledButton = styled(MuiButton, {
   const size =
     buttonSize === "small"
       ? {
-          minHeight: "var(--size-touch-min)",
-          paddingInline: "var(--spacing-md)",
-          gap: "var(--spacing-xs)",
-          fontSize: "var(--font-size-sm)",
-          lineHeight: "var(--line-height-sm)",
-          iconSize: "var(--size-icon-sm)",
+          minHeight: "var(--space-extended-44px)",
+          paddingInline: "var(--pj-space-3)",
+          gap: "var(--pj-space-1)",
+          iconSize: "var(--pj-icon-size-sm)",
         }
       : buttonSize === "medium"
         ? {
-            minHeight: "var(--size-touch-min)",
-            paddingInline: "var(--spacing-xl)",
-            gap: "var(--spacing-sm)",
-            fontSize: "var(--font-size-md)",
-            lineHeight: "var(--line-height-md)",
-            iconSize: "var(--size-icon-md)",
+            minHeight: "var(--space-extended-44px)",
+            paddingInline: "var(--space-extended-20px)",
+            gap: "var(--pj-space-2)",
+            iconSize: "var(--pj-icon-size-md)",
           }
         : {
-            minHeight: "var(--spacing-5xl)",
-            paddingInline: "var(--spacing-2xl)",
-            gap: "var(--spacing-sm)",
-            fontSize: "var(--font-size-md)",
-            lineHeight: "var(--line-height-md)",
-            iconSize: "var(--size-icon-md)",
+            minHeight: "var(--pj-space-8)",
+            paddingInline: "var(--pj-space-5)",
+            gap: "var(--pj-space-2)",
+            iconSize: "var(--pj-icon-size-md)",
           };
 
   const variant =
     buttonVariant === "primary"
       ? {
-          backgroundColor: "var(--primary-solid)",
-          color: "var(--text-on-primary)",
-          "&:hover": { backgroundColor: "var(--primary-solid-hover)" },
-          "&:active": { backgroundColor: "var(--primary-solid-pressed)" },
+          backgroundColor: "var(--pj-color-action-primary)",
+          color: "var(--pj-color-text-inverse)",
+          "&:hover": {
+            backgroundColor: "var(--pj-color-action-primary-hover)",
+          },
+          "&:active": {
+            backgroundColor: "var(--pj-color-action-primary-hover)",
+          },
           "&.Mui-disabled": {
-            backgroundColor: "var(--status-neutral-subtle)",
-            color: "var(--text-disabled)",
+            backgroundColor: "var(--pj-color-feedback-neutral-soft)",
+            color: "var(--pj-color-text-disabled)",
           },
         }
       : buttonVariant === "secondary"
         ? {
-            backgroundColor: "var(--bg-surface)",
-            border: "var(--border-thin) solid var(--border-strong)",
-            color: "var(--text-primary)",
-            "&:hover": { backgroundColor: "var(--bg-surface-alt)" },
-            "&:active": { backgroundColor: "var(--bg-surface-sunken)" },
+            backgroundColor: "var(--pj-color-bg-surface)",
+            border:
+              "var(--pj-border-width-default) solid var(--pj-color-border-default)",
+            color: "var(--pj-color-text-primary)",
+            "&:hover": { backgroundColor: "var(--pj-color-bg-canvas)" },
+            "&:active": { backgroundColor: "var(--pj-color-bg-canvas)" },
             "&.Mui-disabled": {
-              backgroundColor: "var(--bg-surface)",
-              borderColor: "var(--border-default)",
-              color: "var(--text-disabled)",
+              backgroundColor: "var(--pj-color-bg-surface)",
+              borderColor: "var(--pj-color-border-default)",
+              color: "var(--pj-color-text-disabled)",
             },
           }
         : buttonVariant === "discreet"
           ? {
               backgroundColor: "transparent",
-              color: "var(--primary-text)",
-              "&:hover": { backgroundColor: "var(--primary-subtle)" },
-              "&:active": { backgroundColor: "var(--primary-border)" },
+              color: "var(--pj-color-action-primary)",
+              "&:hover": {
+                backgroundColor: "var(--pj-color-feedback-information-soft)",
+              },
+              "&:active": {
+                backgroundColor: "var(--pj-color-feedback-information-soft)",
+              },
               "&.Mui-disabled": {
                 backgroundColor: "transparent",
-                color: "var(--text-disabled)",
+                color: "var(--pj-color-text-disabled)",
               },
             }
           : {
-              backgroundColor: "var(--status-danger-solid)",
-              color: "var(--text-on-primary)",
+              backgroundColor: "var(--pj-color-action-danger)",
+              color: "var(--pj-color-text-inverse)",
               "&:hover, &:active": {
-                backgroundColor: "var(--status-danger-solid-hover)",
+                backgroundColor: "var(--pj-color-action-danger-hover)",
               },
               "&.Mui-disabled": {
-                backgroundColor: "var(--status-neutral-subtle)",
-                color: "var(--text-disabled)",
+                backgroundColor: "var(--pj-color-feedback-neutral-soft)",
+                color: "var(--pj-color-text-disabled)",
               },
             };
 
@@ -93,11 +97,9 @@ const StyledButton = styled(MuiButton, {
     minHeight: size.minHeight,
     paddingInline: size.paddingInline,
     gap: size.gap,
-    borderRadius: "var(--radius-pill)",
+    borderRadius: "var(--pj-radius-full)",
     boxShadow: "none",
-    fontSize: size.fontSize,
-    fontWeight: 600,
-    lineHeight: size.lineHeight,
+    ...typographyStyle("labelMedium"),
     textTransform: "none",
     transition: "background-color 120ms ease",
     ...variant,
@@ -105,7 +107,7 @@ const StyledButton = styled(MuiButton, {
     "&:active": { boxShadow: "none", ...variant["&:active"] },
     "&.Mui-focusVisible": {
       outline:
-        "3px solid color-mix(in srgb, var(--border-focus) 55%, transparent)",
+        "3px solid color-mix(in srgb, var(--pj-color-border-focus) 55%, transparent)",
       outlineOffset: 2,
     },
     "& .MuiButton-startIcon, & .MuiButton-endIcon": {

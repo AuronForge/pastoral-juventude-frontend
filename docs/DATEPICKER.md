@@ -7,9 +7,8 @@ obrigatoriedade, leitura, disabled e tamanhos. Inclui Storybook com estados.
 Usa o calendário nativo do navegador, com navegação de mês/ano e teclado
 fornecidos pelo navegador. A apresentação segue a configuração regional:
 em pt-BR, dia/mês/ano; não se força o formato visual em navegadores de outra região.
-A aparência do calendário pode variar entre desktop e celular. O campo e o
-calendário acompanham o esquema claro/escuro; o indicador em Chromium tem alvo
-de toque mínimo de 44 px usando o token existente.
+A aparência do calendário pode variar entre desktop e celular. O indicador em
+Chromium tem alvo de toque mínimo de 44 px usando o token existente.
 
 value, defaultValue, min e max usam YYYY-MM-DD. onChange entrega o valor ISO
 ou string vazia. Não cria Date no estado nem converte fusos. Limites opcionais

@@ -31,7 +31,7 @@ function setup(props: Partial<React.ComponentProps<typeof AppShell>> = {}) {
   const onPasswordChange = vi.fn();
   const onSignOut = vi.fn();
   render(
-    <ThemeProvider theme={createAppTheme("light")} defaultMode="light">
+    <ThemeProvider theme={createAppTheme()}>
       <CssBaseline />
       <AppShell
         activeNavigationId="encontros"

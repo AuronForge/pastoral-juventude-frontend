@@ -11,14 +11,11 @@ const result = () => ({
   expiraEm: new Date(Date.now() + 900000).toISOString(),
   trocaSenhaObrigatoria: true as const,
 });
-function setup(
-  props: Partial<PasswordRecoveryViewProps> = {},
-  mode: "light" | "dark" = "light",
-) {
+function setup(props: Partial<PasswordRecoveryViewProps> = {}) {
   const recover = vi.fn().mockImplementation(async () => result());
   const onBack = vi.fn();
   const rendered = render(
-    <ThemeProvider theme={createAppTheme(mode)}>
+    <ThemeProvider theme={createAppTheme()}>
       <PasswordRecoveryView recover={recover} onBack={onBack} {...props} />
     </ThemeProvider>,
   );
@@ -173,13 +170,13 @@ it("erro de rede mantém valores e permite tentar novamente", async () => {
   submit();
   await screen.findByRole("heading", { name: "Sua senha temporária" });
 });
-it("volta ao login e usa a marca aprovada no tema escuro", () => {
-  const { onBack } = setup({}, "dark");
+it("volta ao login e usa a marca aprovada", () => {
+  const { onBack } = setup({});
   fireEvent.click(screen.getByRole("button", { name: "Voltar para entrar" }));
   expect(onBack).toHaveBeenCalledOnce();
   expect(screen.getByRole("img", { name: /PastorApp/ })).toHaveAttribute(
     "src",
-    expect.stringContaining("on-dark"),
+    expect.stringContaining("on-light"),
   );
 });
 it("expiração libera novo formulário e remove o valor da tela", async () => {

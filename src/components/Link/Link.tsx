@@ -1,5 +1,6 @@
 import { Link as MuiLink, styled } from "@mui/material";
 import { forwardRef, type MouseEvent } from "react";
+import { typographyStyle } from "../../theme/tokens";
 import type { LinkProps } from "./Link.types";
 
 type LinkStyleOwnerState = { linkDisabled: boolean };
@@ -9,32 +10,32 @@ const StyledLink = styled(MuiLink, {
 })<LinkStyleOwnerState>(({ linkDisabled }) => ({
   display: "inline-flex",
   alignItems: "center",
-  gap: "var(--spacing-xs)",
-  color: linkDisabled ? "var(--text-disabled)" : "var(--primary-text)",
+  gap: "var(--pj-space-1)",
+  color: linkDisabled
+    ? "var(--pj-color-text-disabled)"
+    : "var(--pj-color-action-primary)",
   cursor: linkDisabled ? "not-allowed" : "pointer",
-  fontSize: "var(--font-size-md)",
-  fontWeight: 600,
-  lineHeight: "var(--line-height-md)",
+  ...typographyStyle("bodyLarge"),
   textDecorationColor: linkDisabled ? "transparent" : "currentcolor",
-  textDecorationThickness: "var(--border-thin)",
+  textDecorationThickness: "var(--pj-border-width-default)",
   textUnderlineOffset: "0.16em",
   transition: "color 120ms ease, text-decoration-color 120ms ease",
   "&:hover": linkDisabled
     ? undefined
     : {
-        color: "var(--primary-text)",
+        color: "var(--pj-color-action-primary)",
         textDecorationColor: "transparent",
       },
   "&:focus-visible": {
     outline:
-      "3px solid color-mix(in srgb, var(--border-focus) 55%, transparent)",
+      "3px solid color-mix(in srgb, var(--pj-color-border-focus) 55%, transparent)",
     outlineOffset: 2,
-    borderRadius: "var(--radius-sm)",
+    borderRadius: "var(--pj-radius-md)",
   },
   "& .MuiSvgIcon-root": {
-    width: "var(--size-icon-sm)",
-    height: "var(--size-icon-sm)",
-    fontSize: "var(--size-icon-sm)",
+    width: "var(--pj-icon-size-sm)",
+    height: "var(--pj-icon-size-sm)",
+    fontSize: "var(--pj-icon-size-sm)",
   },
 }));
 

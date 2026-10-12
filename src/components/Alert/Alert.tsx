@@ -25,24 +25,24 @@ const toneDetails = {
 
 const toneStyles = {
   info: {
-    backgroundColor: "var(--status-info-subtle)",
-    borderColor: "var(--status-info-border)",
-    iconColor: "var(--status-info-text)",
+    backgroundColor: "var(--pj-color-feedback-information-soft)",
+    borderColor: "var(--pj-color-feedback-information)",
+    iconColor: "var(--pj-color-feedback-information)",
   },
   success: {
-    backgroundColor: "var(--status-success-subtle)",
-    borderColor: "var(--status-success-border)",
-    iconColor: "var(--status-success-text)",
+    backgroundColor: "var(--pj-color-feedback-success-soft)",
+    borderColor: "var(--pj-color-feedback-success)",
+    iconColor: "var(--pj-color-feedback-success)",
   },
   warning: {
-    backgroundColor: "var(--status-warning-subtle)",
-    borderColor: "var(--status-warning-border)",
-    iconColor: "var(--status-warning-text)",
+    backgroundColor: "var(--pj-color-feedback-attention-soft)",
+    borderColor: "var(--pj-color-feedback-attention)",
+    iconColor: "var(--pj-color-feedback-attention)",
   },
   danger: {
-    backgroundColor: "var(--status-danger-subtle)",
-    borderColor: "var(--status-danger-border)",
-    iconColor: "var(--status-danger-text)",
+    backgroundColor: "var(--pj-color-feedback-error-soft)",
+    borderColor: "var(--pj-color-border-danger)",
+    iconColor: "var(--pj-color-text-danger)",
   },
 } as const;
 
@@ -54,20 +54,20 @@ const StyledAlert = styled(MuiAlert, {
   return {
     alignItems: "flex-start",
     width: "100%",
-    padding: "var(--spacing-lg)",
-    gap: "var(--spacing-md)",
-    border: "var(--border-thin) solid",
+    padding: "var(--pj-space-4)",
+    gap: "var(--pj-space-3)",
+    border: "var(--pj-border-width-default) solid",
     borderColor: tone.borderColor,
-    borderRadius: "var(--radius-lg)",
+    borderRadius: "var(--pj-radius-xl)",
     backgroundColor: tone.backgroundColor,
-    color: "var(--text-primary)",
+    color: "var(--pj-color-text-primary)",
     "& .MuiAlert-icon": {
       margin: 0,
       padding: 0,
       color: tone.iconColor,
       "& .MuiSvgIcon-root": {
-        width: "var(--size-icon-md)",
-        height: "var(--size-icon-md)",
+        width: "var(--pj-icon-size-md)",
+        height: "var(--pj-icon-size-md)",
       },
     },
     "& .MuiAlert-message": {
@@ -84,18 +84,18 @@ const StyledAlert = styled(MuiAlert, {
 });
 
 const CloseButton = styled(MuiIconButton)({
-  width: "var(--size-touch-min)",
-  height: "var(--size-touch-min)",
+  width: "var(--space-extended-44px)",
+  height: "var(--space-extended-44px)",
   flexShrink: 0,
   padding: 0,
-  color: "var(--text-secondary)",
+  color: "var(--pj-color-text-secondary)",
   "& .MuiSvgIcon-root": {
-    width: "var(--size-icon-md)",
-    height: "var(--size-icon-md)",
+    width: "var(--pj-icon-size-md)",
+    height: "var(--pj-icon-size-md)",
   },
   "&.Mui-focusVisible": {
     outline:
-      "3px solid color-mix(in srgb, var(--border-focus) 55%, transparent)",
+      "3px solid color-mix(in srgb, var(--pj-color-border-focus) 55%, transparent)",
     outlineOffset: 2,
   },
 });
@@ -130,7 +130,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
       severity={severity}
       variant="standard"
     >
-      <Typography component="p" variant="bodyMediumStrong">
+      <Typography component="p" variant="labelLarge">
         {title}
       </Typography>
       <Typography component="div" variant="bodySmall" color="text.secondary">

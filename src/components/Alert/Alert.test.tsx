@@ -71,13 +71,13 @@ describe("Alert", () => {
     const button = screen.getByRole("button", { name: "Fechar alerta" });
 
     expect(button).toHaveStyle({
-      width: "var(--size-touch-min)",
-      height: "var(--size-touch-min)",
+      width: "var(--space-extended-44px)",
+      height: "var(--space-extended-44px)",
       flexShrink: "0",
     });
     expect(button.querySelector("svg")).toHaveStyle({
-      width: "var(--size-icon-md)",
-      height: "var(--size-icon-md)",
+      width: "var(--pj-icon-size-md)",
+      height: "var(--pj-icon-size-md)",
     });
   });
 

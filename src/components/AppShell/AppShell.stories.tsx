@@ -9,6 +9,7 @@ import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { AppShell } from "./AppShell";
+import { pendingLayoutTokens } from "../../theme/tokens";
 
 const navigationItems = [
   { id: "inicio", icon: <HomeOutlined />, label: "Início" },
@@ -67,12 +68,12 @@ type Story = StoryObj<typeof meta>;
 
 function ExampleContent() {
   return (
-    <Stack spacing={2} sx={{ maxWidth: "var(--size-content-max)" }}>
+    <Stack spacing={2} sx={{ maxWidth: pendingLayoutTokens.contentMax }}>
       <Box>
         <Typography component="p" variant="labelSmall" color="primary.main">
           Início › Encontros
         </Typography>
-        <Typography component="h1" variant="headingLarge">
+        <Typography component="h1" variant="headingSmall">
           Espiritualidade e missão
         </Typography>
         <Typography color="text.secondary" variant="bodySmall">
@@ -84,8 +85,9 @@ function ExampleContent() {
           display: "grid",
           minHeight: 360,
           placeItems: "center",
-          border: "var(--border-thin) solid var(--border-subtle)",
-          bgcolor: "var(--bg-surface-alt)",
+          border:
+            "var(--pj-border-width-default) solid var(--pj-color-border-default)",
+          bgcolor: "var(--pj-color-bg-canvas)",
         }}
         variant="outlined"
       >
@@ -110,7 +112,7 @@ export const Playground: Story = {
             display: "inline-block",
             px: 2,
             py: 1,
-            borderRadius: "var(--radius-pill)",
+            borderRadius: "var(--pj-radius-full)",
           }}
           variant="outlined"
         >
@@ -159,16 +161,14 @@ function InteractiveNavigation(args: React.ComponentProps<typeof AppShell>) {
     <AppShell
       {...args}
       activeNavigationId={activeId}
-      headerContent={
-        <Typography variant="bodySmallStrong">PastorApp</Typography>
-      }
+      headerContent={<Typography variant="labelMedium">PastorApp</Typography>}
       navigationItems={navigationItems.map((item) => ({
         ...item,
         onClick: () => setActiveId(item.id),
       }))}
     >
       <Stack spacing={2}>
-        <Typography component="h1" variant="headingLarge">
+        <Typography component="h1" variant="headingSmall">
           {activeItem?.label}
         </Typography>
         <Typography color="text.secondary" variant="bodySmall">
@@ -177,7 +177,7 @@ function InteractiveNavigation(args: React.ComponentProps<typeof AppShell>) {
           selecionado. Os três atalhos inferiores continuam disponíveis.
         </Typography>
         <Paper sx={{ p: 2 }} variant="outlined">
-          <Typography variant="bodySmallStrong">
+          <Typography variant="labelMedium">
             Destino selecionado: {activeItem?.label}
           </Typography>
         </Paper>

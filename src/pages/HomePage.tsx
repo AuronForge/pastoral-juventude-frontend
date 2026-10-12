@@ -58,7 +58,7 @@ export function HomePage() {
           sx={{ maxWidth: 640, mx: "auto", p: { xs: 3, sm: 5 }, width: "100%" }}
         >
           <Stack spacing={1.5}>
-            <Typography component="p" variant="overline">
+            <Typography component="p" variant="labelLarge">
               Pastoral da Juventude
             </Typography>
             <Typography component="h1" variant="h4">

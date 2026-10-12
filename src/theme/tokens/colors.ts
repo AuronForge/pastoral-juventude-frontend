@@ -1,242 +1,256 @@
-export const primitiveColors = {
-  navy: {
-    50: "#eff3f9",
-    100: "#dce6f2",
-    200: "#bdcfe4",
-    300: "#8faacb",
-    400: "#5a7fa8",
-    450: "#4b729f",
-    500: "#3a6394",
-    600: "#274c77",
-    700: "#1e3a5f",
-    800: "#182636",
-    900: "#101b27",
-  },
-  amber: {
-    50: "#faefda",
-    100: "#f2ddb2",
-    300: "#e0b96a",
-    400: "#d2a04a",
-    500: "#c08a2e",
-    600: "#a5761f",
-    700: "#86601b",
-    800: "#4a3610",
-  },
-  sand: {
-    0: "#ffffff",
-    50: "#faf7f2",
-    100: "#f5f1ea",
-    200: "#ede6db",
-    300: "#e4dacb",
-    400: "#c4b8a6",
-    500: "#9c9186",
-    550: "#746b62",
-    600: "#6b635a",
-    700: "#4a443e",
-    800: "#33302b",
-    900: "#2b2724",
-    950: "#1c1a17",
-  },
-  green: {
-    50: "#e7f1eb",
-    100: "#cbe0d4",
-    300: "#8fc4a8",
-    600: "#2e6248",
-    700: "#224b37",
-    800: "#1b3a2a",
-  },
-  red: {
-    50: "#f8ebe9",
-    100: "#f0d3cf",
-    300: "#e8a39c",
-    600: "#a3352c",
-    700: "#832820",
-    800: "#4a1a16",
-  },
-} as const;
+/**
+ * Cores do Design System, espelhadas das coleções "Primitives" e "Color" do
+ * Figma (MVP Pastoral da Juventude). Os nomes seguem as variáveis do Figma e
+ * `cssVar` segue o code syntax WEB definido em cada variável.
+ *
+ * Regra do Figma: componentes consomem tokens semânticos, nunca primitivos.
+ * O Figma define somente o modo claro.
+ */
 
-const { amber, green, navy, red, sand } = primitiveColors;
+export type ColorToken = {
+  /** Nome da variável no Figma. */
+  name: string;
+  /** Variável CSS definida pelo code syntax WEB da variável no Figma. */
+  cssVar: `--${string}`;
+};
 
-export const semanticColors = {
-  light: {
-    bg: {
-      canvas: sand[50],
-      surface: sand[0],
-      surfaceAlt: sand[100],
-      surfaceSunken: sand[200],
-      inverse: navy[800],
-      overlay: sand[900],
-    },
-    border: {
-      subtle: sand[100],
-      default: sand[200],
-      strong: sand[550],
-      inverse: navy[700],
-      focus: navy[500],
-    },
-    text: {
-      primary: sand[900],
-      secondary: sand[600],
-      placeholder: sand[550],
-      disabled: sand[400],
-      inverse: sand[0],
-      inverseSecondary: navy[300],
-      link: navy[600],
-      onPrimary: sand[0],
-    },
-    primary: {
-      solid: navy[600],
-      solidHover: navy[700],
-      solidPressed: navy[800],
-      subtle: navy[50],
-      border: navy[100],
-      text: navy[600],
-    },
-    accent: {
-      subtle: amber[50],
-      solid: amber[500],
-      border: amber[100],
-      text: amber[700],
-    },
-    status: {
-      success: {
-        subtle: green[50],
-        solid: green[600],
-        border: green[100],
-        text: green[600],
-        onSolid: sand[0],
-      },
-      warning: {
-        subtle: amber[50],
-        solid: amber[500],
-        border: amber[100],
-        text: amber[700],
-        onSolid: sand[900],
-      },
-      danger: {
-        subtle: red[50],
-        solid: red[600],
-        solidHover: red[700],
-        border: red[100],
-        text: red[600],
-        onSolid: sand[0],
-      },
-      neutral: {
-        subtle: sand[100],
-        solid: sand[600],
-        border: sand[300],
-        text: sand[600],
-        onSolid: sand[0],
-      },
-      info: {
-        subtle: navy[50],
-        solid: navy[600],
-        border: navy[100],
-        text: navy[600],
-        onSolid: sand[0],
-      },
-    },
-    sidebar: {
-      bg: navy[800],
-      itemActiveBg: navy[600],
-      itemHoverBg: navy[700],
-      border: navy[700],
-      text: navy[200],
-      textActive: sand[0],
-      textMuted: navy[300],
-    },
-    skeleton: { base: sand[300] },
-  },
-  dark: {
-    bg: {
-      canvas: sand[950],
-      surface: sand[900],
-      surfaceAlt: sand[800],
-      surfaceSunken: sand[950],
-      inverse: sand[100],
-      overlay: sand[950],
-    },
-    border: {
-      subtle: sand[800],
-      default: sand[700],
-      strong: sand[400],
-      inverse: sand[300],
-      focus: navy[400],
-    },
-    text: {
-      primary: sand[50],
-      secondary: sand[400],
-      placeholder: sand[400],
-      disabled: sand[600],
-      inverse: sand[900],
-      inverseSecondary: sand[600],
-      link: navy[300],
-      onPrimary: sand[0],
-    },
-    primary: {
-      solid: navy[500],
-      solidHover: navy[450],
-      solidPressed: navy[600],
-      subtle: navy[800],
-      border: navy[700],
-      text: navy[300],
-    },
-    accent: {
-      subtle: amber[800],
-      solid: amber[400],
-      border: amber[700],
-      text: amber[300],
-    },
-    status: {
-      success: {
-        subtle: green[800],
-        solid: green[600],
-        border: green[700],
-        text: green[300],
-        onSolid: sand[0],
-      },
-      warning: {
-        subtle: amber[800],
-        solid: amber[400],
-        border: amber[700],
-        text: amber[300],
-        onSolid: sand[900],
-      },
-      danger: {
-        subtle: red[800],
-        solid: red[600],
-        solidHover: red[700],
-        border: red[700],
-        text: red[300],
-        onSolid: sand[0],
-      },
-      neutral: {
-        subtle: sand[800],
-        solid: sand[600],
-        border: sand[700],
-        text: sand[400],
-        onSolid: sand[0],
-      },
-      info: {
-        subtle: navy[800],
-        solid: navy[500],
-        border: navy[700],
-        text: navy[300],
-        onSolid: sand[0],
-      },
-    },
-    sidebar: {
-      bg: sand[900],
-      itemActiveBg: navy[600],
-      itemHoverBg: sand[800],
-      border: sand[800],
-      text: sand[400],
-      textActive: sand[0],
-      textMuted: sand[500],
-    },
-    skeleton: { base: sand[700] },
-  },
-} as const;
+export type PrimitiveColorToken = ColorToken & { value: string };
+export type SemanticColorToken = ColorToken & { alias: string };
 
-export type ColorSchemeMode = keyof typeof semanticColors;
-export type SemanticColorScheme = (typeof semanticColors)[ColorSchemeMode];
+export const primitiveColorTokens = [
+  { name: "blue/600", cssVar: "--pj-color-blue-600", value: "#1f4e5f" },
+  {
+    name: "terracotta/600",
+    cssVar: "--pj-color-terracotta-600",
+    value: "#b85c38",
+  },
+  { name: "gold/500", cssVar: "--pj-color-gold-500", value: "#d6a84b" },
+  { name: "sand/50", cssVar: "--pj-color-sand-50", value: "#f7f1e8" },
+  { name: "cream/0", cssVar: "--pj-color-cream-0", value: "#fffdf9" },
+  { name: "brown/900", cssVar: "--pj-color-brown-900", value: "#2e2925" },
+  { name: "brown/600", cssVar: "--pj-color-brown-600", value: "#6d625a" },
+  { name: "brown/300", cssVar: "--pj-color-brown-300", value: "#e4d7cb" },
+  { name: "red/600", cssVar: "--pj-color-red-600", value: "#b3261e" },
+  { name: "blue/700", cssVar: "--pj-color-blue-700", value: "#1b4554" },
+  { name: "red/700", cssVar: "--pj-color-red-700", value: "#9e211b" },
+  { name: "green/600", cssVar: "--pj-color-green-600", value: "#2e7d32" },
+  { name: "amber/700", cssVar: "--pj-color-amber-700", value: "#9a6700" },
+  {
+    name: "brown/600-alpha12",
+    cssVar: "--pj-color-brown-600-alpha12",
+    value: "rgba(109, 98, 90, 0.12)",
+  },
+  {
+    name: "green/600-alpha12",
+    cssVar: "--pj-color-green-600-alpha12",
+    value: "rgba(46, 125, 50, 0.12)",
+  },
+  {
+    name: "blue/600-alpha12",
+    cssVar: "--pj-color-blue-600-alpha12",
+    value: "rgba(31, 78, 95, 0.12)",
+  },
+  {
+    name: "amber/700-alpha12",
+    cssVar: "--pj-color-amber-700-alpha12",
+    value: "rgba(154, 103, 0, 0.12)",
+  },
+  {
+    name: "red/600-alpha12",
+    cssVar: "--pj-color-red-600-alpha12",
+    value: "rgba(179, 38, 30, 0.12)",
+  },
+  { name: "yellow/500", cssVar: "--pj-color-yellow-500", value: "#f4b400" },
+  {
+    name: "yellow/500-alpha12",
+    cssVar: "--pj-color-yellow-500-alpha12",
+    value: "rgba(244, 180, 0, 0.12)",
+  },
+  { name: "amber/800", cssVar: "--pj-color-amber-800", value: "#704800" },
+  { name: "blue/950", cssVar: "--blue-950", value: "#192837" },
+] as const satisfies readonly PrimitiveColorToken[];
+
+export const semanticColorTokens = [
+  { name: "color/bg/canvas", cssVar: "--pj-color-bg-canvas", alias: "sand/50" },
+  {
+    name: "color/bg/surface",
+    cssVar: "--pj-color-bg-surface",
+    alias: "cream/0",
+  },
+  { name: "color/bg/access", cssVar: "--color-bg-access", alias: "blue/950" },
+  {
+    name: "color/text/primary",
+    cssVar: "--pj-color-text-primary",
+    alias: "brown/900",
+  },
+  {
+    name: "color/text/secondary",
+    cssVar: "--pj-color-text-secondary",
+    alias: "brown/600",
+  },
+  {
+    name: "color/text/inverse",
+    cssVar: "--pj-color-text-inverse",
+    alias: "cream/0",
+  },
+  {
+    name: "color/text/disabled",
+    cssVar: "--pj-color-text-disabled",
+    alias: "brown/600",
+  },
+  {
+    name: "color/text/danger",
+    cssVar: "--pj-color-text-danger",
+    alias: "red/600",
+  },
+  {
+    name: "color/border/default",
+    cssVar: "--pj-color-border-default",
+    alias: "brown/300",
+  },
+  {
+    name: "color/border/focus",
+    cssVar: "--pj-color-border-focus",
+    alias: "blue/600",
+  },
+  {
+    name: "color/border/danger",
+    cssVar: "--pj-color-border-danger",
+    alias: "red/600",
+  },
+  {
+    name: "color/action/primary",
+    cssVar: "--pj-color-action-primary",
+    alias: "blue/600",
+  },
+  {
+    name: "color/action/primary-hover",
+    cssVar: "--pj-color-action-primary-hover",
+    alias: "blue/700",
+  },
+  {
+    name: "color/action/accent",
+    cssVar: "--pj-color-action-accent",
+    alias: "terracotta/600",
+  },
+  {
+    name: "color/action/danger",
+    cssVar: "--pj-color-action-danger",
+    alias: "red/600",
+  },
+  {
+    name: "color/action/danger-hover",
+    cssVar: "--pj-color-action-danger-hover",
+    alias: "red/700",
+  },
+  {
+    name: "color/action/disabled",
+    cssVar: "--pj-color-action-disabled",
+    alias: "brown/300",
+  },
+  {
+    name: "color/content/highlight",
+    cssVar: "--pj-color-content-highlight",
+    alias: "gold/500",
+  },
+  {
+    name: "color/feedback/success",
+    cssVar: "--pj-color-feedback-success",
+    alias: "green/600",
+  },
+  {
+    name: "color/feedback/information",
+    cssVar: "--pj-color-feedback-information",
+    alias: "blue/600",
+  },
+  {
+    name: "color/feedback/attention",
+    cssVar: "--pj-color-feedback-attention",
+    alias: "amber/800",
+  },
+  {
+    name: "color/feedback/error",
+    cssVar: "--pj-color-feedback-error",
+    alias: "red/600",
+  },
+  {
+    name: "color/feedback/neutral",
+    cssVar: "--pj-color-feedback-neutral",
+    alias: "brown/600",
+  },
+  {
+    name: "color/feedback/neutral-soft",
+    cssVar: "--pj-color-feedback-neutral-soft",
+    alias: "brown/600-alpha12",
+  },
+  {
+    name: "color/feedback/success-soft",
+    cssVar: "--pj-color-feedback-success-soft",
+    alias: "green/600-alpha12",
+  },
+  {
+    name: "color/feedback/information-soft",
+    cssVar: "--pj-color-feedback-information-soft",
+    alias: "blue/600-alpha12",
+  },
+  {
+    name: "color/feedback/attention-soft",
+    cssVar: "--pj-color-feedback-attention-soft",
+    alias: "yellow/500-alpha12",
+  },
+  {
+    name: "color/feedback/error-soft",
+    cssVar: "--pj-color-feedback-error-soft",
+    alias: "red/600-alpha12",
+  },
+  {
+    name: "color/feedback/attention-emphasis",
+    cssVar: "--pj-color-feedback-attention-emphasis",
+    alias: "yellow/500",
+  },
+  {
+    name: "color/tooltip/bg",
+    cssVar: "--color-tooltip-bg",
+    alias: "brown/900",
+  },
+  {
+    name: "color/tooltip/text",
+    cssVar: "--color-tooltip-text",
+    alias: "color/text/inverse",
+  },
+] as const satisfies readonly SemanticColorToken[];
+
+/*
+ * Pendência registrada: as variáveis color/avatar/* existem no Figma, mas não
+ * possuem code syntax WEB. Ficam fora do código até o Figma defini-lo.
+ */
+
+type PrimitiveName = (typeof primitiveColorTokens)[number]["name"];
+type SemanticName = (typeof semanticColorTokens)[number]["name"];
+
+const primitiveByName = new Map<string, string>(
+  primitiveColorTokens.map((token) => [token.name, token.value]),
+);
+const semanticByName = new Map<string, string>(
+  semanticColorTokens.map((token) => [token.name, token.alias]),
+);
+
+/** Resolve o valor final de uma variável de cor seguindo os aliases do Figma. */
+export function resolveColor(name: PrimitiveName | SemanticName): string {
+  let current: string = name;
+  for (let depth = 0; depth < 5; depth += 1) {
+    const primitive = primitiveByName.get(current);
+    if (primitive) return primitive;
+    const alias = semanticByName.get(current);
+    if (!alias) break;
+    current = alias;
+  }
+  throw new Error(`Token de cor sem valor resolvido: ${name}`);
+}
+
+/** Referência `var(...)` a um token semântico de cor. */
+export function colorVar(name: SemanticName): string {
+  const token = semanticColorTokens.find((item) => item.name === name);
+  if (!token) throw new Error(`Token de cor inexistente: ${name}`);
+  return `var(${token.cssVar})`;
+}

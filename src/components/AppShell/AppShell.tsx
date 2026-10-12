@@ -1,8 +1,6 @@
 import {
-  DarkModeOutlined,
   KeyboardArrowLeftRounded,
   KeyboardArrowRightRounded,
-  LightModeOutlined,
   LogoutRounded,
   MenuRounded,
   PasswordRounded,
@@ -18,14 +16,11 @@ import {
   Menu,
   MenuItem,
   Stack,
-  ToggleButton,
-  ToggleButtonGroup,
   Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useColorScheme } from "@mui/material/styles";
 import { useId, useState } from "react";
 import { BrandLockup } from "../BrandLockup/BrandLockup";
 import type {
@@ -115,7 +110,6 @@ function AccountMenu({
   onPasswordChange,
   onProfile,
   onSignOut,
-  onThemeModeChange,
   open,
   user,
 }: {
@@ -124,17 +118,9 @@ function AccountMenu({
   onPasswordChange?: () => void;
   onProfile?: () => void;
   onSignOut?: () => void;
-  onThemeModeChange?: (mode: "light" | "dark") => void;
   open: boolean;
   user: AppShellUser;
 }) {
-  const { mode, setMode } = useColorScheme();
-  const activeMode = mode === "dark" ? "dark" : "light";
-  const selectTheme = (_event: unknown, nextMode: "light" | "dark" | null) => {
-    if (!nextMode) return;
-    setMode(nextMode);
-    onThemeModeChange?.(nextMode);
-  };
   const run = (action?: () => void) => () => {
     onClose();
     action?.();
@@ -156,8 +142,8 @@ function AccountMenu({
       >
         <Avatar>{initialsFor(user)}</Avatar>
         <Box>
-          <Typography variant="bodySmallStrong">{user.name}</Typography>
-          <Typography color="text.secondary" variant="caption">
+          <Typography variant="labelMedium">{user.name}</Typography>
+          <Typography color="text.secondary" variant="bodySmall">
             {user.role}
           </Typography>
         </Box>
@@ -175,30 +161,6 @@ function AccountMenu({
           Alterar senha
         </MenuItem>
       )}
-      <Divider />
-      <Box sx={{ px: 1.25, py: 0.75 }}>
-        <Typography color="text.secondary" variant="labelSmall">
-          Tema
-        </Typography>
-        <ToggleButtonGroup
-          aria-label="Tema da aplicação"
-          exclusive
-          fullWidth
-          onChange={selectTheme}
-          size="small"
-          sx={{ mt: 0.5 }}
-          value={activeMode}
-        >
-          <ToggleButton aria-label="Tema claro" value="light">
-            <LightModeOutlined fontSize="small" />
-            Claro
-          </ToggleButton>
-          <ToggleButton aria-label="Tema escuro" value="dark">
-            <DarkModeOutlined fontSize="small" />
-            Escuro
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
       {onSignOut && (
         <>
           <Divider />
@@ -223,7 +185,6 @@ export function AppShell({
   onPasswordChange,
   onProfile,
   onSignOut,
-  onThemeModeChange,
   user,
 }: AppShellProps) {
   const theme = useTheme();
@@ -265,7 +226,7 @@ export function AppShell({
               PJ
             </Avatar>
           ) : (
-            <BrandLockup label="Pastoral" size="compact" tone="on-dark" />
+            <BrandLockup label="Pastoral" size="compact" tone="on-light" />
           )}
         </SidebarBrand>
         {sidebarNavigation}
@@ -332,8 +293,8 @@ export function AppShell({
           >
             <Avatar
               sx={{
-                height: "var(--size-avatar-md)",
-                width: "var(--size-avatar-md)",
+                height: "var(--pj-avatar-size-md)",
+                width: "var(--pj-avatar-size-md)",
               }}
             >
               {initialsFor(user)}
@@ -369,14 +330,14 @@ export function AppShell({
         slotProps={{
           paper: {
             sx: {
-              bgcolor: "var(--sidebar-bg)",
-              width: "var(--size-sidebar-expanded)",
+              bgcolor: "var(--pj-color-bg-canvas)",
+              width: "var(--pj-layout-sidebar-expanded)",
             },
           },
         }}
       >
         <Box sx={{ p: 1.5 }}>
-          <BrandLockup label="Pastoral" size="compact" tone="on-dark" />
+          <BrandLockup label="Pastoral" size="compact" tone="on-light" />
         </Box>
         <NavigationList
           aria-label="Menu de navegação móvel"
@@ -405,7 +366,6 @@ export function AppShell({
         onPasswordChange={onPasswordChange}
         onProfile={onProfile}
         onSignOut={onSignOut}
-        onThemeModeChange={onThemeModeChange}
         open={accountOpen}
         user={user}
       />

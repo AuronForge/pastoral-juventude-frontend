@@ -1,7 +1,7 @@
 import { CircularProgress, circularProgressClasses } from "@mui/material";
 import { keyframes, styled } from "@mui/material/styles";
 import { forwardRef } from "react";
-import { sizeTokens } from "../../theme/tokens";
+import { tokenValue } from "../../theme/tokens";
 import type {
   LoadingIndicatorProps,
   LoadingIndicatorSize,
@@ -31,9 +31,9 @@ const StyledCircularProgress = styled(CircularProgress)({
 });
 
 const sizeByName: Record<LoadingIndicatorSize, number> = {
-  small: sizeTokens.iconSm,
-  medium: sizeTokens.iconMd,
-  large: sizeTokens.iconLg,
+  small: tokenValue("icon/size/sm"),
+  medium: tokenValue("icon/size/md"),
+  large: tokenValue("icon/size/lg"),
 };
 
 export const LoadingIndicator = forwardRef<
