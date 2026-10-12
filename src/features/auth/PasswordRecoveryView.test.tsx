@@ -1,4 +1,10 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { ThemeProvider } from "@mui/material";
 import { createAppTheme } from "../../theme/appTheme";
 import {
@@ -70,9 +76,11 @@ it("normaliza request, exibe senha uma vez sem storage e devolve foco", async ()
     dataNascimento: "2000-02-29",
     nomeParoquia: "São João",
   });
-  expect(
-    screen.getByRole("heading", { name: "Sua senha temporária" }),
-  ).toHaveFocus();
+  await waitFor(() =>
+    expect(
+      screen.getByRole("heading", { name: "Sua senha temporária" }),
+    ).toHaveFocus(),
+  );
   expect(screen.getByText("fictional-temporary")).toBeVisible();
   expect(local).not.toHaveBeenCalled();
   expect(screen.getByRole("button", { name: /Pedir outra em/ })).toBeDisabled();

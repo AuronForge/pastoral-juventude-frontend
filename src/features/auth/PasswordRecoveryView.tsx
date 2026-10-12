@@ -1,10 +1,3 @@
-import {
-  CalendarMonthRounded,
-  ContentCopyRounded,
-  GroupsRounded,
-  PasswordRounded,
-  WorkspacePremiumRounded,
-} from "@mui/icons-material";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
@@ -13,6 +6,7 @@ import {
   Button,
   DatePicker,
   IconButton,
+  MaterialSymbol,
   TextField,
 } from "../../components";
 import {
@@ -232,7 +226,7 @@ export function PasswordRecoveryView({
                   mb: "var(--spacing-lg)",
                 }}
               >
-                <PasswordRounded aria-hidden />
+                <MaterialSymbol name="password" />
               </Box>
               <Typography
                 id={`${id}-title`}
@@ -279,7 +273,7 @@ export function PasswordRecoveryView({
                 </Typography>
                 <IconButton
                   label="Copiar senha temporária"
-                  icon={<ContentCopyRounded />}
+                  icon={<MaterialSymbol name="content_copy" />}
                   variant="tertiary"
                   size="large"
                   disabled={seconds === 0}
@@ -447,19 +441,19 @@ export function PasswordRecoveryView({
         </Box>
         <Box component="ul" className="login-benefits">
           <li>
-            <CalendarMonthRounded />
+            <MaterialSymbol name="calendar_month" />
             <Typography variant="bodyMedium">
               Encontros, presença e pendências no mesmo lugar
             </Typography>
           </li>
           <li>
-            <GroupsRounded />
+            <MaterialSymbol name="groups" />
             <Typography variant="bodyMedium">
               Cada pessoa da pastoral com a sua história
             </Typography>
           </li>
           <li>
-            <WorkspacePremiumRounded />
+            <MaterialSymbol name="workspace_premium" />
             <Typography variant="bodyMedium">
               Lideranças acompanhadas, não improvisadas
             </Typography>

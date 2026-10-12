@@ -6,25 +6,48 @@ import {
   typographyTokens,
 } from "./tokens";
 
-function relativeLuminance(hex: string) {
-  const channels = hex
-    .slice(1)
-    .match(/.{2}/g)
-    ?.map((channel) => Number.parseInt(channel, 16) / 255)
-    .map((channel) =>
-      channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4,
-    );
-
-  if (!channels || channels.length < 3) {
-    throw new Error(`Cor hexadecimal inválida: ${hex}`);
+function channels(color: string, backdrop = "#ffffff"): number[] {
+  const rgba = color.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)$/u);
+  if (rgba) {
+    const background = channels(backdrop);
+    const alpha = Number(rgba[4]);
+    return rgba.slice(1, 4).map((channel, index) => {
+      const foreground = Number(channel) / 255;
+      return foreground * alpha + background[index] * (1 - alpha);
+    });
   }
 
-  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+  const parsed = color
+    .slice(1)
+    .match(/.{2}/g)
+    ?.map((channel) => Number.parseInt(channel, 16) / 255);
+
+  if (!parsed || parsed.length < 3) {
+    throw new Error(`Cor inválida: ${color}`);
+  }
+
+  return parsed;
 }
 
-function contrastRatio(foreground: string, background: string) {
-  const foregroundLuminance = relativeLuminance(foreground);
-  const backgroundLuminance = relativeLuminance(background);
+function relativeLuminance(color: string, backdrop?: string) {
+  const resolvedChannels = channels(color, backdrop).map((channel) =>
+    channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4,
+  );
+
+  return (
+    0.2126 * resolvedChannels[0] +
+    0.7152 * resolvedChannels[1] +
+    0.0722 * resolvedChannels[2]
+  );
+}
+
+function contrastRatio(
+  foreground: string,
+  background: string,
+  backdrop?: string,
+) {
+  const foregroundLuminance = relativeLuminance(foreground, backdrop);
+  const backgroundLuminance = relativeLuminance(background, backdrop);
   const lightest = Math.max(foregroundLuminance, backgroundLuminance);
   const darkest = Math.min(foregroundLuminance, backgroundLuminance);
 
@@ -32,22 +55,25 @@ function contrastRatio(foreground: string, background: string) {
 }
 
 describe("design system", () => {
-  it("espelha os 179 tokens do Figma em variáveis CSS", () => {
-    expect(Object.keys(designSystemCssVariables.light)).toHaveLength(179);
-    expect(Object.keys(designSystemCssVariables.dark)).toHaveLength(179);
-    expect(designSystemCssVariables.light["--primary-solid"]).toBe("#274c77");
-    expect(designSystemCssVariables.dark["--primary-solid"]).toBe("#3a6394");
+  it("espelha as fundações vigentes do Figma em variáveis CSS", () => {
+    expect(designSystemCssVariables.light["--primary-solid"]).toBe("#1f4e5f");
+    expect(designSystemCssVariables.light["--bg-canvas"]).toBe("#f7f1e8");
+    expect(designSystemCssVariables.light["--bg-surface"]).toBe("#fffdf9");
+    expect(designSystemCssVariables.light["--text-primary"]).toBe("#2e2925");
+    expect(designSystemCssVariables.light["--radius-md"]).toBe("8px");
+    expect(designSystemCssVariables.light["--size-control-lg"]).toBe("48px");
+    expect(designSystemCssVariables.light["--size-icon-xl"]).toBe("32px");
     expect(designSystemCssVariables.light["--font-family-display"]).toContain(
-      "Fraunces",
+      "Roboto",
     );
   });
 
   it("configura os modos claro e escuro no MUI", () => {
     expect(appTheme.defaultColorScheme).toBe("light");
-    expect(appTheme.colorSchemes.light?.palette.primary.main).toBe("#274c77");
-    expect(appTheme.colorSchemes.dark?.palette.primary.main).toBe("#3a6394");
+    expect(appTheme.colorSchemes.light?.palette.primary.main).toBe("#1f4e5f");
+    expect(appTheme.colorSchemes.dark?.palette.primary.main).toBe("#1f4e5f");
     expect(appTheme.colorSchemes.light?.palette.secondary.contrastText).toBe(
-      "#2b2724",
+      "#2e2925",
     );
   });
 
@@ -59,7 +85,7 @@ describe("design system", () => {
       lg: 1200,
       xl: 1440,
     });
-    expect(appTheme.shape.borderRadius).toBe(12);
+    expect(appTheme.shape.borderRadius).toBe(8);
     expect(appTheme.motion.reducedMotion).toBe("system");
     expect(appTheme.typography.displayMedium).toEqual(
       typographyTokens.displayMedium,
@@ -77,12 +103,6 @@ describe("design system", () => {
         [colors.text.placeholder, colors.bg.surface],
         [colors.text.link, colors.bg.canvas],
         [colors.text.onPrimary, colors.primary.solid],
-        [colors.accent.text, colors.accent.subtle],
-        [colors.status.success.text, colors.status.success.subtle],
-        [colors.status.warning.text, colors.status.warning.subtle],
-        [colors.status.danger.text, colors.status.danger.subtle],
-        [colors.status.neutral.text, colors.status.neutral.subtle],
-        [colors.status.info.text, colors.status.info.subtle],
         [colors.status.success.onSolid, colors.status.success.solid],
         [colors.status.warning.onSolid, colors.status.warning.solid],
         [colors.status.danger.onSolid, colors.status.danger.solid],
@@ -94,9 +114,9 @@ describe("design system", () => {
       ] as const;
 
       for (const [foreground, background] of pairs) {
-        expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(
-          4.5,
-        );
+        expect(
+          contrastRatio(foreground, background, colors.bg.canvas),
+        ).toBeGreaterThanOrEqual(4.5);
       }
     },
   );

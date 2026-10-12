@@ -1,7 +1,7 @@
-import { Add } from "@mui/icons-material";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
+import { MaterialSymbol } from "../MaterialSymbol";
 import { Button } from "./Button";
 
 describe("Button", () => {
@@ -42,8 +42,8 @@ describe("Button", () => {
   it("preserva ícones posicionados nos dois lados", () => {
     render(
       <Button
-        startIcon={<Add data-testid="inicio" />}
-        endIcon={<Add data-testid="fim" />}
+        startIcon={<MaterialSymbol data-testid="inicio" name="add" />}
+        endIcon={<MaterialSymbol data-testid="fim" name="add" />}
       >
         Adicionar
       </Button>,

@@ -1,8 +1,3 @@
-import {
-  CalendarMonthOutlined,
-  HomeOutlined,
-  PeopleOutlineRounded,
-} from "@mui/icons-material";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import {
   fireEvent,
@@ -13,14 +8,20 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createAppTheme } from "../../theme/appTheme";
+import { MaterialSymbol } from "../MaterialSymbol";
 import { AppShell } from "./AppShell";
 
 const items = [
-  { id: "inicio", icon: <HomeOutlined />, label: "Início" },
-  { id: "pessoas", icon: <PeopleOutlineRounded />, label: "Pessoas", badge: 4 },
+  { id: "inicio", icon: <MaterialSymbol name="home" />, label: "Início" },
+  {
+    id: "pessoas",
+    icon: <MaterialSymbol name="groups" />,
+    label: "Pessoas",
+    badge: 4,
+  },
   {
     id: "encontros",
-    icon: <CalendarMonthOutlined />,
+    icon: <MaterialSymbol name="calendar_month" />,
     label: "Encontros",
     badge: 3,
   },
@@ -158,13 +159,13 @@ describe("AppShell", () => {
           {
             id: "lideranca",
             label: "Liderança",
-            icon: <PeopleOutlineRounded />,
+            icon: <MaterialSymbol name="groups" />,
             onClick: onLeadership,
           },
           {
             id: "administracao",
             label: "Administração",
-            icon: <PeopleOutlineRounded />,
+            icon: <MaterialSymbol name="groups" />,
           },
         ],
       });

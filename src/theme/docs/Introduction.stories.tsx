@@ -20,10 +20,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const metrics = [
-  { value: "179", label: "tokens sincronizados" },
-  { value: "2", label: "modos de cor" },
-  { value: "17", label: "estilos tipográficos" },
-  { value: "3", label: "grids responsivos" },
+  { value: "96", label: "variáveis publicadas no Figma" },
+  { value: "1", label: "modo de cor oficial: Light" },
+  { value: "11", label: "estilos tipográficos oficiais" },
+  { value: "4", label: "tamanhos de ícone" },
 ];
 
 export const VisaoGeral: Story = {
@@ -108,8 +108,8 @@ export const VisaoGeral: Story = {
             área mínima de toque de 44 px.
           </Typography>
           <Typography component="li" variant="bodyMedium">
-            O modo escuro utiliza aliases próprios; não deve ser obtido apenas
-            invertendo as cores claras.
+            O modo escuro é uma extensão do produto; o modo Light é a referência
+            publicada no Figma.
           </Typography>
         </Stack>
       </FoundationSection>

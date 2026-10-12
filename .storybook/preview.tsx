@@ -1,8 +1,6 @@
-import "@fontsource/figtree/latin-400.css";
-import "@fontsource/figtree/latin-500.css";
-import "@fontsource/figtree/latin-600.css";
-import "@fontsource/figtree/latin-700.css";
-import "@fontsource/fraunces/latin-600.css";
+import "@fontsource/roboto/latin-400.css";
+import "@fontsource/roboto/latin-500.css";
+import "@fontsource/roboto/latin-700.css";
 import { CssBaseline } from "@mui/material";
 import { withThemeFromJSXProvider } from "@storybook/addon-themes";
 import type { Preview } from "@storybook/react-vite";
@@ -42,7 +40,14 @@ const preview: Preview = {
           [
             "Introdução",
             "Fundações",
-            ["Cores", "Tipografia", "Layout", "Elevação"],
+            [
+              "Alinhamento com o Figma",
+              "Cores",
+              "Tipografia",
+              "Ícones",
+              "Layout",
+              "Elevação",
+            ],
             "Componentes",
           ],
         ],

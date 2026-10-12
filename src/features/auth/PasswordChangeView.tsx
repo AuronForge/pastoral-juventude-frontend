@@ -1,13 +1,12 @@
-import {
-  CalendarMonthRounded,
-  GroupsRounded,
-  WorkspacePremiumRounded,
-  CheckCircleRounded,
-  RadioButtonUncheckedRounded,
-} from "@mui/icons-material";
 import { Box, Typography, useTheme } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
-import { Alert, BrandLockup, Button, PasswordField } from "../../components";
+import {
+  Alert,
+  BrandLockup,
+  Button,
+  MaterialSymbol,
+  PasswordField,
+} from "../../components";
 import {
   ApiRequestError,
   createCommunicationError,
@@ -249,17 +248,15 @@ export function PasswordChangeView({
                       }}
                     >
                       {criteria[index] ? (
-                        <CheckCircleRounded
-                          aria-hidden
-                          sx={{
-                            fontSize: "18px",
-                            color: "var(--status-success-text)",
-                          }}
+                        <MaterialSymbol
+                          name="check_circle"
+                          size={18}
+                          style={{ color: "var(--status-success-text)" }}
                         />
                       ) : (
-                        <RadioButtonUncheckedRounded
-                          aria-hidden
-                          sx={{ fontSize: "18px" }}
+                        <MaterialSymbol
+                          name="radio_button_unchecked"
+                          size={18}
                         />
                       )}
                       <Typography variant="bodySmall">
@@ -311,19 +308,19 @@ export function PasswordChangeView({
         </Box>
         <Box component="ul" className="login-benefits">
           <li>
-            <CalendarMonthRounded />
+            <MaterialSymbol name="calendar_month" />
             <Typography variant="bodyMedium">
               Encontros, presença e pendências no mesmo lugar
             </Typography>
           </li>
           <li>
-            <GroupsRounded />
+            <MaterialSymbol name="groups" />
             <Typography variant="bodyMedium">
               Cada pessoa da pastoral com a sua história
             </Typography>
           </li>
           <li>
-            <WorkspacePremiumRounded />
+            <MaterialSymbol name="workspace_premium" />
             <Typography variant="bodyMedium">
               Lideranças acompanhadas, não improvisadas
             </Typography>

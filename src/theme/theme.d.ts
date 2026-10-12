@@ -10,6 +10,7 @@ declare module "@mui/material/styles" {
     displayLarge: CSSProperties;
     displayMedium: CSSProperties;
     displaySmall: CSSProperties;
+    title: CSSProperties;
     headingLarge: CSSProperties;
     headingMedium: CSSProperties;
     headingSmall: CSSProperties;
@@ -19,6 +20,7 @@ declare module "@mui/material/styles" {
     bodySmall: CSSProperties;
     bodySmallStrong: CSSProperties;
     labelMedium: CSSProperties;
+    labelLarge: CSSProperties;
     labelSmall: CSSProperties;
     metricDisplay: CSSProperties;
   }
@@ -28,6 +30,7 @@ declare module "@mui/material/styles" {
     displayLarge?: CSSProperties;
     displayMedium?: CSSProperties;
     displaySmall?: CSSProperties;
+    title?: CSSProperties;
     headingLarge?: CSSProperties;
     headingMedium?: CSSProperties;
     headingSmall?: CSSProperties;
@@ -37,6 +40,7 @@ declare module "@mui/material/styles" {
     bodySmall?: CSSProperties;
     bodySmallStrong?: CSSProperties;
     labelMedium?: CSSProperties;
+    labelLarge?: CSSProperties;
     labelSmall?: CSSProperties;
     metricDisplay?: CSSProperties;
   }
@@ -48,6 +52,7 @@ declare module "@mui/material/Typography" {
     displayLarge: true;
     displayMedium: true;
     displaySmall: true;
+    title: true;
     headingLarge: true;
     headingMedium: true;
     headingSmall: true;
@@ -57,6 +62,7 @@ declare module "@mui/material/Typography" {
     bodySmall: true;
     bodySmallStrong: true;
     labelMedium: true;
+    labelLarge: true;
     labelSmall: true;
     metricDisplay: true;
   }
