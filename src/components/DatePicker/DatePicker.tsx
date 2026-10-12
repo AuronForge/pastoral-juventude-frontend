@@ -22,7 +22,8 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
       <CalendarField
         {...props}
         ref={ref}
-        type="date"
+        // Temporário: o Date Picker do Figma substituirá o calendário nativo.
+        {...({ type: "date" } as object)}
         inputProps={{
           ...inputProps,
           min,

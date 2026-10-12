@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
-import { Alert, BrandLockup, Button, PasswordField } from "../../components";
+import { Alert, BrandLockup, Button, TextField } from "../../components";
 import {
   ApiRequestError,
   createCommunicationError,
@@ -154,7 +154,9 @@ export function PasswordChangeView({
           ) : (
             <>
               <Box className="login-fields">
-                <PasswordField
+                <TextField
+                  size="large"
+                  type="password"
                   id={`${id}-new`}
                   name="novaSenha"
                   label="Nova senha"
@@ -178,7 +180,9 @@ export function PasswordChangeView({
                     setMismatch(false);
                   }}
                 />
-                <PasswordField
+                <TextField
+                  size="large"
+                  type="password"
                   ref={confirmationRef}
                   id={`${id}-confirmation`}
                   name="confirmacaoNovaSenha"

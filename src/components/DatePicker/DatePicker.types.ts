@@ -9,8 +9,8 @@ export type DatePickerProps = Omit<
   | "placeholder"
   | "leadingIcon"
   | "trailingIcon"
-  | "prefix"
-  | "suffix"
+  | "showPasswordLabel"
+  | "hidePasswordLabel"
 > & {
   value?: string;
   defaultValue?: string;

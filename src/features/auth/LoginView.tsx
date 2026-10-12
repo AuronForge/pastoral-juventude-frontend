@@ -1,13 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
-import {
-  Alert,
-  BrandLockup,
-  Button,
-  Link,
-  PasswordField,
-  TextField,
-} from "../../components";
+import { Alert, BrandLockup, Button, Link, TextField } from "../../components";
 import {
   ApiRequestError,
   createCommunicationError,
@@ -199,6 +192,7 @@ export function LoginView({
             )}
             <Box className="login-fields">
               <TextField
+                size="large"
                 id={`${id}-email`}
                 name="email"
                 label="E-mail"
@@ -211,7 +205,9 @@ export function LoginView({
                 inputProps={{ autoCapitalize: "none", spellCheck: false }}
                 onChange={(event) => setEmail(event.target.value)}
               />
-              <PasswordField
+              <TextField
+                size="large"
+                type="password"
                 ref={passwordRef}
                 id={`${id}-password`}
                 name="senha"
