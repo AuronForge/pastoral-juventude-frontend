@@ -30,14 +30,50 @@ describe("Button", () => {
     },
   );
 
-  it("mantém o rótulo, informa andamento e bloqueia a ação ao carregar", () => {
-    render(<Button loading>Entrando</Button>);
+  it("preserva o nome acessível, mostra três pontos e bloqueia a ação ao carregar", () => {
+    const { container } = render(
+      <Button
+        loading
+        startIcon={<MaterialSymbol data-testid="icone-inicial" name="add" />}
+        endIcon={<MaterialSymbol data-testid="icone-final" name="add" />}
+      >
+        Entrando
+      </Button>,
+    );
 
     const button = screen.getByRole("button", { name: "Entrando" });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).toHaveStyle({
+      borderRadius: "var(--radius-md)",
+      minWidth: "50px",
+    });
+    expect(
+      container.querySelector('[aria-hidden="true"]')?.children,
+    ).toHaveLength(3);
+    expect(screen.queryByTestId("icone-inicial")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("icone-final")).not.toBeInTheDocument();
+    expect(container.querySelector(".MuiButton-startIcon")).toBeNull();
+    expect(container.querySelector(".MuiButton-endIcon")).toBeNull();
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
   });
+
+  it.each([
+    ["small", "var(--size-touch-min)"],
+    ["medium", "50px"],
+    ["large", "58px"],
+  ] as const)(
+    "mantém a largura compacta do Figma ao carregar no tamanho %s",
+    (size, minWidth) => {
+      render(
+        <Button loading size={size}>
+          Salvando alterações muito extensas
+        </Button>,
+      );
+
+      expect(screen.getByRole("button")).toHaveStyle({ minWidth });
+    },
+  );
 
   it("preserva ícones posicionados nos dois lados", () => {
     render(

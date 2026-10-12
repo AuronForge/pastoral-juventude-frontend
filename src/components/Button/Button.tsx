@@ -1,17 +1,71 @@
 import { Button as MuiButton, styled } from "@mui/material";
+import { keyframes } from "@mui/material/styles";
 import { forwardRef } from "react";
-import { LoadingIndicator } from "../LoadingIndicator";
 import type { ButtonProps, ButtonSize, ButtonVariant } from "./Button.types";
 
 type ButtonStyleOwnerState = {
+  buttonLoading: boolean;
   buttonSize: ButtonSize;
   buttonVariant: ButtonVariant;
 };
 
+const loadingDotPulse = keyframes`
+  0%, 80%, 100% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+const LoadingDots = styled("span")({
+  alignItems: "center",
+  display: "inline-flex",
+  gap: "3px",
+  height: "6px",
+  justifyContent: "center",
+  width: "18px",
+  "& > span": {
+    animation: `${loadingDotPulse} 900ms ease-in-out infinite`,
+    backgroundColor: "currentColor",
+    borderRadius: "var(--radius-full)",
+    display: "block",
+    height: "4px",
+    width: "4px",
+  },
+  "& > span:nth-of-type(2)": { animationDelay: "120ms" },
+  "& > span:nth-of-type(3)": { animationDelay: "240ms" },
+  "@media (prefers-reduced-motion: reduce)": {
+    "& > span": {
+      animation: "none",
+      opacity: 1,
+      transform: "none",
+    },
+  },
+});
+
+const VisuallyHidden = styled("span")({
+  border: 0,
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: "1px",
+  margin: "-1px",
+  overflow: "hidden",
+  padding: 0,
+  position: "absolute",
+  whiteSpace: "nowrap",
+  width: "1px",
+});
+
 const StyledButton = styled(MuiButton, {
   shouldForwardProp: (prop) =>
-    prop !== "buttonSize" && prop !== "buttonVariant",
-})<ButtonStyleOwnerState>(({ buttonSize, buttonVariant }) => {
+    prop !== "buttonLoading" &&
+    prop !== "buttonSize" &&
+    prop !== "buttonVariant",
+})<ButtonStyleOwnerState>(({ buttonLoading, buttonSize, buttonVariant }) => {
   const size =
     buttonSize === "small"
       ? {
@@ -21,6 +75,7 @@ const StyledButton = styled(MuiButton, {
           fontSize: "var(--font-size-sm)",
           lineHeight: "var(--line-height-sm)",
           iconSize: "var(--size-icon-sm)",
+          loadingWidth: "var(--size-touch-min)",
         }
       : buttonSize === "medium"
         ? {
@@ -30,6 +85,7 @@ const StyledButton = styled(MuiButton, {
             fontSize: "var(--font-size-md)",
             lineHeight: "var(--line-height-md)",
             iconSize: "var(--size-icon-md)",
+            loadingWidth: "50px",
           }
         : {
             minHeight: "var(--spacing-5xl)",
@@ -38,6 +94,7 @@ const StyledButton = styled(MuiButton, {
             fontSize: "var(--font-size-md)",
             lineHeight: "var(--line-height-md)",
             iconSize: "var(--size-icon-md)",
+            loadingWidth: "58px",
           };
 
   const variant =
@@ -89,11 +146,11 @@ const StyledButton = styled(MuiButton, {
             };
 
   return {
-    minWidth: 0,
+    minWidth: buttonLoading ? size.loadingWidth : 0,
     minHeight: size.minHeight,
     paddingInline: size.paddingInline,
     gap: size.gap,
-    borderRadius: "var(--radius-pill)",
+    borderRadius: "var(--radius-md)",
     boxShadow: "none",
     fontSize: size.fontSize,
     fontWeight: 600,
@@ -119,6 +176,7 @@ const StyledButton = styled(MuiButton, {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     {
+      children,
       disabled = false,
       loading = false,
       size = "medium",
@@ -129,34 +187,31 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) {
-    const indicatorTone =
-      variant === "primary" || variant === "danger" ? "on-solid" : "default";
-    const indicatorSize = size === "small" ? "small" : "medium";
-    const resolvedStartIcon =
-      loading || startIcon ? (
-        <>
-          {loading ? (
-            <LoadingIndicator
-              decorative
-              size={indicatorSize}
-              tone={indicatorTone}
-            />
-          ) : null}
-          {startIcon}
-        </>
-      ) : undefined;
-
     return (
       <StyledButton
         {...props}
         ref={ref}
         aria-busy={loading || undefined}
+        buttonLoading={loading}
         buttonSize={size}
         buttonVariant={variant}
         disabled={disabled || loading}
-        startIcon={resolvedStartIcon}
-        endIcon={endIcon}
-      />
+        startIcon={loading ? undefined : startIcon}
+        endIcon={loading ? undefined : endIcon}
+      >
+        {loading ? (
+          <>
+            <LoadingDots aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </LoadingDots>
+            <VisuallyHidden>{children}</VisuallyHidden>
+          </>
+        ) : (
+          children
+        )}
+      </StyledButton>
     );
   },
 );
