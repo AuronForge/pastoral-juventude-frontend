@@ -1,5 +1,6 @@
 export * from "./Alert";
 export * from "./AppShell";
+export * from "./Avatar";
 export * from "./Button";
 export * from "./BrandLockup";
 export * from "./Checkbox";
@@ -9,3 +10,4 @@ export * from "./IconButton";
 export * from "./Link";
 export * from "./Progress";
 export * from "./TextField";
+export * from "./Tooltip";

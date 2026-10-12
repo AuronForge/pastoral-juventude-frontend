@@ -209,6 +209,46 @@ export const semanticColorTokens = [
     alias: "yellow/500",
   },
   {
+    name: "color/avatar/blue-bg",
+    cssVar: "--pj-color-avatar-blue-bg",
+    alias: "blue/600",
+  },
+  {
+    name: "color/avatar/blue-fg",
+    cssVar: "--pj-color-avatar-blue-fg",
+    alias: "color/text/inverse",
+  },
+  {
+    name: "color/avatar/terracotta-bg",
+    cssVar: "--pj-color-avatar-terracotta-bg",
+    alias: "terracotta/600",
+  },
+  {
+    name: "color/avatar/terracotta-fg",
+    cssVar: "--pj-color-avatar-terracotta-fg",
+    alias: "color/text/inverse",
+  },
+  {
+    name: "color/avatar/gold-bg",
+    cssVar: "--pj-color-avatar-gold-bg",
+    alias: "gold/500",
+  },
+  {
+    name: "color/avatar/gold-fg",
+    cssVar: "--pj-color-avatar-gold-fg",
+    alias: "brown/900",
+  },
+  {
+    name: "color/avatar/neutral-bg",
+    cssVar: "--pj-color-avatar-neutral-bg",
+    alias: "brown/600",
+  },
+  {
+    name: "color/avatar/neutral-fg",
+    cssVar: "--pj-color-avatar-neutral-fg",
+    alias: "color/text/inverse",
+  },
+  {
     name: "color/tooltip/bg",
     cssVar: "--color-tooltip-bg",
     alias: "brown/900",
@@ -219,11 +259,6 @@ export const semanticColorTokens = [
     alias: "color/text/inverse",
   },
 ] as const satisfies readonly SemanticColorToken[];
-
-/*
- * Pendência registrada: as variáveis color/avatar/* existem no Figma, mas não
- * possuem code syntax WEB. Ficam fora do código até o Figma defini-lo.
- */
 
 type PrimitiveName = (typeof primitiveColorTokens)[number]["name"];
 type SemanticName = (typeof semanticColorTokens)[number]["name"];

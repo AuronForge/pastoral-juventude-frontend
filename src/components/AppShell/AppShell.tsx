@@ -1,367 +1,210 @@
-import {
-  Avatar,
-  Badge,
-  Box,
-  Divider,
-  Drawer,
-  IconButton as MuiIconButton,
-  Menu,
-  MenuItem,
-  Stack,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { useId, useState } from "react";
-import { BrandLockup } from "../BrandLockup/BrandLockup";
-import type {
-  AppShellNavigationItem,
-  AppShellProps,
-  AppShellUser,
-} from "./AppShell.types";
+import { Drawer, useMediaQuery } from "@mui/material";
+import { useId, useState, type ElementType } from "react";
+import { Avatar } from "../Avatar";
+import { BrandLockup } from "../BrandLockup";
+import { Icon } from "../Icon";
+import { Tooltip } from "../Tooltip";
+import type { AppShellNavigationItem, AppShellProps } from "./AppShell.types";
 import {
   AppFrame,
   BottomNavigation,
   BottomNavigationButton,
+  CollapseButton,
   Content,
+  DrawerClose,
+  DrawerPanel,
+  Header,
+  HeaderAction,
   NavigationButton,
   NavigationList,
   Sidebar,
-  SidebarBrand,
-  SidebarFooter,
-  Topbar,
 } from "./AppShell.styles";
-import { Icon } from "../Icon";
 
-function initialsFor(user: AppShellUser) {
-  if (user.initials) return user.initials;
-  return user.name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join("")
-    .toUpperCase();
+function linkProps(item: AppShellNavigationItem, onNavigate?: () => void) {
+  return {
+    component: (item.href ? "a" : "button") as ElementType,
+    href: item.disabled ? undefined : item.href,
+    disabled: item.disabled,
+    onClick: () => {
+      onNavigate?.();
+      item.onClick?.();
+    },
+  };
 }
 
 function NavigationItem({
   compact,
   item,
+  onNavigate,
   selected,
 }: {
   compact: boolean;
   item: AppShellNavigationItem;
+  onNavigate?: () => void;
   selected: boolean;
 }) {
-  const navigate = () => {
-    item.onClick?.();
-    if (item.href) window.location.assign(item.href);
-  };
-  const content = (
-    <>
-      <Box className="app-shell-navigation-icon">{item.icon}</Box>
-      {!compact && (
-        <span className="app-shell-navigation-label">{item.label}</span>
-      )}
-      {!compact && item.badge !== undefined && (
-        <Badge
-          badgeContent={item.badge}
-          color="primary"
-          max={99}
-          className="app-shell-navigation-badge"
-        />
-      )}
-    </>
-  );
-
   const button = (
     <NavigationButton
+      {...linkProps(item, onNavigate)}
       aria-current={selected ? "page" : undefined}
       aria-label={compact ? item.label : undefined}
       compact={compact}
-      onClick={navigate}
+      disableRipple
       selected={selected}
-      type="button"
     >
-      {content}
+      <Icon name={item.icon} />
+      {compact ? null : <span>{item.label}</span>}
     </NavigationButton>
   );
 
-  return compact ? (
-    <Tooltip title={item.label} placement="right">
-      {button}
-    </Tooltip>
-  ) : (
-    button
-  );
-}
-
-function AccountMenu({
-  anchor,
-  onClose,
-  onPasswordChange,
-  onProfile,
-  onSignOut,
-  open,
-  user,
-}: {
-  anchor: HTMLElement | null;
-  onClose: () => void;
-  onPasswordChange?: () => void;
-  onProfile?: () => void;
-  onSignOut?: () => void;
-  open: boolean;
-  user: AppShellUser;
-}) {
-  const run = (action?: () => void) => () => {
-    onClose();
-    action?.();
-  };
-
   return (
-    <Menu
-      anchorEl={anchor}
-      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      onClose={onClose}
-      open={open}
-      slotProps={{ paper: { sx: { minWidth: 248, p: 0.5 } } }}
-      transformOrigin={{ horizontal: "right", vertical: "top" }}
-    >
-      <Stack
-        direction="row"
-        spacing={1.25}
-        sx={{ alignItems: "center", px: 1.25, py: 1 }}
-      >
-        <Avatar>{initialsFor(user)}</Avatar>
-        <Box>
-          <Typography variant="labelMedium">{user.name}</Typography>
-          <Typography color="text.secondary" variant="bodySmall">
-            {user.role}
-          </Typography>
-        </Box>
-      </Stack>
-      <Divider />
-      {onProfile && (
-        <MenuItem onClick={run(onProfile)}>
-          <Icon name="person" size="md" />
-          Meu perfil
-        </MenuItem>
+    <li>
+      {compact ? (
+        <Tooltip position="right" text={item.label}>
+          {button}
+        </Tooltip>
+      ) : (
+        button
       )}
-      {onPasswordChange && (
-        <MenuItem onClick={run(onPasswordChange)}>
-          <Icon name="password" size="md" />
-          Alterar senha
-        </MenuItem>
-      )}
-      {onSignOut && (
-        <>
-          <Divider />
-          <MenuItem className="app-shell-sign-out" onClick={run(onSignOut)}>
-            <Icon name="logout" size="md" />
-            Sair
-          </MenuItem>
-        </>
-      )}
-    </Menu>
+    </li>
   );
 }
 
-/** Moldura responsiva para as páginas autenticadas da aplicação. */
+/**
+ * App Shell do Figma: Header, Sidebar (desktop, 280/72 px) e, em tablet e
+ * mobile, Navigation Drawer acionado pelo Header com Bottom Navigation de
+ * atalhos. O conteúdo ocupa a área em color/bg/surface.
+ */
 export function AppShell({
   activeNavigationId,
+  bottomNavigationItems,
   children,
-  headerActions,
-  headerContent,
-  mobileNavigationItems,
   navigationItems,
-  onPasswordChange,
-  onProfile,
-  onSignOut,
   user,
 }: AppShellProps) {
-  const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [expanded, setExpanded] = useState(isDesktop);
-  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
-  const [accountAnchor, setAccountAnchor] = useState<HTMLElement | null>(null);
-  const navigationId = useId();
-  const mobileNavigationId = useId();
-  const bottomItems = (mobileNavigationItems ?? navigationItems).slice(0, 3);
-
+  const isDesktop = useMediaQuery("(min-width: 1200px)");
+  const [expanded, setExpanded] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const drawerId = useId();
   const compact = !expanded;
-  const accountOpen = Boolean(accountAnchor);
-  const accountLabel = `Conta de ${user.name}`;
-  const closeAccount = () => setAccountAnchor(null);
-  const openAccount = (event: React.MouseEvent<HTMLElement>) =>
-    setAccountAnchor(event.currentTarget);
-
-  const sidebarNavigation = (
-    <NavigationList aria-label="Navegação principal" id={navigationId}>
-      {navigationItems.map((item) => (
-        <NavigationItem
-          compact={compact}
-          item={item}
-          key={item.id}
-          selected={activeNavigationId === item.id}
-        />
-      ))}
-    </NavigationList>
-  );
+  const shortcuts = (bottomNavigationItems ?? navigationItems).slice(0, 5);
+  const closeDrawer = () => setDrawerOpen(false);
 
   return (
     <AppFrame sidebarExpanded={expanded}>
-      <Sidebar aria-label="Navegação da aplicação" compact={compact}>
-        <SidebarBrand compact={compact}>
-          {compact ? (
-            <Avatar aria-label="Pastoral da Juventude" variant="rounded">
-              PJ
-            </Avatar>
-          ) : (
-            <BrandLockup label="Pastoral" size="compact" tone="on-light" />
-          )}
-        </SidebarBrand>
-        {sidebarNavigation}
-        <SidebarFooter compact={compact}>
-          {onProfile && (
-            <>
-              <NavigationButton
-                aria-label={compact ? "Meu perfil" : undefined}
-                compact={compact}
-                onClick={onProfile}
-                selected={false}
-                type="button"
-              >
-                <Icon name="person" />
-                {!compact && (
-                  <span className="app-shell-navigation-label">Meu perfil</span>
-                )}
-              </NavigationButton>
-            </>
-          )}
-          <Divider />
-          <NavigationButton
-            aria-label={compact ? "Expandir menu lateral" : undefined}
-            compact={compact}
-            onClick={() => setExpanded((current) => !current)}
-            selected={false}
-            type="button"
-          >
-            {compact ? (
-              <Icon name="keyboard_arrow_right" />
-            ) : (
-              <>
-                <Icon name="keyboard_arrow_left" />
-                <span className="app-shell-navigation-label">
-                  Recolher menu lateral
-                </span>
-              </>
-            )}
-          </NavigationButton>
-        </SidebarFooter>
-      </Sidebar>
+      <Header>
+        <HeaderAction
+          aria-controls={drawerOpen ? drawerId : undefined}
+          aria-expanded={drawerOpen}
+          aria-label="Abrir navegação"
+          disableRipple
+          onClick={() => setDrawerOpen(true)}
+        >
+          <Icon name="menu" />
+        </HeaderAction>
+        <BrandLockup
+          className="app-shell-brand"
+          label="PastorApp"
+          size="compact"
+        />
+        <div className="app-shell-user">
+          <Avatar initials={user.initials} personId={user.id} size={32} />
+          <span className="app-shell-user-name">{user.name}</span>
+        </div>
+      </Header>
 
-      <Topbar>
-        {isMobile && (
-          <MuiIconButton
-            aria-controls={
-              mobileNavigationOpen ? mobileNavigationId : undefined
-            }
-            aria-expanded={mobileNavigationOpen}
-            aria-label="Abrir menu de navegação"
-            onClick={() => setMobileNavigationOpen(true)}
+      <Sidebar compact={compact}>
+        <nav aria-label="Navegação principal">
+          <NavigationList>
+            {navigationItems.map((item) => (
+              <NavigationItem
+                compact={compact}
+                item={item}
+                key={item.id}
+                selected={activeNavigationId === item.id}
+              />
+            ))}
+          </NavigationList>
+        </nav>
+        <div className="app-shell-sidebar-footer">
+          <Tooltip
+            position="right"
+            text={compact ? "Expandir navegação" : "Recolher navegação"}
           >
-            <Icon name="menu" />
-          </MuiIconButton>
-        )}
-        <Box className="app-shell-header-content">{headerContent}</Box>
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-          {headerActions}
-          <MuiIconButton
-            aria-expanded={accountOpen}
-            aria-haspopup="menu"
-            aria-label={accountLabel}
-            onClick={openAccount}
-          >
-            <Avatar
-              sx={{
-                height: "var(--pj-avatar-size-md)",
-                width: "var(--pj-avatar-size-md)",
-              }}
+            <CollapseButton
+              aria-expanded={expanded}
+              aria-label={compact ? "Expandir navegação" : "Recolher navegação"}
+              disableRipple
+              onClick={() => setExpanded((current) => !current)}
             >
-              {initialsFor(user)}
-            </Avatar>
-          </MuiIconButton>
-        </Stack>
-      </Topbar>
+              <Icon name={compact ? "chevron_right" : "chevron_left"} />
+            </CollapseButton>
+          </Tooltip>
+        </div>
+      </Sidebar>
 
       <Content>{children}</Content>
 
-      <BottomNavigation aria-label="Navegação móvel">
-        {bottomItems.map((item) => (
-          <BottomNavigationButton
-            aria-current={activeNavigationId === item.id ? "page" : undefined}
-            key={item.id}
-            onClick={() => {
-              item.onClick?.();
-              if (item.href) window.location.assign(item.href);
-            }}
-            selected={activeNavigationId === item.id}
-            type="button"
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </BottomNavigationButton>
-        ))}
+      <BottomNavigation aria-label="Atalhos de navegação">
+        <ul>
+          {shortcuts.map((item) => {
+            const selected = activeNavigationId === item.id;
+            return (
+              <li key={item.id}>
+                <BottomNavigationButton
+                  {...linkProps(item)}
+                  aria-current={selected ? "page" : undefined}
+                  disableRipple
+                  selected={selected}
+                >
+                  <Icon name={item.icon} />
+                  <span>{item.label}</span>
+                </BottomNavigationButton>
+              </li>
+            );
+          })}
+        </ul>
       </BottomNavigation>
 
       <Drawer
         anchor="left"
-        onClose={() => setMobileNavigationOpen(false)}
-        open={isMobile && mobileNavigationOpen}
+        onClose={closeDrawer}
+        open={!isDesktop && drawerOpen}
         slotProps={{
-          paper: {
-            sx: {
-              bgcolor: "var(--pj-color-bg-canvas)",
-              width: "var(--pj-layout-sidebar-expanded)",
-            },
+          backdrop: {
+            sx: { backgroundColor: "var(--pj-color-text-primary)" },
           },
+          paper: { sx: { boxShadow: "none" } },
         }}
       >
-        <Box sx={{ p: 1.5 }}>
-          <BrandLockup label="Pastoral" size="compact" tone="on-light" />
-        </Box>
-        <NavigationList
-          aria-label="Menu de navegação móvel"
-          id={mobileNavigationId}
-        >
-          {navigationItems.map((item) => (
-            <NavigationItem
-              compact={false}
-              item={{
-                ...item,
-                onClick: () => {
-                  setMobileNavigationOpen(false);
-                  item.onClick?.();
-                },
-              }}
-              key={item.id}
-              selected={activeNavigationId === item.id}
-            />
-          ))}
-        </NavigationList>
+        <DrawerPanel id={drawerId}>
+          <div className="app-shell-drawer-header">
+            <Icon name="groups" />
+            <p className="app-shell-drawer-title">Pastoral da Juventude</p>
+            <DrawerClose
+              aria-label="Fechar navegação"
+              disableRipple
+              onClick={closeDrawer}
+            >
+              <Icon name="close" size="md" />
+            </DrawerClose>
+          </div>
+          <hr className="app-shell-drawer-divider" />
+          <nav aria-label="Navegação completa">
+            <NavigationList>
+              {navigationItems.map((item) => (
+                <NavigationItem
+                  compact={false}
+                  item={item}
+                  key={item.id}
+                  onNavigate={closeDrawer}
+                  selected={activeNavigationId === item.id}
+                />
+              ))}
+            </NavigationList>
+          </nav>
+        </DrawerPanel>
       </Drawer>
-
-      <AccountMenu
-        anchor={accountAnchor}
-        onClose={closeAccount}
-        onPasswordChange={onPasswordChange}
-        onProfile={onProfile}
-        onSignOut={onSignOut}
-        open={accountOpen}
-        user={user}
-      />
     </AppFrame>
   );
 }

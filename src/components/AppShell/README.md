@@ -1,28 +1,30 @@
 # App Shell
 
-Composição para as rotas autenticadas. Recebe os itens permitidos para a pessoa,
-o item ativo, a identificação da pessoa e o conteúdo da página.
+Composição do Figma para as rotas autenticadas: Header / App Bar, Sidebar,
+Navigation Drawer e Bottom Navigation. Recebe os destinos permitidos para a
+pessoa, o destino atual, a identificação da pessoa e o conteúdo da página.
 
 ## Responsividade
 
-- A partir de 1200 px, a sidebar inicia expandida em 260 px.
-- Entre 768 e 1199 px, inicia recolhida em 72 px e pode ser expandida.
-- Abaixo de 768 px, a sidebar é substituída pela navegação inferior e por um
-  menu lateral aberto pelo cabeçalho.
+- Desktop (a partir de 1200 px): Header de 64 px e Sidebar fixa, expandida
+  (280 px) ou recolhida (72 px) pelo controle no rodapé. Bottom Navigation
+  ausente.
+- Tablet e mobile (abaixo de 1200 px): Header de 56 px com o controle de
+  menu, que abre o Navigation Drawer (320 px, limitado à viewport) com a
+  navegação completa, e Bottom Navigation de 64 px com 3 a 5 atalhos.
 
-O botão de abrir o menu fica disponível em toda a faixa abaixo de 768 px,
-incluindo celulares com 360, 390 e 414 px de largura. O menu lateral apresenta
-todos os `navigationItems`; a barra inferior mantém até três atalhos, definidos
-por `mobileNavigationItems` ou pelos três primeiros itens da navegação principal.
-Escolher um destino no menu lateral executa a ação do item e fecha o menu.
-Também é possível fechá-lo pela tecla Esc ou clicando fora dele.
+Os breakpoints ainda não têm variável no Figma (pendência registrada).
 
-O botão anuncia seu estado por `aria-expanded` e, quando aberto, referencia
-o menu lateral móvel por `aria-controls`.
+## Comportamento e acessibilidade
+
+- Cada navegação usa `nav` com rótulo; o destino atual recebe
+  `aria-current="page"`.
+- Na Sidebar recolhida, os itens mostram somente o ícone e oferecem Tooltip
+  acessível com o rótulo.
+- O Drawer abre pelo menu do Header e fecha pelo botão ×, pela seleção de um
+  destino, pelo scrim ou pela tecla Esc, devolvendo o foco ao acionador.
+- A Bottom Navigation usa os `bottomNavigationItems` ou, sem eles, os
+  primeiros destinos da navegação completa (até 5).
 
 O componente não define permissões nem busca dados de usuário. A aplicação
-fornece somente as opções que a pessoa pode acessar, evitando renderizar
-destinos não autorizados.
-
-O menu da conta disponibiliza perfil, alteração de senha e saída quando as
-respectivas ações são informadas.
+fornece somente os destinos que a pessoa pode acessar.

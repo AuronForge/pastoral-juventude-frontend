@@ -1,21 +1,11 @@
-import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
 import { AppShell } from "./AppShell";
-import { pendingLayoutTokens } from "../../theme/tokens";
-import { Icon } from "../Icon";
 
 const navigationItems = [
-  { id: "inicio", icon: <Icon name="home" />, label: "Início" },
-  { id: "pessoas", icon: <Icon name="group" />, label: "Pessoas", badge: 4 },
-  {
-    id: "encontros",
-    icon: <Icon name="calendar_month" />,
-    label: "Encontros",
-    badge: 3,
-  },
-  { id: "lideranca", icon: <Icon name="account_tree" />, label: "Liderança" },
-  { id: "administracao", icon: <Icon name="shield" />, label: "Administração" },
+  { id: "inicio", icon: "home", label: "Início" },
+  { id: "encontros", icon: "calendar_month", label: "Encontros" },
+  { id: "perfil", icon: "person", label: "Meu perfil" },
 ];
 
 const meta = {
@@ -23,27 +13,23 @@ const meta = {
   component: AppShell,
   tags: ["autodocs"],
   args: {
-    activeNavigationId: "encontros",
+    activeNavigationId: "inicio",
     navigationItems,
-    user: { name: "José Eduardo", role: "Coordenador" },
+    user: { id: "pessoa-1", name: "Maria da Silva", initials: "MS" },
+    children: null,
   },
   parameters: {
     layout: "fullscreen",
     viewport: {
       options: {
-        celular390: {
-          name: "Celular — 390 px",
+        mobile390: {
+          name: "Mobile — 390 px",
           styles: { width: "390px", height: "844px" },
-          type: "mobile",
-        },
-        limiteMovel767: {
-          name: "Limite móvel — 767 px",
-          styles: { width: "767px", height: "900px" },
           type: "mobile",
         },
         tablet768: {
           name: "Tablet — 768 px",
-          styles: { width: "768px", height: "900px" },
+          styles: { width: "768px", height: "1024px" },
           type: "tablet",
         },
       },
@@ -51,7 +37,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Moldura das áreas autenticadas: barra lateral adaptável, cabeçalho, menu da conta e área de conteúdo. Os itens de navegação e as ações da conta são recebidos por propriedades.",
+          "App Shell do Figma: Header / App Bar, Sidebar no desktop (280 px expandida, 72 px recolhida) e, em tablet e mobile, Navigation Drawer acionado pelo Header com Bottom Navigation de 3 a 5 atalhos. O conteúdo ocupa a área em color/bg/surface.",
       },
     },
   },
@@ -62,84 +48,18 @@ type Story = StoryObj<typeof meta>;
 
 function ExampleContent() {
   return (
-    <Stack spacing={2} sx={{ maxWidth: pendingLayoutTokens.contentMax }}>
-      <Box>
-        <Typography component="p" variant="labelSmall" color="primary.main">
-          Início › Encontros
-        </Typography>
-        <Typography component="h1" variant="headingSmall">
-          Espiritualidade e missão
-        </Typography>
-        <Typography color="text.secondary" variant="bodySmall">
-          28 de setembro · 19h · Salão paroquial
-        </Typography>
-      </Box>
-      <Paper
-        sx={{
-          display: "grid",
-          minHeight: 360,
-          placeItems: "center",
-          border:
-            "var(--pj-border-width-default) solid var(--pj-color-border-default)",
-          bgcolor: "var(--pj-color-bg-canvas)",
-        }}
-        variant="outlined"
-      >
-        <Typography color="text.secondary" variant="bodySmall">
-          Área de conteúdo da tela
-        </Typography>
-      </Paper>
-    </Stack>
+    <Box sx={{ p: 4 }}>
+      <Typography component="h1" variant="headingMedium">
+        Olá, Maria
+      </Typography>
+      <Typography color="text.secondary" variant="bodyMedium">
+        Área de conteúdo da tela.
+      </Typography>
+    </Box>
   );
 }
 
-export const Playground: Story = {
-  args: { children: null },
-  render: (args) => (
-    <AppShell
-      {...args}
-      headerActions={<Chip label="3 aprovações pendentes" size="small" />}
-      headerContent={
-        <Paper
-          component="span"
-          sx={{
-            display: "inline-block",
-            px: 2,
-            py: 1,
-            borderRadius: "var(--pj-radius-full)",
-          }}
-          variant="outlined"
-        >
-          <Typography color="text.secondary" variant="bodySmall">
-            Buscar pessoas, encontros...
-          </Typography>
-        </Paper>
-      }
-      onPasswordChange={() => undefined}
-      onProfile={() => undefined}
-      onSignOut={() => undefined}
-    >
-      <ExampleContent />
-    </AppShell>
-  ),
-};
-
-export const JovemNoCelular: Story = {
-  args: {
-    activeNavigationId: "encontros",
-    children: null,
-    mobileNavigationItems: [
-      navigationItems[0],
-      { ...navigationItems[2], label: "Meus encontros" },
-      { id: "perfil", icon: <Icon name="group" />, label: "Meu perfil" },
-    ],
-    navigationItems: [
-      navigationItems[0],
-      { ...navigationItems[2], label: "Meus encontros" },
-    ],
-    user: { name: "Ana Lúcia", role: "Jovem" },
-  },
-  parameters: { viewport: { defaultViewport: "mobile1" } },
+export const Desktop: Story = {
   render: (args) => (
     <AppShell {...args}>
       <ExampleContent />
@@ -147,64 +67,12 @@ export const JovemNoCelular: Story = {
   ),
 };
 
-function InteractiveNavigation(args: React.ComponentProps<typeof AppShell>) {
-  const [activeId, setActiveId] = useState("encontros");
-  const activeItem = navigationItems.find((item) => item.id === activeId);
-
-  return (
-    <AppShell
-      {...args}
-      activeNavigationId={activeId}
-      headerContent={<Typography variant="labelMedium">PastorApp</Typography>}
-      navigationItems={navigationItems.map((item) => ({
-        ...item,
-        onClick: () => setActiveId(item.id),
-      }))}
-    >
-      <Stack spacing={2}>
-        <Typography component="h1" variant="headingSmall">
-          {activeItem?.label}
-        </Typography>
-        <Typography color="text.secondary" variant="bodySmall">
-          Abra o menu no cabeçalho para acessar os cinco destinos. Escolha
-          Liderança ou Administração: o menu fecha e esta área mostra o destino
-          selecionado. Os três atalhos inferiores continuam disponíveis.
-        </Typography>
-        <Paper sx={{ p: 2 }} variant="outlined">
-          <Typography variant="labelMedium">
-            Destino selecionado: {activeItem?.label}
-          </Typography>
-        </Paper>
-      </Stack>
-    </AppShell>
-  );
-}
-
-export const NavegacaoCompletaNoCelular: Story = {
-  name: "Navegação completa no celular (390 px)",
-  args: { children: null },
-  globals: { viewport: { value: "celular390", isRotated: false } },
-  render: (args) => <InteractiveNavigation {...args} />,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Regressão da faixa de 360 a 767 px: o acionador fica disponível e o menu apresenta todos os destinos permitidos, inclusive os que não cabem nos três atalhos inferiores. Valide também fechamento por Esc e clique fora.",
-      },
-    },
-  },
+export const Tablet: Story = {
+  ...Desktop,
+  globals: { viewport: { value: "tablet768" } },
 };
 
-export const LimiteDaNavegacaoMovel: Story = {
-  name: "Limite da navegação móvel (767 px)",
-  args: { children: null },
-  globals: { viewport: { value: "limiteMovel767", isRotated: false } },
-  render: (args) => <InteractiveNavigation {...args} />,
-};
-
-export const NavegacaoNoTablet: Story = {
-  name: "Navegação no tablet (768 px)",
-  args: { children: null },
-  globals: { viewport: { value: "tablet768", isRotated: false } },
-  render: (args) => <InteractiveNavigation {...args} />,
+export const Mobile: Story = {
+  ...Desktop,
+  globals: { viewport: { value: "mobile390" } },
 };
