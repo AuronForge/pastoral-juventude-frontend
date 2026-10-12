@@ -15,22 +15,24 @@ const meta = {
     docs: {
       description: {
         component:
-          "Aviso ancorado no conteúdo, usado quando a pessoa precisa compreender uma situação antes de continuar. O ícone acompanha o tom para que a distinção não dependa somente de cor. Quando dispensável, a ação de fechar tem área de 44 × 44 px e ícone de 20 px, com foco visível e acionamento por clique, Enter ou Espaço. A área da ação não encolhe em linhas flexíveis; o texto pode quebrar em várias linhas. O consumidor controla a remoção do alerta em onClose.",
+          "Alert do Figma: comunica uma condição persistente dentro do fluxo sem interromper a tarefa. Severidades Sucesso, Informação, Atenção e Erro; modelos Suave (fundo com 12% da cor semântica) e Contornado (superfície clara com borda semântica). Fechável e Com ação são propriedades independentes e opcionais. Não comunique severidade somente pela cor: mantenha ícone e texto. Ao fechar, remova somente a mensagem.",
       },
     },
   },
   args: {
     children: description,
     title: "Não foi possível salvar",
-    tone: "info",
+    severity: "information",
+    model: "soft",
   },
   argTypes: {
     closeLabel: { control: "text" },
     dismissible: { control: "boolean" },
-    tone: {
+    severity: {
       control: "inline-radio",
-      options: ["info", "success", "warning", "danger"],
+      options: ["success", "information", "attention", "error"],
     },
+    model: { control: "inline-radio", options: ["soft", "outlined"] },
   },
 } satisfies Meta<typeof Alert>;
 
@@ -39,23 +41,55 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const Tons: Story = {
+export const Severidades: Story = {
   render: () => (
     <Stack spacing={2} sx={{ maxWidth: 560 }}>
-      <Alert title="Não foi possível salvar" tone="info">
+      <Alert title="Não foi possível salvar" severity="information">
         {description}
       </Alert>
-      <Alert title="Alterações salvas" tone="success">
+      <Alert title="Alterações salvas" severity="success">
         As informações do encontro foram atualizadas com sucesso.
       </Alert>
-      <Alert title="Cadastro incompleto" tone="warning">
+      <Alert title="Cadastro incompleto" severity="attention">
         Informe o endereço do encontro antes de publicar esta atividade.
       </Alert>
-      <Alert title="Não foi possível salvar" tone="danger">
+      <Alert title="Não foi possível salvar" severity="error">
         Houve um conflito ao atualizar este registro. Recarregue os dados antes
         de tentar novamente.
       </Alert>
     </Stack>
+  ),
+};
+
+export const Modelos: Story = {
+  render: () => (
+    <Stack spacing={2} sx={{ maxWidth: 560 }}>
+      {(["success", "information", "attention", "error"] as const).map(
+        (severity) => (
+          <Alert
+            key={severity}
+            model="outlined"
+            severity={severity}
+            title="Contornado"
+          >
+            Superfície clara com borda semântica.
+          </Alert>
+        ),
+      )}
+    </Stack>
+  ),
+};
+
+export const ComAcao: Story = {
+  name: "Com ação",
+  render: () => (
+    <Alert
+      action={{ label: "Tentar novamente", onClick: () => undefined }}
+      severity="error"
+      title="Não foi possível conectar"
+    >
+      Verifique sua conexão e tente novamente.
+    </Alert>
   ),
 };
 
@@ -71,7 +105,7 @@ export const Dispensavel: Story = {
             dismissible
             onClose={() => setVisible(false)}
             title="Dica para o cadastro"
-            tone="info"
+            severity="information"
           >
             Você pode complementar o endereço do encontro em outro momento.
           </Alert>
@@ -96,7 +130,7 @@ export const Dispensavel: Story = {
 export const ConflitoDeConcorrencia: Story = {
   name: "Conflito de concorrência (409)",
   render: () => (
-    <Alert title="Este registro foi alterado" tone="danger">
+    <Alert title="Este registro foi alterado" severity="error">
       Outra pessoa atualizou este registro. Recarregue os dados antes de salvar
       novamente.
     </Alert>
@@ -123,7 +157,7 @@ function CloseTargetExample() {
           dismissible
           onClose={() => setShortVisible(false)}
           title="Dica"
-          tone="info"
+          severity="information"
         >
           Você pode atualizar os dados depois.
         </Alert>
@@ -136,7 +170,7 @@ function CloseTargetExample() {
           dismissible
           onClose={() => setLongVisible(false)}
           title="As informações do encontro foram atualizadas"
-          tone="success"
+          severity="success"
         >
           Os dados foram salvos com sucesso. Você pode revisar o endereço, a
           programação e as informações complementares a qualquer momento antes

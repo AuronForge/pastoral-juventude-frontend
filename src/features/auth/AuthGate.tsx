@@ -37,7 +37,7 @@ export function AuthLifetime() {
     return (
       <Box component="main" sx={{ p: 3, maxWidth: 480, mx: "auto" }}>
         <Stack spacing={2}>
-          <Alert title="Não foi possível restaurar sua sessão" tone="danger">
+          <Alert title="Não foi possível restaurar sua sessão" severity="error">
             Verifique sua conexão e tente novamente.
           </Alert>
           <Button onClick={() => void dispatch(restoreSession())}>

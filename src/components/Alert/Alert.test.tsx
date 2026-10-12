@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef, type ComponentProps } from "react";
 import { Alert } from "./Alert";
-import type { AlertTone } from "./Alert.types";
+import type { AlertSeverity } from "./Alert.types";
 
 const defaultProps: ComponentProps<typeof Alert> = {
   title: "Não foi possível salvar",
@@ -23,14 +23,38 @@ describe("Alert", () => {
   });
 
   it.each([
-    ["info", "MuiAlert-colorInfo"],
-    ["success", "MuiAlert-colorSuccess"],
-    ["warning", "MuiAlert-colorWarning"],
-    ["danger", "MuiAlert-colorError"],
-  ] as const)("mapeia o tom %s", (tone: AlertTone, muiClass) => {
-    render(<Alert {...defaultProps} tone={tone} />);
+    ["success", "check"],
+    ["information", "info_i"],
+    ["attention", "priority_high"],
+    ["error", "close"],
+  ] as const)(
+    "mantém o ícone semântico da severidade %s",
+    (severity: AlertSeverity, icon) => {
+      render(<Alert {...defaultProps} severity={severity} />);
 
-    expect(screen.getByRole("alert")).toHaveClass(muiClass);
+      expect(
+        screen.getByRole("alert").querySelector(".alert-icon"),
+      ).toHaveTextContent(icon);
+    },
+  );
+
+  it("usa o modelo Contornado com borda semântica", () => {
+    render(<Alert {...defaultProps} model="outlined" severity="error" />);
+
+    expect(screen.getByRole("alert")).toHaveStyle({
+      backgroundColor: "var(--pj-color-bg-surface)",
+    });
+  });
+
+  it("executa a ação opcional", async () => {
+    const onClick = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <Alert {...defaultProps} action={{ label: "Ver detalhes", onClick }} />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Ver detalhes" }));
+    expect(onClick).toHaveBeenCalledOnce();
   });
 
   it("não oferece dispensa por padrão", () => {

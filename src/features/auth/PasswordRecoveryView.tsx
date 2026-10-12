@@ -45,30 +45,30 @@ function feedback(error: ApiErrorDetails) {
     return {
       title: "Já existe uma recuperação em andamento",
       text: "A senha temporária que você recebeu ainda vale. Use-a para entrar ou espere ela expirar (15 minutos) para pedir outra.",
-      tone: "warning" as const,
+      severity: "attention" as const,
     };
   if (error.codigo === "DADOS_RECUPERACAO_NAO_LOCALIZADOS")
     return {
       title: "Não foi possível confirmar seus dados",
       text: "Confira nome, e-mail, data de nascimento e paróquia. Se continuar, fale com o coordenador da sua pastoral.",
-      tone: "danger" as const,
+      severity: "error" as const,
     };
   if (error.codigo === "USUARIO_INATIVO")
     return {
       title: "Esta conta está inativa",
       text: "Fale com o coordenador da sua pastoral para reativar o acesso.",
-      tone: "danger" as const,
+      severity: "error" as const,
     };
   if (error.status === 429)
     return {
       title: "Muitas tentativas",
       text: "Por segurança, aguarde antes de tentar de novo. As tentativas ficam bloqueadas por 30 minutos.",
-      tone: "danger" as const,
+      severity: "error" as const,
     };
   return {
     title: "Não foi possível recuperar sua senha",
     text: "Verifique sua conexão e tente novamente.",
-    tone: "danger" as const,
+    severity: "error" as const,
   };
 }
 
@@ -337,7 +337,7 @@ export function PasswordRecoveryView({
                 <Alert
                   className="login-feedback"
                   title={message.title}
-                  tone={message.tone}
+                  severity={message.severity}
                 >
                   {message.text}
                 </Alert>

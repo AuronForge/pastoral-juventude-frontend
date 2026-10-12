@@ -152,7 +152,9 @@ export function LoginView({
             {notice && !error && (
               <Alert
                 className="login-feedback"
-                tone={notice === "passwordChanged" ? "success" : "warning"}
+                severity={
+                  notice === "passwordChanged" ? "success" : "attention"
+                }
                 title={
                   notice === "passwordChanged"
                     ? "Senha alterada"
@@ -177,7 +179,7 @@ export function LoginView({
             {error && (
               <Alert
                 className="login-feedback"
-                tone={error.status === 429 ? "warning" : "danger"}
+                severity={error.status === 429 ? "attention" : "error"}
                 title={feedback.title}
               >
                 {feedback.message}

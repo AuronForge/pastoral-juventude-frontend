@@ -121,7 +121,7 @@ export function PasswordChangeView({
           </Typography>
           <Alert
             className="login-feedback"
-            tone={error || mismatch ? "danger" : "info"}
+            severity={error || mismatch ? "error" : "information"}
             title={
               expired
                 ? "Tempo esgotado"
