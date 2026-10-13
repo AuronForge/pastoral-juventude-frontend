@@ -28,16 +28,21 @@ const NOTICES = {
     title: "Usuário inativo",
     message: "Entre em contato com o coordenador da pastoral.",
   },
-  replaced: {
+  // JA-04 do Figma: sessão invalidada (inclui a substituída por novo login).
+  invalidated: {
     severity: "attention",
-    title: "Sessão substituída",
-    message:
-      "Um novo login encerrou esta sessão. Entre novamente para continuar.",
+    title: "Entre novamente",
+    message: "Sua sessão não é mais válida. Faça um novo login.",
   },
   expired: {
     severity: "attention",
-    title: "Tempo esgotado",
-    message: "Inicie novamente o acesso para continuar.",
+    title: "Entre novamente",
+    message: "Sua sessão expirou. Faça um novo login para continuar.",
+  },
+  loggedOut: {
+    severity: "success",
+    title: "Você saiu",
+    message: "Seu acesso foi encerrado.",
   },
 } as const;
 

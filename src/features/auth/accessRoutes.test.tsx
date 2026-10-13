@@ -168,5 +168,7 @@ it("expira o acesso conforme expiresIn sem renovação automática", async () =>
   await act(() => vi.advanceTimersByTimeAsync(1000));
   expect(store.getState().auth.accessToken).toBeNull();
   expect(router.state.location.pathname).toBe("/login");
-  expect(screen.getByText("Tempo esgotado")).toBeVisible();
+  expect(
+    screen.getByText("Sua sessão expirou. Faça um novo login para continuar."),
+  ).toBeVisible();
 });
