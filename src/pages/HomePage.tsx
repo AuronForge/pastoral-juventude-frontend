@@ -1,8 +1,7 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
 import { AppShell } from "../components/AppShell";
-
-const navigationItems = [{ id: "inicio", icon: "home", label: "Início" }];
 
 const anonymous = { id: "anonimo", name: "Pessoa autenticada" };
 
@@ -50,6 +49,17 @@ function authenticatedPerson(accessToken: string | null) {
 }
 
 export function HomePage() {
+  const navigate = useNavigate();
+  // Pendência: o item "Sair" não está desenhado no App Shell do Figma.
+  const navigationItems = [
+    { id: "inicio", icon: "home", label: "Início" },
+    {
+      id: "sair",
+      icon: "logout",
+      label: "Sair",
+      onClick: () => void navigate("/sair"),
+    },
+  ];
   const accessToken = useAppSelector((state) => state.auth.accessToken);
   const person = authenticatedPerson(accessToken);
   const user = { ...person, initials: initialsFrom(person.name) };

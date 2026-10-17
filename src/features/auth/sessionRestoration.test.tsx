@@ -151,10 +151,18 @@ it("ignora falha tardia após limpeza da sessão", async () => {
 
 it.each([
   [400, "TOKEN_REFRESH_AUSENTE", "Entrar"],
-  [409, "SESSAO_SUBSTITUIDA", "Sessão substituída"],
+  [
+    409,
+    "SESSAO_SUBSTITUIDA",
+    "Sua sessão não é mais válida. Faça um novo login.",
+  ],
   [403, "USUARIO_BLOQUEADO", "Usuário bloqueado"],
   [403, "USUARIO_INATIVO", "Usuário inativo"],
-  [401, "SESSAO_EXPIRADA", "Tempo esgotado"],
+  [
+    401,
+    "SESSAO_EXPIRADA",
+    "Sua sessão expirou. Faça um novo login para continuar.",
+  ],
 ] as const)("trata erro terminal %s/%s", async (status, codigo, title) => {
   post.mockResolvedValue({
     error: { ...problem, status, codigo },

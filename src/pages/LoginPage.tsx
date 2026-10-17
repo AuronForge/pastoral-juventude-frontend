@@ -10,17 +10,20 @@ export function LoginPage() {
   const auth = useAppSelector((root) => root.auth);
   if (auth.accessToken) return <Navigate to="/" replace />;
   if (auth.passwordChangeToken) return <Navigate to="/alterar-senha" replace />;
+  const codigo = auth.error?.codigo;
   const notice = state?.passwordChanged
     ? "passwordChanged"
-    : auth.error?.codigo === "USUARIO_BLOQUEADO"
-      ? "blocked"
-      : auth.error?.codigo === "USUARIO_INATIVO"
-        ? "inactive"
-        : auth.error?.codigo === "SESSAO_SUBSTITUIDA"
-          ? "replaced"
-          : state?.expired || auth.error?.codigo === "SESSAO_EXPIRADA"
-            ? "expired"
-            : undefined;
+    : state?.loggedOut
+      ? "loggedOut"
+      : codigo === "USUARIO_BLOQUEADO"
+        ? "blocked"
+        : codigo === "USUARIO_INATIVO"
+          ? "inactive"
+          : codigo === "SESSAO_SUBSTITUIDA" || codigo === "SESSAO_INVALIDA"
+            ? "invalidated"
+            : state?.expired || codigo === "SESSAO_EXPIRADA"
+              ? "expired"
+              : undefined;
   return (
     <LoginView
       recoveryHref="/recuperar-senha"

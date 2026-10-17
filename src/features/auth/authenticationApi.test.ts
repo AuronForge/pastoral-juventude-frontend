@@ -1,6 +1,6 @@
 import { ApiRequestError } from "../../shared/api/apiError";
 import { apiClient } from "../../shared/api/client";
-import { authenticateUser, changePassword } from "./authenticationApi";
+import { authenticateUser, changePassword, logout } from "./authenticationApi";
 
 vi.mock("../../shared/api/client", () => ({
   apiClient: { POST: vi.fn() },
@@ -133,6 +133,31 @@ describe("API de autenticação", () => {
       details: {
         codigo: "ERRO_COMUNICACAO",
         endpoint: "/api/v1/autenticacao/alterar-senha",
+      },
+    });
+  });
+
+  it("encerra a sessão sem corpo nem Authorization (RES-107)", async () => {
+    postMock.mockResolvedValue({
+      response: new Response(null, { status: 204 }),
+    });
+    await expect(logout()).resolves.toBeUndefined();
+    expect(postMock).toHaveBeenCalledWith("/api/v1/autenticacao/logout");
+  });
+
+  it("preserva o erro do logout e converte falha de rede", async () => {
+    postMock.mockResolvedValueOnce({
+      error: { ...problem, status: 503, codigo: "SERVICO_INDISPONIVEL" },
+      response: new Response(null, { status: 503 }),
+    });
+    await expect(logout()).rejects.toMatchObject({
+      details: { status: 503, codigo: "SERVICO_INDISPONIVEL" },
+    });
+    postMock.mockRejectedValueOnce(new TypeError("Failed to fetch"));
+    await expect(logout()).rejects.toMatchObject({
+      details: {
+        codigo: "ERRO_COMUNICACAO",
+        endpoint: "/api/v1/autenticacao/logout",
       },
     });
   });

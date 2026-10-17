@@ -75,18 +75,16 @@ it("orienta correção de validação", () => {
     "Confira os dados",
   );
 });
-it.each(["passwordChanged", "expired"] as const)(
-  "mostra feedback de %s",
-  (notice) => {
-    render(
-      <ThemeProvider theme={createAppTheme()}>
-        <LoginView authenticate={vi.fn()} notice={notice} />
-      </ThemeProvider>,
-    );
-    expect(
-      screen.getByText(
-        notice === "passwordChanged" ? "Senha alterada" : "Tempo esgotado",
-      ),
-    ).toBeVisible();
-  },
-);
+it.each([
+  ["passwordChanged", "Senha alterada"],
+  ["expired", "Sua sessão expirou. Faça um novo login para continuar."],
+  ["invalidated", "Sua sessão não é mais válida. Faça um novo login."],
+  ["loggedOut", "Seu acesso foi encerrado."],
+] as const)("mostra feedback de %s", (notice, text) => {
+  render(
+    <ThemeProvider theme={createAppTheme()}>
+      <LoginView authenticate={vi.fn()} notice={notice} />
+    </ThemeProvider>,
+  );
+  expect(screen.getByText(text)).toBeVisible();
+});
