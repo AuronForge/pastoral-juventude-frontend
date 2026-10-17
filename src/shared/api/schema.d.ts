@@ -64,6 +64,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/autenticacao/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Encerrar sessão
+         * @description RES-107: invalida a sessão ativa identificada pelo cookie HttpOnly refresh_token com motivo LOGOUT e expira o cookie. Não exige Authorization. Exige Origin permitido. Idempotente: cookie ausente ou sessão já encerrada também retornam 204.
+         */
+        post: operations["logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/autenticacao/alterar-senha": {
         parameters: {
             query?: never;
@@ -767,6 +787,123 @@ export interface operations {
             };
             /** @description Default Response */
             413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+        };
+    };
+    logout: {
+        parameters: {
+            query?: never;
+            header?: {
+                origin?: string;
+                "x-correlation-id"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Default Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Default Response */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date-time */
+                        timestamp: string;
+                        status: number;
+                        codigo: string;
+                        titulo: string;
+                        mensagem: string;
+                        endpoint: string;
+                        /** Format: uuid */
+                        correlationId: string;
+                        erros?: {
+                            campo: string;
+                            codigo: string;
+                            mensagem: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Default Response */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

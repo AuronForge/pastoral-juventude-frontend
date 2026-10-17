@@ -10,6 +10,7 @@ const LOGIN_ENDPOINT = "/api/v1/autenticacao/login" as const;
 const CHANGE_PASSWORD_ENDPOINT = "/api/v1/autenticacao/alterar-senha" as const;
 const REFRESH_ENDPOINT = "/api/v1/autenticacao/renovar-token" as const;
 const RECOVERY_ENDPOINT = "/api/v1/autenticacao/recuperar-senha" as const;
+const LOGOUT_ENDPOINT = "/api/v1/autenticacao/logout" as const;
 
 export type RecoveryRequest =
   operations["recuperarSenha"]["requestBody"]["content"]["application/json"];
@@ -52,6 +53,17 @@ export async function refreshSession() {
   } catch (error: unknown) {
     if (error instanceof ApiRequestError) throw error;
     throw new ApiRequestError(createCommunicationError(REFRESH_ENDPOINT));
+  }
+}
+
+/** RES-107: a sessão é identificada pelo cookie refresh_token; 204 sem corpo. */
+export async function logout(): Promise<void> {
+  try {
+    const { error } = await apiClient.POST(LOGOUT_ENDPOINT);
+    if (error) throw new ApiRequestError(error);
+  } catch (error: unknown) {
+    if (error instanceof ApiRequestError) throw error;
+    throw new ApiRequestError(createCommunicationError(LOGOUT_ENDPOINT));
   }
 }
 

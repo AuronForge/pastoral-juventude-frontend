@@ -6,6 +6,7 @@ import {
 import {
   authenticateUser,
   changePassword,
+  logout,
   refreshSession,
   type ChangePasswordRequest,
   type LoginCredentials,
@@ -50,6 +51,14 @@ export function restoreSession() {
         dispatch(restorationRejected(details));
       else dispatch(restorationFailed(details));
     }
+  };
+}
+
+/** Encerra a sessão no backend e, somente após o 204, limpa o estado local. */
+export function endSession() {
+  return async (dispatch: AppDispatch) => {
+    await logout();
+    dispatch(sessionCleared());
   };
 }
 

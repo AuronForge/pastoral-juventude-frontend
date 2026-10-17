@@ -8,7 +8,9 @@ describe("páginas da aplicação", () => {
   it("apresenta a página inicial dentro da moldura autenticada", () => {
     render(
       <AppProviders>
-        <HomePage />
+        <MemoryRouter>
+          <HomePage />
+        </MemoryRouter>
       </AppProviders>,
     );
 
@@ -25,6 +27,9 @@ describe("páginas da aplicação", () => {
       "aria-current",
       "page",
     );
+    expect(
+      screen.getAllByRole("button", { name: "Sair" }).length,
+    ).toBeGreaterThan(0);
   });
 
   it("apresenta a página não encontrada", () => {
