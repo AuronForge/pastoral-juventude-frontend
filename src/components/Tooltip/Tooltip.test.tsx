@@ -32,4 +32,20 @@ describe("Tooltip", () => {
       expect(screen.queryByRole("tooltip")).not.toBeInTheDocument(),
     );
   });
+
+  it("permite exibição controlada sem hover ou foco", async () => {
+    const { rerender } = render(
+      <Tooltip text="Copiado" open={false}>
+        <button type="button">Copiar</button>
+      </Tooltip>,
+    );
+    expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+
+    rerender(
+      <Tooltip text="Copiado" open>
+        <button type="button">Copiar</button>
+      </Tooltip>,
+    );
+    expect(await screen.findByRole("tooltip")).toHaveTextContent("Copiado");
+  });
 });
