@@ -4,6 +4,7 @@ export * from "./AppShell";
 export * from "./Avatar";
 export * from "./Button";
 export * from "./BrandLockup";
+export * from "./Card";
 export * from "./Checkbox";
 export * from "./DatePicker";
 export * from "./Icon";
