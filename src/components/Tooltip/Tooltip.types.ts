@@ -8,6 +8,8 @@ export type TooltipProps = {
   text: string;
   position?: TooltipPosition;
   disabled?: boolean;
+  /** Exibição controlada (ex.: confirmação "Copiado"); sem valor, segue hover e foco. */
+  open?: boolean;
   /** Elemento de origem; recebe a descrição acessível. */
   children: ReactElement;
 };

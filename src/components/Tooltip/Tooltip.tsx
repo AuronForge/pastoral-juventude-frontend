@@ -11,6 +11,7 @@ export function Tooltip({
   text,
   position = "top",
   disabled = false,
+  open,
   children,
 }: TooltipProps) {
   return (
@@ -23,6 +24,7 @@ export function Tooltip({
       enterDelay={300}
       enterNextDelay={300}
       placement={position}
+      {...(open === undefined ? {} : { open })}
       title={text}
       slotProps={{
         tooltip: {

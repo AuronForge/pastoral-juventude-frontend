@@ -7,6 +7,7 @@ export * from "./BrandLockup";
 export * from "./Card";
 export * from "./Checkbox";
 export * from "./DatePicker";
+export * from "./DisplayField";
 export * from "./Icon";
 export * from "./IconButton";
 export * from "./Link";
